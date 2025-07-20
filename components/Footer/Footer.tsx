@@ -9,7 +9,7 @@ const { Footer } = Layout;
 const AppFooter = () => {
   return (
     <Footer className={styles.footer}  id='app-footer'>
-      © {new Date().getFullYear()} Aimperia. All rights reserved.
+      © {new Date().getFullYear()} AImperia. All rights reserved.
     </Footer>
   );
 };

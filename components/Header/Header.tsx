@@ -13,7 +13,6 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 import styles from './styles.module.css';
-// import Logo from '/logo.svg';
 
 const { Header, Content, Sider } = Layout;
 const { Title, Paragraph } = Typography;
@@ -36,7 +35,8 @@ const AppHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   return (
     <Header className={styles.header} id='app-header'>
       <div className={styles.logo}>
-        <Link href="/">Aimperia</Link>
+        <img src="/logo.svg" alt="Logo" className={styles.logoImage} />
+        <Link href="/">AImperia</Link>
       </div>
       <div className={styles.buttons}>
         {isAuthenticated ? (
