@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form} from "antd";
+import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form, Table, Collapse } from "antd";
+import {useState, useEffect} from "react";
 
-import { LineChartOutlined, DesktopOutlined } from "@ant-design/icons";
+import { LineChartOutlined, DesktopOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { BsStars, BsSliders  } from "react-icons/bs";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -11,9 +12,14 @@ const { Title, Paragraph } = Typography;
 const { Content } = Layout;
 
 export default function LandingPage() {
+    
+    
+    const [collapseActiveKey, setCollapseActiveKey] = useState<string | string[]>(['1']);
+    
     return (
         <Layout className={styles.layout}>
             <Content className={styles.content}>
+                {/* Hero Section */}
                 <section className={styles.hero}>
                     <div>
                         <Title level={1} style={{
@@ -29,13 +35,15 @@ export default function LandingPage() {
                                     type="primary"
                                     size="large"
                                     style={{ marginRight: "10px", width: "200px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
-                                    
+                                    className={styles.landingButton}
                                 >
                                     Начать
                                 </Button>
                             </Link>
                             <Link href="/signin">
-                                <Button size="large" style={{width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px"}}>Смотреть видео</Button>
+                                <Button size="large" style={{width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px"}}
+                                    className={styles.landingButton}
+                                >Смотреть видео</Button>
                             </Link>
                         </div>
                     </div>
@@ -49,6 +57,7 @@ export default function LandingPage() {
                     </div>
                 </section>
                 
+                {/* Features Section */}
                 <section className={styles.section}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'center', gap:'50px' }}>
                         <div className={styles.info1Item}>
@@ -88,13 +97,9 @@ export default function LandingPage() {
                     </div>
                 </section>
                 
+                {/* How It Works Section */}
                 <section className={styles.section}>
-                    <Title style={{
-                        textAlign: 'center',
-                        marginBottom: '40px',
-                        fontSize: '36px',
-                        color: '#3d8eff',
-                    }}>Легко начать пользоваться</Title>
+                    <div className={styles.sectionTitle}>Легко начать пользоваться</div>
                     <div>
                         <Row gutter={24}>
                             <Col span={18}>
@@ -191,6 +196,7 @@ export default function LandingPage() {
                     </div>
                 </section>
                 
+                {/* Statistics Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionUsers}>
                         <div className={styles.sectionUsersItem}>
@@ -228,6 +234,7 @@ export default function LandingPage() {
                     </div>
                 </section>
                 
+                {/* Contact Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionFormBackground}>
                         <img src="/landing/landingBooks.png" className={styles.sectionFormBooks} />
@@ -245,16 +252,19 @@ export default function LandingPage() {
                             <Input placeholder="Имя"  className={styles.sectionFormInput}/>
                             <Input type="email" placeholder="Email"  className={styles.sectionFormInput}/>
                             <Input placeholder="Телефон"  className={styles.sectionFormInput}/>
-                            <Button color="purple" variant="solid" style={{ width: '100%' }} className={styles.sectionFormInput}>
+                            <Button color="purple" variant="solid" style={{ width: '100%' }}
+                                className={styles.sectionFormInput}
+                                onClick={() => alert('Спасибо за ваш вопрос! Мы свяжемся с вами в ближайшее время.')}>
                                 Задать вопрос
                             </Button>
                         </div>
                     </div>
                 </section>
                 
+                {/* About Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionAbout}>
-                        <div className={styles.sectionAboutTitle}>
+                        <div className={styles.sectionTitle}>
                             Что такое платформа AImperia?
                         </div>
                         <div style={{
@@ -337,9 +347,10 @@ export default function LandingPage() {
                     </div>
                 </section>
                 
+                {/* Pricing Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionPrice}>
-                        <div className={styles.sectionPriceTitle}>
+                        <div className={styles.sectionTitle}>
                             Стоимость занятий
                         </div>
                         <Divider style={{ marginBottom: '40px' }} />
@@ -420,9 +431,10 @@ export default function LandingPage() {
                     </div>
                 </section>
                 
+                {/* For Who Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionForWho}>
-                        <div className={styles.sectionForWhoTitle}>
+                        <div className={styles.sectionTitle}>
                             Для кого подходит платформа AImperia?
                         </div>
                         <Divider style={{ marginBottom: '40px' }} />
@@ -483,6 +495,387 @@ export default function LandingPage() {
                             </div>
                         </div>
                     </div>
+                </section>
+
+                {/* How It Works Section */}
+                <section className={styles.section}>
+                    <div className={styles.sectionTitle}>
+                        Как начать пользоваться платформой AImperia?
+                    </div>
+                    <Divider style={{ marginBottom: '40px' }} />
+                    <div className={styles.sectionHowToStartContainer}>
+                        <div className={styles.sectionHowToStartTopText}>
+                            Через минуту вы уже на уроке!
+                        </div>
+                        <div className={styles.sectionHowToStartItem}>
+                            <div className={styles.sectionHowToStartItemTitle}>
+                                01
+                            </div>
+                            <div className={styles.sectionHowToStartItemDescription}>
+                                Зарегистрируйтесь на платформе AImperia
+                            </div>
+                        </div>
+                        <img src="/landing/arrow.png" alt="Arrow" className={styles.sectionHowToStartArrow} />
+                        <div className={styles.sectionHowToStartItem}>
+                            <div className={styles.sectionHowToStartItemTitle}>
+                                02
+                            </div>
+                            <div className={styles.sectionHowToStartItemDescription}>
+                                Создайте новый урок или присоединитесь к уже существующему
+                            </div>
+                        </div>
+                        <img src="/landing/arrow.png" alt="Arrow" className={styles.sectionHowToStartArrow} />
+                        <div className={styles.sectionHowToStartItem}>
+                            <div className={styles.sectionHowToStartItemTitle}>
+                                03
+                            </div>
+                            <div className={styles.sectionHowToStartItemDescription}>
+                                Вы пользуетесь платформой :)
+                            </div>
+                        </div>
+                    </div>
+                    <Button
+                        type="primary"
+                        size="large"
+                        style={{ marginTop: "50px", width: "300px", height: "70px", fontSize: "30px", borderRadius: "50px", backgroundColor: "#3d98ff" }}
+                        className={styles.landingButton}
+                        onClick={() => window.location.href = '/signup'}
+                    >
+                        Начать сейчас
+                    </Button>
+                </section>
+                
+                {/* Statistics Section */}
+                <section className={styles.section}>
+                    <div className={styles.sectionTitle}>
+                        Лучшая платформа для онлайн-занятий
+                    </div>
+                    <Divider style={{ marginBottom: '40px' }} />
+                    <div className={styles.sectionAdvantagesItems}>
+                        <div className={styles.sectionAdvantagesItem}>
+                            <div className={styles.sectionAdvantagesItemTitle}>
+                                +200%
+                            </div>
+                            <div className={styles.sectionAdvantagesItemDescription}>
+                                Пользователи AImperia учатся на 200% быстрее, чем на традиционных платформах.
+                            </div>
+                        </div>
+                        <div className={styles.sectionAdvantagesVertDivider}></div>
+                        <div className={styles.sectionAdvantagesItem}>
+                            <div className={styles.sectionAdvantagesItemTitle}>
+                                40%
+                            </div>
+                            <div className={styles.sectionAdvantagesItemDescription}>
+                                Пользователи AImperia в среднем имеют оценки на 40% выше, чем на традиционных платформах.
+                            </div>
+                        </div>
+                        <div className={styles.sectionAdvantagesVertDivider}></div>
+                        <div className={styles.sectionAdvantagesItem}>
+                            <div className={styles.sectionAdvantagesItemTitle}>
+                                89
+                            </div>
+                            <div className={styles.sectionAdvantagesItemDescription}>
+                                Средний балл по ЕГЭ у пользователей AImperia составляет 89 баллов.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                {/* Features Comparison Section */}
+                <section className={styles.section}>
+                    <div className={styles.sectionTitle}>
+                        Особенности платформы AImperia
+                    </div>
+                    <Divider style={{ marginBottom: '40px' }} />
+                    <Table
+                        className={styles.featuresTable}
+                        pagination={false}
+                        columns={[
+                            {
+                                title: '',
+                                dataIndex: 'feature',
+                                key: 'feature',
+                                render: (text) => <div style={{ marginLeft: '50px' }}>{text}</div>,
+                            },
+                            {
+                                title: 'Aimperia',
+                                dataIndex: 'Aimperia',
+                                key: 'Aimperia',
+                                render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
+                            },
+                            {
+                                title: 'Другие школы',
+                                dataIndex: 'other',
+                                key: 'other',
+                                render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
+                            },
+                            {
+                                title: 'Zoom',
+                                dataIndex: 'zoom',
+                                key: 'zoom',
+                                render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
+                            }
+                        ]}
+                        dataSource={[
+                            {
+                                key: '1',
+                                feature: 'Видеозвонок',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                zoom: <CheckCircleOutlined className={styles.featuresCheckmark} />
+                            },
+                            {
+                                key: '2',
+                                feature: 'Интерактивная доска',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                zoom: <CheckCircleOutlined className={styles.featuresCheckmark} />
+                            },
+                            {
+                                key: '8',
+                                feature:
+                                    'Занятие с опытным преподавателем',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                zoom: <CloseCircleOutlined className={styles.featuresCross} />
+                            },
+                            {
+                                key: '4',
+                                feature: 'Поддержка в чате',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                zoom: <CloseCircleOutlined className={styles.featuresCross} />
+                            },
+                            {
+                                key: '3',
+                                feature: 'Автоконспект',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CloseCircleOutlined className={styles.featuresCross} />,
+                                zoom: <CloseCircleOutlined className={styles.featuresCross} />
+                            },
+                            {
+                                key: '5',
+                                feature: 'Запись урока',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CloseCircleOutlined className={styles.featuresCross} />,
+                                zoom: <CloseCircleOutlined className={styles.featuresCross} />
+                            },
+                            {
+                                key: '6',
+                                feature: 'Возможность задать вопрос ИИ',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CloseCircleOutlined className={styles.featuresCross} />,
+                                zoom: <CloseCircleOutlined className={styles.featuresCross} />
+                            },
+                            {
+                                key: '7',
+                                feature: 'Создание pdf файла конспекта',
+                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                other: <CloseCircleOutlined className={styles.featuresCross} />,
+                                zoom: <CloseCircleOutlined className={styles.featuresCross} />
+                            },
+                        ]}
+                    />
+                </section>
+                
+                {/* Teachers Section */}
+                <section className={styles.section}>
+                    <div className={styles.sectionTitle}>
+                        Преподаватели Aimperia
+                    </div>
+                    <Divider style={{ marginBottom: '40px' }} />
+                    <div className={styles.sectionTeachers}>
+                        <div className={styles.sectionTeachersItem}>
+                            <img src="/landing/teacher1.png" alt="Teacher 1" className={styles.sectionTeachersItemImage} />
+                            <div className={styles.sectionTeachersItemName}>
+                                Иван Иванов
+                            </div>
+                            <div className={styles.sectionTeachersItemSubject}>
+                                Математика
+                            </div>
+                            <div className={styles.sectionTeachersItemDescription}>
+                                Преподаватель математики с 10-летним опытом работы. Помог
+                                более 1000 ученикам подготовиться к ЕГЭ и ОГЭ.
+                            </div>
+                        </div>
+                        <div className={styles.sectionTeachersItem}>
+                            <img src="/landing/teacher2.png" alt="Teacher 2" className={styles.sectionTeachersItemImage} />
+                            <div className={styles.sectionTeachersItemName}>
+                                Анна Петрова
+                            </div>
+                            <div className={styles.sectionTeachersItemSubject}>
+                                Физика
+                            </div>
+                            <div className={styles.sectionTeachersItemDescription}>
+                                Преподаватель физики с 8-летним опытом работы. Помогла
+                                более 800 ученикам подготовиться к ЕГЭ и ОГЭ.
+                            </div> 
+                        </div>
+                        <div className={styles.sectionTeachersItem}>
+                            <img src="/landing/teacher3.png" alt="Teacher 3" className={styles.sectionTeachersItemImage} />
+                            <div className={styles.sectionTeachersItemName}>
+                                Мария Смирнова
+                            </div>
+                            <div className={styles.sectionTeachersItemSubject}>
+                                Химия
+                            </div>
+                            <div className={styles.sectionTeachersItemDescription}>
+                                Преподаватель химии с 5-летним опытом работы. Помогла
+                                более 500 ученикам подготовиться к ЕГЭ и ОГЭ.
+                            </div>
+                        </div>
+                        <div className={styles.sectionTeachersItem}>
+                            <img src="/landing/teacher4.png" alt="Teacher 4" className={styles.sectionTeachersItemImage} />
+                            <div className={styles.sectionTeachersItemName}>
+                                Алексей Кузнецов
+                            </div>
+                            <div className={styles.sectionTeachersItemSubject}>
+                                Информатика
+                            </div>
+                            <div className={styles.sectionTeachersItemDescription}>
+                                Преподаватель информатики с 7-летним опытом работы. Помог
+                                более 600 ученикам подготовиться к ЕГЭ и ОГЭ.
+                            </div>
+                        </div>
+                        <div className={styles.sectionTeachersItem}>
+                            <img src="/landing/teacher5.png" alt="Teacher 5" className={styles.sectionTeachersItemImage} />
+                            <div className={styles.sectionTeachersItemName}>
+                                Дмитрий Сидоров
+                            </div>
+                            <div className={styles.sectionTeachersItemSubject}>
+                                Биология
+                            </div>
+                            <div className={styles.sectionTeachersItemDescription}>
+                                Преподаватель биологии с 6-летним опытом работы. Помог
+                                более 700 ученикам подготовиться к ЕГЭ и ОГЭ.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                {/* Reviews Section */}
+                <section className={styles.sectionReviews}
+                    style={{
+                        backgroundImage: 'url(/landing/reviewsBackground.png)',
+                        backgroundRepeat: 'repeat',
+                        backgroundSize: '800px auto',
+                 }}
+                >
+                    <div className={styles.sectionReviewsTitle}>
+                        Отзывы пользователей
+                    </div>
+                    <div className={styles.sectionReviewsItems}
+                    >
+                        <div className={styles.sectionReviewItem}>
+                            <div className={styles.sectionReviewText}>
+                                "Платформа AImperia - это просто находка! Я
+                                учусь на ней уже несколько месяцев и заметил,
+                                что стал учиться гораздо быстрее. Очень
+                                рекомендую!"
+                            </div>
+                            <div className={styles.sectionReviewAuthor}>
+                                Алексей, ученик
+                            </div>
+                        </div>
+                        <div className={styles.sectionReviewItem}>
+                            <div className={styles.sectionReviewText}>
+                                "Я использую платформу AImperia для своих
+                                уроков и очень доволен. Интерактивная доска и
+                                автоконспект - это просто супер!"
+                            </div>
+                            <div className={styles.sectionReviewAuthor}>
+                                Мария, преподаватель
+                            </div>
+                        </div>
+                        <div className={styles.sectionReviewItem}>
+                            <div className={styles.sectionReviewText}>
+                                "Платформа AImperia - это лучший способ
+                                учиться! Я уже подготовился к ЕГЭ на 90 баллов
+                                благодаря этой платформе."
+                            </div>
+                            <div className={styles.sectionReviewAuthor}>
+                                Иван, ученик
+                            </div>
+                        </div>
+                        <div className={styles.sectionReviewItem}>
+                            <div className={styles.sectionReviewText}>
+                                "Я использую платформу AImperia для своих
+                                уроков и очень доволен. Интерактивная доска и
+                                автоконспект - это просто супер!"
+                            </div>
+                            <div className={styles.sectionReviewAuthor}>
+                                Анна, преподаватель
+                            </div>
+                        </div>
+                        <div className={styles.sectionReviewItem}>
+                            <div className={styles.sectionReviewText}>
+                                "Платформа AImperia - это просто находка! Я
+                                учусь на ней уже несколько месяцев и заметил,
+                                что стал учиться гораздо быстрее. Очень
+                                рекомендую!"
+                            </div>
+                            <div className={styles.sectionReviewAuthor}>
+                                Дмитрий, ученик
+                            </div>
+                        </div>
+                        <div className={styles.sectionReviewItem}>
+                            <div className={styles.sectionReviewText}>
+                                "Я использую платформу AImperia для своих
+                                уроков и очень доволен. Интерактивная доска и
+                                автоконспект - это просто супер!"
+                            </div>
+                            <div className={styles.sectionReviewAuthor}>
+                                Алексей, преподаватель
+                            </div>
+                        </div>
+                        
+                    </div>
+                </section>
+                
+                {/* FAQ */}
+                <section className={styles.section}>
+                    <div className={styles.sectionTitle}>
+                        Часто задаваемые вопросы
+                    </div>
+                    <Divider style={{ marginBottom: '40px' }} />
+                    <Collapse
+                        activeKey={collapseActiveKey}
+                        onChange={(key) => {
+                            if (key.length>0)
+                                setCollapseActiveKey([key[key.length - 1]])
+                            
+                        }}
+                        expandIconPosition="right"
+                        className={styles.faqCollapse}
+                        items={[
+                            {
+                                key: '1',
+                                label: 'Как зарегистрироваться на платформе AImperia?',
+                                children: 'Для регистрации на платформе AImperia перейдите на страницу регистрации и заполните все необходимые поля. После этого вы сможете войти в свой аккаунт и начать пользоваться платформой.',
+                            },
+                            {
+                                key: '2',
+                                label: 'Как создать новый урок?',
+                                children: 'Для создания нового урока перейдите в раздел "Уроки" и нажмите кнопку "Создать урок". Заполните все необходимые поля и нажмите кнопку "Сохранить".',
+                            },
+                            {
+                                key: '3',
+                                label: 'Как присоединиться к уже существующему уроку?',
+                                children: 'Для присоединения к уже существующему уроку перейдите в раздел "Уроки", найдите нужный урок и нажмите кнопку "Присоединиться".',
+                            },
+                            {
+                                key: '4',
+                                label: 'Как использовать интерактивную доску?',
+                                children: 'Для использования интерактивной доски перейдите в раздел "Уроки", откройте нужный урок и нажмите кнопку "Открыть интерактивную доску". Вы сможете рисовать, писать и добавлять изображения на доску.',
+                            },
+                            {
+                                key: '5',
+                                label: 'Как работает автоконспект?',
+                                children: 'Автоконспект работает автоматически во время урока. Он записывает все, что говорится на уроке, и выделяет важные моменты на интерактивной доске. После урока вы сможете скачать конспект в формате PDF.',
+                            },
+                         ]}
+                    >
+                    </Collapse>
                 </section>
                 
             </Content>
