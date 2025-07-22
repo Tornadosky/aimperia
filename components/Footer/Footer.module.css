@@ -1,7 +1,38 @@
 .footer {
   text-align: center;
+  align-items: center;
+  justify-content: center;
   padding: 24px;
   background: #f0f2f5;
   color: rgba(0, 0, 0, 0.45);
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 24px;
+  height: 24px;
+  margin: 0 8px;
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.socialLink{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.socialLink:hover {
+  color: #1890ff;
 }

@@ -1,76 +1,192 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Button, Layout, List, Typography, Space, Card, Modal, Popover } from 'antd';
+import { useEffect, useState } from "react";
 import {
-  PlusOutlined,
-  LoginOutlined,
-  DesktopOutlined,
-  FileTextOutlined,
-  TeamOutlined,
-  VideoCameraOutlined,
-  LogoutOutlined,
-} from '@ant-design/icons';
-import Link from 'next/link';
-import styles from './styles.module.css';
+    Button,
+    Layout,
+    List,
+    Typography,
+    Space,
+    Card,
+    Modal,
+    Popover,
+} from "antd";
+import {
+    PlusOutlined,
+    LoginOutlined,
+    DesktopOutlined,
+    FileTextOutlined,
+    TeamOutlined,
+    VideoCameraOutlined,
+    LogoutOutlined,
+} from "@ant-design/icons";
+import Link from "next/link";
+import styles from "./styles.module.css";
 
 const { Header, Content, Sider } = Layout;
 const { Title, Paragraph } = Typography;
 
+import { usePathname } from 'next/navigation'
 
 const fakeLessons = [
-  {
-    id: '1',
-    title: 'Математика: Уравнения',
-    summary: 'Обсудили основные методы решения линейных уравнений.',
-  },
-  {
-    id: '2',
-    title: 'Физика: Законы Ньютона',
-    summary: 'Разобрали примеры применения второго закона Ньютона.',
-  },
+    {
+        id: "1",
+        title: "Математика: Уравнения",
+        summary: "Обсудили основные методы решения линейных уравнений.",
+    },
+    {
+        id: "2",
+        title: "Физика: Законы Ньютона",
+        summary: "Разобрали примеры применения второго закона Ньютона.",
+    },
 ];
 
 const AppHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
-  return (
-    <Header className={styles.header} id='app-header'>
-      <div className={styles.logo}>
-        <img src="/logo.svg" alt="Logo" className={styles.logoImage} />
-        <Link href="/">AImperia</Link>
-      </div>
-      <div className={styles.buttons}>
-        {isAuthenticated ? (
-          <Space>
-            <Button icon={<PlusOutlined />}>Создать урок</Button>
-            <Button icon={<LoginOutlined />}>Присоединиться к уроку</Button>
-            <Popover
-              content={
-                <div>
-                  <p><b>Имя:</b> Иван Иванов</p>
-                  <p><b>Email:</b> ivan@example.com</p>
-                  <Button icon={<LogoutOutlined />} type="link" danger>
-                    Выйти
-                  </Button>
+    
+    const pathname = usePathname()
+    
+    return (
+        <Header className={styles.header} id="app-header">
+            <div className={styles.headerContainer}>
+                <div className={styles.logo}>
+                    <img
+                        src="/logo.svg"
+                        alt="Logo"
+                        className={styles.logoImage}
+                    />
+                    <Link href="/">AImperia</Link>
                 </div>
-              }
-              placement="bottomRight"
-            >
-              <Button icon={<TeamOutlined />}>Аккаунт</Button>
-            </Popover>
-          </Space>
-        ) : (
-          <>
-            <Link href="/signin">
-              <Button type="default" style={{ marginRight: '8px' }}>Вход</Button>
-            </Link>
-            <Link href="/signup">
-              <Button type="primary">Регистрация</Button>
-            </Link>
-          </>
-        )}
-      </div>
-    </Header>
-  );
+                {isAuthenticated ?
+                    <div className={styles.buttons}>
+                        <Space>
+                            <Button
+                                icon={<PlusOutlined />}
+                                className={styles.button}
+                            >
+                                Создать урок
+                            </Button>
+                            <Button
+                                icon={<LoginOutlined />}
+                                className={styles.button}
+                            >
+                                Присоединиться к уроку
+                            </Button>
+                            <Popover
+                                content={
+                                    <div>
+                                        <p>
+                                            <b>Имя:</b> Иван Иванов
+                                        </p>
+                                        <p>
+                                            <b>Email:</b> ivan@example.com
+                                        </p>
+                                        <Button
+                                            icon={<LogoutOutlined />}
+                                            type="link"
+                                            danger
+                                        >
+                                            Выйти
+                                        </Button>
+                                    </div>
+                                }
+                                placement="bottomRight"
+                            >
+                                <Button icon={<TeamOutlined />}>Аккаунт</Button>
+                            </Popover>
+                        </Space>
+                    </div>
+                : null}
+                {pathname === '/' ?
+                <div className={styles.buttons}>
+                    <div className={styles.scrollToLinks}>
+                        <div className={styles.scrollToLink}
+                            onClick={() => {
+                                document
+                                    .getElementById("aboutSection")
+                                    ?.scrollIntoView({
+                                        behavior: "smooth",
+                                    });
+                                }
+                            }
+                        >
+                            О нас
+                        </div>
+                        <div className={styles.scrollToLink}
+                            onClick={() => {
+                                document
+                                    .getElementById("teachersSection")
+                                    ?.scrollIntoView({
+                                        behavior: "smooth",
+                                    });
+                                }
+                            }
+                        >
+                            Преподаватели
+                        </div>
+                        <div className={styles.scrollToLink}
+                            onClick={() => {
+                                document
+                                    .getElementById("faqSection")
+                                    ?.scrollIntoView({
+                                        behavior: "smooth",
+                                    });
+                                }
+                            }
+                        >
+                            Вопросы
+                        </div>
+                    </div>
+                    <div className={styles.registrationButtons}>
+                        <Link href="/signin">
+                            <Button
+                                type="default"
+                                style={{ marginRight: "8px" }}
+                                className={styles.button}
+                            >
+                                Вход
+                            </Button>
+                        </Link>
+                        <Link href="/signup">
+                            <Button
+                                type="primary"
+                                className={styles.button}
+                            >
+                                Регистрация
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
+                :null
+                }
+                
+                {['/signin', '/signup'].includes(pathname) ?
+                    <div className={styles.buttons}>
+                        <div className={styles.registrationButtons}>
+                            <Link href="/signin">
+                                <Button
+                                    type="default"
+                                    style={{ marginRight: "8px" }}
+                                    className={styles.button}
+                                >
+                                    Вход
+                                </Button>
+                            </Link>
+                            <Link href="/signup">
+                                <Button
+                                    type="primary"
+                                    className={styles.button}
+                                >
+                                    Регистрация
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                    :null
+                }
+                
+            </div>
+        </Header>
+    );
 };
 
 export default AppHeader;

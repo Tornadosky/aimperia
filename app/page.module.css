@@ -752,9 +752,114 @@
 
 .faqCollapse {
   width: 1200px !important;
+  border: none !important;
+  /* transition: all 0.3s ease; */
 }
 
-.faqCollapse .ant-collapse-content {
-  height: 100px !important;
-  background-color: green !important;
+.faqCollapse :global(.ant-collapse-header-text) {
+  font-size: 24px !important;
+  font-weight: bold !important;
+  color: #747474 !important;
+  margin-left: 15px !important;
+}
+
+.faqCollapse :global(.ant-collapse-content) {
+  background-color: #f0f0f0 !important;
+  border-radius: 10px !important;
+}
+
+.faqCollapse :global(.ant-collapse-content-box) {
+  font-size: 18px !important;
+  color: #555 !important;
+  line-height: 1.5 !important;
+}
+
+.faqCollapse :global(.ant-collapse-item) {
+  border: none !important;
+}
+
+.faqCollapse :global(.ant-collapse-content) {
+  border: none !important;
+  padding: 5px 20px !important;
+}
+
+.faqCollapse :global(.anticon) {
+  zoom: 1.5 !important;
+}
+
+
+.sectionNews {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  /* background-color: #f0f0f0; */
+  padding: 40px 20px;
+  gap: 40px;
+}
+
+.sectionNewsItem {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  width: 400px;
+  height: 500px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.sectionNewsItem:hover {
+  transform: scale(1.05);
+}
+
+.sectionNewsItemTitle{
+  font-size: 20px;
+  font-weight: bold;
+  color: #3d8eff;
+  margin-bottom: 10px;
+}
+
+.sectionNewsItemDate{
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.sectionNewsItemDescription{
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.sectionNewsItemImage {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.sectionNewsletterTitle{
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  color: #3d8eff;
+  margin-bottom: 20px;
+}
+
+.sectionNewsletterSubTitle{
+  font-size: 20px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.newsletterForm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }

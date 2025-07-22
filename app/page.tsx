@@ -3,7 +3,7 @@
 import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form, Table, Collapse } from "antd";
 import {useState, useEffect} from "react";
 
-import { LineChartOutlined, DesktopOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { LineChartOutlined, DesktopOutlined, CheckCircleOutlined, CloseCircleOutlined, MailOutlined } from "@ant-design/icons";
 import { BsStars, BsSliders  } from "react-icons/bs";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -24,7 +24,7 @@ export default function LandingPage() {
                     <div>
                         <Title level={1} style={{
                             marginBottom: "50px !important",
-                        }}>AImperia: Первая платформа в мире, которая позволяет тебе учится в разы быстрее <LineChartOutlined style={{color:'#3d8eff'}} /></Title>
+                        }}>AImperia: Первая платформа в мире, которая позволяет тебе учится в разы <span style={{textWrap:'nowrap'}}>быстрее <LineChartOutlined style={{color:'#3d8eff'}} /></span></Title>
                         {/* <Paragraph>
                             Интерактивная платформа для онлайн-занятий с
                             возможностью видеосвязи, доской и автоконспектами.
@@ -262,7 +262,7 @@ export default function LandingPage() {
                 </section>
                 
                 {/* About Section */}
-                <section className={styles.section}>
+                <section className={styles.section} id="aboutSection">
                     <div className={styles.sectionAbout}>
                         <div className={styles.sectionTitle}>
                             Что такое платформа AImperia?
@@ -408,7 +408,7 @@ export default function LandingPage() {
                                 className={styles.priceCardAnimated}
                             >
                                 <div className={styles.priceCardTitle}>
-                                    Одна лекция с преподавателем Aimperia (2 часа)
+                                    Одна лекция с преподавателем AImperia (2 часа)
                                 </div>
                                 <div className={styles.priceCardPrice}>
                                     1400 ₽
@@ -598,9 +598,9 @@ export default function LandingPage() {
                                 render: (text) => <div style={{ marginLeft: '50px' }}>{text}</div>,
                             },
                             {
-                                title: 'Aimperia',
-                                dataIndex: 'Aimperia',
-                                key: 'Aimperia',
+                                title: 'AImperia',
+                                dataIndex: 'AImperia',
+                                key: 'AImperia',
                                 render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
                             },
                             {
@@ -620,14 +620,14 @@ export default function LandingPage() {
                             {
                                 key: '1',
                                 feature: 'Видеозвонок',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CheckCircleOutlined className={styles.featuresCheckmark} />
                             },
                             {
                                 key: '2',
                                 feature: 'Интерактивная доска',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CheckCircleOutlined className={styles.featuresCheckmark} />
                             },
@@ -635,42 +635,42 @@ export default function LandingPage() {
                                 key: '8',
                                 feature:
                                     'Занятие с опытным преподавателем',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '4',
                                 feature: 'Поддержка в чате',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '3',
                                 feature: 'Автоконспект',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '5',
                                 feature: 'Запись урока',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '6',
                                 feature: 'Возможность задать вопрос ИИ',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '7',
                                 feature: 'Создание pdf файла конспекта',
-                                Aimperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
+                                AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
@@ -679,9 +679,9 @@ export default function LandingPage() {
                 </section>
                 
                 {/* Teachers Section */}
-                <section className={styles.section}>
+                <section className={styles.section} id="teachersSection">
                     <div className={styles.sectionTitle}>
-                        Преподаватели Aimperia
+                        Преподаватели AImperia
                     </div>
                     <Divider style={{ marginBottom: '40px' }} />
                     <div className={styles.sectionTeachers}>
@@ -833,7 +833,7 @@ export default function LandingPage() {
                 </section>
                 
                 {/* FAQ */}
-                <section className={styles.section}>
+                <section className={styles.section} id="faqSection">
                     <div className={styles.sectionTitle}>
                         Часто задаваемые вопросы
                     </div>
@@ -850,32 +850,161 @@ export default function LandingPage() {
                         items={[
                             {
                                 key: '1',
-                                label: 'Как зарегистрироваться на платформе AImperia?',
-                                children: 'Для регистрации на платформе AImperia перейдите на страницу регистрации и заполните все необходимые поля. После этого вы сможете войти в свой аккаунт и начать пользоваться платформой.',
+                                label: 'Чем отличается AImperia от таких платформ как Zoom, Microsoft Teams или Google Meets?',
+                                children: <span>AImperia - это специализированная платформа для онлайн-занятий, которая включает в себя все необходимые инструменты для обучения: 
+                                видеозвонок, интерактивную доску, автоконспект и многое другое. В отличие от Zoom,
+                                Microsoft Teams или Google Meets, AImperia предоставляет готовое решение для образовательных учреждений и преподавателей.
+                                В дополнение, AImperia автоматически создаёт конспект из сказанного на уроке и выделенного на доске, что позволяет сосредоточиться на обучении,
+                                а не на написании конспекта и попытках успеть понять преподавателя и суммаризировать информацию.</span>,
                             },
                             {
                                 key: '2',
-                                label: 'Как создать новый урок?',
-                                children: 'Для создания нового урока перейдите в раздел "Уроки" и нажмите кнопку "Создать урок". Заполните все необходимые поля и нажмите кнопку "Сохранить".',
+                                label: 'Насколько качественно проводятся занятия и насколько сильно ИИ помогает при обучении?',
+                                children: <span>
+                                    AImperia предоставляет возможность проводить занятия с опытными преподавателями, которые имеют большой опыт работы в сфере образования.
+                                    ИИ помогает в создании автоконспекта, который автоматически записывает все, что говорится на уроке, и выделяет важные моменты на интерактивной доске.
+                                    После урока вы сможете просмотреть, повторить или скачать конспект в формате PDF.
+                                    Также, ИИ позволяет задавать вопросы во время урока и получать ответы на них, что делает обучение более интерактивным и эффективным.
+                                </span>,
                             },
                             {
                                 key: '3',
-                                label: 'Как присоединиться к уже существующему уроку?',
-                                children: 'Для присоединения к уже существующему уроку перейдите в раздел "Уроки", найдите нужный урок и нажмите кнопку "Присоединиться".',
+                                label: 'Как записаться на занятие и как выбрать преподавателя?',
+                                children: <span>
+                                    Чтобы записаться на занятие, вам нужно зарегистрироваться на платформе AImperia и написать нам, какой предмет и уровень обучения вас интересует.
+                                    Мы поможем вам выбрать подходящего преподавателя и договориться о времени занятия.
+                                </span>,
                             },
                             {
                                 key: '4',
-                                label: 'Как использовать интерактивную доску?',
-                                children: 'Для использования интерактивной доски перейдите в раздел "Уроки", откройте нужный урок и нажмите кнопку "Открыть интерактивную доску". Вы сможете рисовать, писать и добавлять изображения на доску.',
+                                label: 'Как проходит занятие и какие инструменты используются?',
+                                children: <span>
+                                    Занятие проходит в формате видеозвонка с использованием интерактивной доски, на которой преподаватель может рисовать, писать и выделять важные моменты.
+                                    Также используется автоконспект, который автоматически записывает все, что говорится на уроке, и выделяет важные моменты на интерактивной доске.
+                                    После урока вы сможете просмотреть, повторить или скачать конспект в формате PDF.
+                                </span>,
                             },
                             {
                                 key: '5',
-                                label: 'Как работает автоконспект?',
-                                children: 'Автоконспект работает автоматически во время урока. Он записывает все, что говорится на уроке, и выделяет важные моменты на интерактивной доске. После урока вы сможете скачать конспект в формате PDF.',
+                                label: 'Могу ли я заниматься на этой платформе, если у меня есть свой преподаватель?',
+                                children: <span>
+                                    Да, вы можете использовать платформу AImperia для проведения занятий со своим преподавателем.
+                                    Для этого вам и преподавателю нужно зарегистрироваться на платформе и договориться о времени занятия.
+                                    Вы сможете использовать все инструменты платформы, включая видеозвонок, интерактивную доску и автоконспект.
+                                </span>,
+                            },
+                            {
+                                key: '6',
+                                label: 'Предоставляет ли AImperia поддержку, если я занимаюсь со своим преподавателем?',
+                                children: <span>
+                                    Да, AImperia предоставляет поддержку всем пользователям, независимо от того, занимаются ли они со своим преподавателем или с преподавателями платформы.
+                                    Вы можете обратиться в службу поддержки по любым вопросам, связанным с использованием платформы, и мы постараемся помочь вам как можно быстрее.
+                                </span>,
+                            },
+                            {
+                                key: '7',
+                                label: 'Какие предметы я могу изучать на платформе AImperia?',
+                                children: <span>
+                                    На платформе AImperia вы можете изучать различные предметы, включая математику, физику, химию, информатику и другие.
+                                    Если вас интересует какой-то конкретный предмет, напишите нам, и мы постараемся найти подходящего преподавателя для вас.
+                                </span>,
+                            },
+                            {
+                                key: '8',
+                                label: 'Как я могу связаться с поддержкой AImperia?',
+                                children: <span>
+                                    Вы можете связаться с поддержкой AImperia через форму обратной связи на сайте, по электронной почте или в чате на платформе.
+                                    Мы постараемся ответить на ваш вопрос как можно быстрее.
+                                </span>,
                             },
                          ]}
                     >
                     </Collapse>
+                </section>
+                
+                {/* News Section */}
+                <section className={styles.section}>
+                    <div className={styles.sectionTitle}>
+                        Последние новости AImperia
+                    </div>
+                    <div className={styles.sectionNews}>
+                        <div className={styles.sectionNewsItem}>
+                            <img src="/landing/news1.png" alt="News 1" className={styles.sectionNewsItemImage} />
+                            <div className={styles.sectionNewsItemTitle}>
+                                Новая версия AImperia
+                            </div>
+                            <div className={styles.sectionNewsItemDate}>
+                                01.10.2023
+                            </div>
+                            <div className={styles.sectionNewsItemDescription}>
+                                Мы выпустили новую версию платформы AImperia с улучшенным интерфейсом и новыми функциями.
+                            </div>
+                        </div>
+                        <div className={styles.sectionNewsItem}>
+                            <img src="/landing/news2.png" alt="News 1" className={styles.sectionNewsItemImage} />
+                            <div className={styles.sectionNewsItemTitle}>
+                                Новый курс по математике
+                            </div>
+                            <div className={styles.sectionNewsItemDate}>
+                                15.09.2023
+                            </div>
+                            <div className={styles.sectionNewsItemDescription}>
+                                Мы запустили новый курс по математике для учеников 9-11 классов.
+                            </div>
+                        </div>
+                        <div className={styles.sectionNewsItem}>
+                            <img src="/landing/news3.png" alt="News 1" className={styles.sectionNewsItemImage} />
+                            <div className={styles.sectionNewsItemTitle}>
+                                Новый преподаватель
+                            </div>
+                            <div className={styles.sectionNewsItemDate}>
+                                01.09.2023
+                            </div>
+                            <div className={styles.sectionNewsItemDescription}>
+                                Мы пригласили нового преподавателя по физике, который будет проводить занятия на платформе AImperia.
+                            </div>
+                        </div>
+                        <div className={styles.sectionNewsItem}>
+                            <img src="/landing/news4.png" alt="News 1" className={styles.sectionNewsItemImage} />
+                            <div className={styles.sectionNewsItemTitle}>
+                                Новый курс по информатике
+                            </div>
+                            <div className={styles.sectionNewsItemDate}>
+                                20.08.2023
+                            </div>
+                            <div className={styles.sectionNewsItemDescription}>
+                                Мы запустили новый курс по информатике для учеников 9-11 классов.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                {/* Newsletter */}
+                <section className={styles.section}>
+                    <div className={styles.sectionNewsletterTitle}>
+                        Подпишитесь на нашу рассылку
+                    </div>
+                    <Divider />
+                    <div className={styles.sectionNewsletterSubTitle}>
+                        Будьте в курсе последних новостей и обновлений AImperia
+                    </div>
+                    <Form layout="inline" className={styles.newsletterForm}>
+                        <Form.Item>
+                            <Input placeholder="Введите ваш email"
+                                style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px', textAlign: 'center' }} 
+                                className={styles.landingInput}
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit"
+                                icon={<MailOutlined />}
+                                style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px' }}
+                                className={styles.landingButton}
+                            >
+                                Подписаться
+                            </Button>
+                        </Form.Item>
+                    </Form>
                 </section>
                 
             </Content>
