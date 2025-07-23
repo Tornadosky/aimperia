@@ -1,0 +1,21 @@
+.prose{
+    /* background-color: #f8f8f8; */
+    padding: 50px;
+    border-radius: 8px;
+    line-height: 1.8;
+    max-height: calc(100vh);
+}
+
+
+.prose .katex {
+  font-size: 1.2em !important;
+  line-height: 3 !important;
+}
+.prose .katex .base {
+  font-size: inherit !important;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+}

@@ -21,7 +21,9 @@ import {
   VideoCameraOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
+import Notebook from './notebook';
 import styles from './Home.module.css';
+
 
 const { Header, Sider, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
@@ -76,9 +78,9 @@ export default function HomePage() {
         const setPageHeight = (container: ContainerRef) => {
             if (container.current) {
                 let footer_header_height: number = 0;
-                const footer: HTMLElement | null = document.querySelector('#app-footer');
-                if (footer)
-                    footer_header_height += footer.clientHeight;
+                // const footer: HTMLElement | null = document.querySelector('#app-footer');
+                // if (footer)
+                //     footer_header_height += footer.clientHeight;
                 const header: HTMLElement | null = document.querySelector('#app-header');
                 if (header)
                     footer_header_height += header.clientHeight;
@@ -142,29 +144,7 @@ export default function HomePage() {
             ) : (
             <>
                 <Title level={3}>{selectedLesson.title}</Title>
-                <Paragraph><b>Конспект урока:</b></Paragraph>
-                <div className={styles.notesContainer}>
-                {isTeacher ? (
-                    <textarea
-                    className={styles.notesTextarea}
-                    value={selectedLesson.notes}
-                    onChange={(e) => {
-                        const newNotes = e.target.value;
-                        setSelectedLesson((prev) =>
-                        prev ? { ...prev, notes: newNotes } : prev
-                        );
-                        // Optionally update lesson list as well
-                        setLessons((prev) =>
-                        prev.map((l) =>
-                            l.id === selectedLesson.id ? { ...l, notes: newNotes } : l
-                        )
-                        );
-                    }}
-                    />
-                ) : (
-                    <pre className={styles.notesPre}>{selectedLesson.notes}</pre>
-                )}
-                </div>
+                <Notebook />
             </>
             )}
         </Content>

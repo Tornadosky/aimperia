@@ -40,63 +40,16 @@ const fakeLessons = [
         summary: "Разобрали примеры применения второго закона Ньютона.",
     },
 ];
+import HeaderLogo from '../HeaderLogo/HeaderLogo';
 
-const AppHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+const AppHeader = () => {
     
     const pathname = usePathname()
     
     return (
         <Header className={styles.header} id="app-header">
             <div className={styles.headerContainer}>
-                <div className={styles.logo}>
-                    <img
-                        src="/logo.svg"
-                        alt="Logo"
-                        className={styles.logoImage}
-                    />
-                    <Link href="/">AImperia</Link>
-                </div>
-                {isAuthenticated ?
-                    <div className={styles.buttons}>
-                        <Space>
-                            <Button
-                                icon={<PlusOutlined />}
-                                className={styles.button}
-                            >
-                                Создать урок
-                            </Button>
-                            <Button
-                                icon={<LoginOutlined />}
-                                className={styles.button}
-                            >
-                                Присоединиться к уроку
-                            </Button>
-                            <Popover
-                                content={
-                                    <div>
-                                        <p>
-                                            <b>Имя:</b> Иван Иванов
-                                        </p>
-                                        <p>
-                                            <b>Email:</b> ivan@example.com
-                                        </p>
-                                        <Button
-                                            icon={<LogoutOutlined />}
-                                            type="link"
-                                            danger
-                                        >
-                                            Выйти
-                                        </Button>
-                                    </div>
-                                }
-                                placement="bottomRight"
-                            >
-                                <Button icon={<TeamOutlined />}>Аккаунт</Button>
-                            </Popover>
-                        </Space>
-                    </div>
-                : null}
-                {pathname === '/' ?
+                <HeaderLogo />
                 <div className={styles.buttons}>
                     <div className={styles.scrollToLinks}>
                         <div className={styles.scrollToLink}
@@ -156,33 +109,6 @@ const AppHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
                         </Link>
                     </div>
                 </div>
-                :null
-                }
-                
-                {['/signin', '/signup'].includes(pathname) ?
-                    <div className={styles.buttons}>
-                        <div className={styles.registrationButtons}>
-                            <Link href="/signin">
-                                <Button
-                                    type="default"
-                                    style={{ marginRight: "8px" }}
-                                    className={styles.button}
-                                >
-                                    Вход
-                                </Button>
-                            </Link>
-                            <Link href="/signup">
-                                <Button
-                                    type="primary"
-                                    className={styles.button}
-                                >
-                                    Регистрация
-                                </Button>
-                            </Link>
-                        </div>
-                    </div>
-                    :null
-                }
                 
             </div>
         </Header>

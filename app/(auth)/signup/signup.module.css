@@ -1,0 +1,33 @@
+.input{
+    height: 45px;
+    width: 100%;
+    border-radius: 50px;
+    padding: 0 20px;
+    font-size: 18px;
+}
+
+.button{
+    width: 100%;
+    height: 45px;
+    border-radius: 50px;
+    font-size: 18px;
+    /* font-weight: bold; */
+}
+
+.radio{
+    height: 45px;
+    font-size: 18px;
+    padding: 8px;
+    text-align: center;
+    
+}
+
+.radio:first-child {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+}
+
+.radio:last-child {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
