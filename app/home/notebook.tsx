@@ -1,17 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
 import rehypeKatex from "rehype-katex";
+import katex from 'katex';
 import "katex/dist/katex.min.css";
-import "./notebook.css";
+import styles from "./notebook.module.css"; // Ensure this is imported to apply styles
 import MDEditor from "@uiw/react-md-editor";
+import MarkdownPreview from '@uiw/react-markdown-preview';
+import { EditFilled, CloseCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
-export default function Notebook() {
+import { Lesson } from "./page";
+
+export default function Notebook({ selectedLesson }: { selectedLesson: Lesson|null }) {
     const [content, setContent] = useState("");
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState("");
@@ -51,29 +55,32 @@ export default function Notebook() {
     };
 
     return (
-        <div className="prose">
-            <div className="flex justify-end mb-4 space-x-2">
+        <div className={styles.notebookContainer} data-color-mode="light">
+            <div  className={styles.buttonsContainer}>
                 {editing ? (
                     <>
                         <Button
                             onClick={handleCancel}
                             disabled={saving}
-                            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                            className={styles.button}
                         >
                             Cancel
                         </Button>
                         <Button
                             onClick={handleSave}
                             disabled={saving}
-                            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                            icon={<SaveOutlined />}
+                            type="primary"
+                            className={styles.button}
                         >
                             {saving ? "Saving..." : "Save"}
                         </Button>
                     </>
                 ) : (
                     <Button
-                        onClick={() => setEditing(true)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            onClick={() => setEditing(true)}
+                            icon={<EditFilled />}
+                            className={styles.button}
                     >
                         Edit
                     </Button>
@@ -82,23 +89,27 @@ export default function Notebook() {
 
             {editing ? (
                 <MDEditor
+                    className={styles.markdownEditor}
                     value={draft}
                     onChange={(val) => setDraft(val ?? "")}
-                    height={window.innerHeight * 0.7}
-                    textareaProps={{
-                        className: "prose prose-lg leading-relaxed",
+                    previewOptions={{
+                        remarkPlugins: [remarkGfm, remarkMath],
+                        rehypePlugins: [rehypeRaw, rehypeKatex],
                     }}
                 />
             ) : (
-                <div className="prose prose-lg leading-relaxed">
-                    <ReactMarkdown
-                            remarkPlugins={[remarkGfm, remarkMath]}
-                            rehypePlugins={[rehypeRaw, rehypeKatex]}
-                    >
-                        {content}
-                    </ReactMarkdown>
-                </div>
-            )}
+                <MarkdownPreview
+                    source={content}
+                    className={styles.markdownPreview}
+                    rehypePlugins={[rehypeRaw, rehypeKatex]}
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    wrapperElement={{
+                        'data-color-mode': 'light',
+                        className: 'markdown-wrapper',
+                        }}
+                    />
+                )
+            }
         </div>
     );
 }

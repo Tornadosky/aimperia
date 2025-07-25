@@ -30,9 +30,9 @@ export const AuthProvider = ({ children }) => {
         loadUser();
     }, []);
     
-    useEffect(() => {
-        console.log('AuthContext user updated:', user);
-    }, [user]);
+    // useEffect(() => {
+    //     console.log('AuthContext user updated:', user);
+    // }, [user]);
 
     return (
         <AuthContext.Provider value={{ user, setUser, loading }}>

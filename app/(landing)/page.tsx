@@ -768,10 +768,10 @@ export default function LandingPage() {
                     >
                         <div className={styles.sectionReviewItem}>
                             <div className={styles.sectionReviewText}>
-                                "Платформа AImperia - это просто находка! Я
+                                &quot;Платформа AImperia - это просто находка! Я
                                 учусь на ней уже несколько месяцев и заметил,
                                 что стал учиться гораздо быстрее. Очень
-                                рекомендую!"
+                                рекомендую!&quot;
                             </div>
                             <div className={styles.sectionReviewAuthor}>
                                 Алексей, ученик
@@ -779,9 +779,9 @@ export default function LandingPage() {
                         </div>
                         <div className={styles.sectionReviewItem}>
                             <div className={styles.sectionReviewText}>
-                                "Я использую платформу AImperia для своих
+                                &quot;Я использую платформу AImperia для своих
                                 уроков и очень доволен. Интерактивная доска и
-                                автоконспект - это просто супер!"
+                                автоконспект - это просто супер!&quot;
                             </div>
                             <div className={styles.sectionReviewAuthor}>
                                 Мария, преподаватель
@@ -789,9 +789,9 @@ export default function LandingPage() {
                         </div>
                         <div className={styles.sectionReviewItem}>
                             <div className={styles.sectionReviewText}>
-                                "Платформа AImperia - это лучший способ
+                                &quot;Платформа AImperia - это лучший способ
                                 учиться! Я уже подготовился к ЕГЭ на 90 баллов
-                                благодаря этой платформе."
+                                благодаря этой платформе.&quot;
                             </div>
                             <div className={styles.sectionReviewAuthor}>
                                 Иван, ученик
@@ -799,9 +799,9 @@ export default function LandingPage() {
                         </div>
                         <div className={styles.sectionReviewItem}>
                             <div className={styles.sectionReviewText}>
-                                "Я использую платформу AImperia для своих
+                                &quot;Я использую платформу AImperia для своих
                                 уроков и очень доволен. Интерактивная доска и
-                                автоконспект - это просто супер!"
+                                автоконспект - это просто супер!&quot;
                             </div>
                             <div className={styles.sectionReviewAuthor}>
                                 Анна, преподаватель
@@ -809,10 +809,10 @@ export default function LandingPage() {
                         </div>
                         <div className={styles.sectionReviewItem}>
                             <div className={styles.sectionReviewText}>
-                                "Платформа AImperia - это просто находка! Я
+                                &quot;Платформа AImperia - это просто находка! Я
                                 учусь на ней уже несколько месяцев и заметил,
                                 что стал учиться гораздо быстрее. Очень
-                                рекомендую!"
+                                рекомендую!&quot;
                             </div>
                             <div className={styles.sectionReviewAuthor}>
                                 Дмитрий, ученик
@@ -820,9 +820,9 @@ export default function LandingPage() {
                         </div>
                         <div className={styles.sectionReviewItem}>
                             <div className={styles.sectionReviewText}>
-                                "Я использую платформу AImperia для своих
+                                &quot;Я использую платформу AImperia для своих
                                 уроков и очень доволен. Интерактивная доска и
-                                автоконспект - это просто супер!"
+                                автоконспект - это просто супер!&quot;
                             </div>
                             <div className={styles.sectionReviewAuthor}>
                                 Алексей, преподаватель
@@ -845,7 +845,7 @@ export default function LandingPage() {
                                 setCollapseActiveKey([key[key.length - 1]])
                             
                         }}
-                        expandIconPosition="right"
+                        expandIconPosition="end"
                         className={styles.faqCollapse}
                         items={[
                             {

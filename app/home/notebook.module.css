@@ -1,0 +1,37 @@
+.notebookContainer{
+    background-color: #f8f8f8;
+    padding: 50px;
+    padding-top: 30px;
+    border-radius: 8px;
+    line-height: 1.8;
+    bottom: 0;
+    overflow: auto;
+}
+
+.markdownPreview{
+  background-color: #f8f8f8 !important;
+}
+
+.notebookContainer img {
+  width: 100%;
+  max-width: 600px !important;
+  height: auto;
+}
+
+.markdownEditor{
+  height: auto !important;
+}
+
+.button{
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-size: 20px;
+    height: 40px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  gap: 10px;
+}

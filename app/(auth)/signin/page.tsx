@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, Input, Typography, Space, Divider, Steps, message, Modal } from 'antd';
-import '@ant-design/v5-patch-for-react-19';
 import {
     GoogleOutlined,
     GithubOutlined,
@@ -23,8 +22,14 @@ const { Step } = Steps;
 
 export default function SignIn() {
 
-    const { setUser } = useAuth();
+    const { user, setUser } = useAuth();
     const router = useRouter();
+    
+    useEffect(() => {
+        if (user) {
+            router.push('/home');
+        }
+    }, [user, router]);
     
     return (
         <div style={{ maxWidth: 400, margin: 'auto', padding: '40px 20px' }}>

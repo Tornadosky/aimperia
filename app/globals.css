@@ -3,12 +3,7 @@
   /* --foreground: #171717; */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* --background: #0a0a0a; */
-    /* --foreground: #ededed; */
-  }
-}
+
 
 html,
 body {
@@ -42,4 +37,45 @@ a {
 .ant-list-item-action{
   margin-inline-start: 0 !important;
   margin-left: 10px !important;
+}
+
+.ant-btn {
+  border-radius: 20px;
+  font-size: 15px;
+  height: 40px;
+  padding: 0 20px;
+  transition: all 0.3s ease;
+}
+
+.ant-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ant-picker-ok .ant-btn {
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 0 10px;
+  height: 30px;
+}
+
+.ant-input {
+  border-radius: 20px;
+  font-size: 15px;
+  height: 40px;
+}
+
+textarea.ant-input {
+  padding: 10px;
+  max-height: 400px;
+}
+
+.ant-modal-content{
+  border-radius: 30px !important;
+}
+
+.ant-picker {
+  border-radius: 20px;
+  font-size: 15px;
+  height: 40px;
 }
