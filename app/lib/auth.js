@@ -29,3 +29,15 @@ export async function logout() {
     const res = await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
     return await res.json();
 }
+
+export async function handleCallback(access_token, expires_in) {
+    const params = new URLSearchParams();
+    params.append('access_token', access_token);
+    if (expires_in) params.append('expires_in', expires_in);
+
+    const res = await fetch(`${API_BASE_URL}/api/auth/callback?${params.toString()}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return await res.json();
+}

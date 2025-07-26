@@ -19,9 +19,11 @@ import {
 } from "@ant-design/icons";
 import styles from "./signup.module.css";
 import { useAuth } from "../../context/AuthContext";
-import { signup } from "../../lib/auth";
+import { signup, handleCallback, getCurrentUser } from "../../lib/auth";
 
 import { useRouter } from "next/navigation";
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 const { Title } = Typography;
 
@@ -177,10 +179,17 @@ export default function SignUp() {
             <Space direction="vertical" style={{ width: "100%" }}>
                 <Button
                     icon={<GoogleOutlined />}
-                    href="/signup/google"
                     type="primary"
                     block
                     className={styles.button}
+                    onClick={async () => {
+                        supabase.auth.signInWithOAuth({
+                            provider: 'google',
+                            options: {
+                                redirectTo: `${window.location.origin}/callback`,
+                            }
+                        });
+                    }}
                 >
                     Зарегистрироваться через Google
                 </Button>

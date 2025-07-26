@@ -79,3 +79,20 @@ textarea.ant-input {
   font-size: 15px;
   height: 40px;
 }
+
+.ant-select {
+  border-radius: 20px;
+  font-size: 15px;
+  height: 40px;
+}
+
+.ant-select-selector {
+  border-radius: 20px !important;
+  font-size: 15px !important;
+  height: 40px;
+  padding: 0 10px;
+}
+
+label.ant-form-item-required {
+  font-size: 15px !important;
+}

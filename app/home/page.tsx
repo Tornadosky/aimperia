@@ -13,6 +13,10 @@ import {
     Popover,
     Tooltip,
     Spin,
+    message,
+    Form,
+    Select,
+    Input
 } from "antd";
 import {
     PlusOutlined,
@@ -22,13 +26,14 @@ import {
     TeamOutlined,
     VideoCameraOutlined,
     LogoutOutlined,
+    CloseCircleOutlined,
 } from "@ant-design/icons";
 import Notebook from "./notebook";
 import styles from "./Home.module.css";
 
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
-import { fetchLessons, createLesson, attendLesson } from "@/app/lib/lessons";
+import { fetchLessons, createLesson, attendLesson, closeLesson } from "@/app/lib/lessons";
 
 import HomeHeader from "@/components/HomeHeader/HomeHeader";
 import React from "react";
@@ -67,14 +72,21 @@ const { Title, Text, Paragraph } = Typography;
 
 export default function HomePage() {
     
+    const updateForm = Form.useFormInstance();
+    
     const router = useRouter();
     const { user, setUser } = useAuth();
+    const [roleSelectModal, setRoleSelectModal] = useState(false);
     useEffect(() => {
         if (!user) {
             router.push("/signin");
             return;
         }
-        
+        console.log("Current user:", user, !user.role);
+        if (!user.role && user.id) {
+            setRoleSelectModal(true);
+            return;
+        }
         
         const loadLessons = async () => {
             setLoading(true);
@@ -133,6 +145,49 @@ export default function HomePage() {
         if (!user) return;
         router.push(`/meeting/${lesson.id}`);
     }
+    
+    const handleLessonEnd = async (lesson: Lesson) => {
+        if (!user) return;
+        Modal.info({
+            title: "Завершение урока",
+            content: (
+                <div>
+                    <p>Вы уверены, что хотите завершить этот урок?</p>
+                    <p>После завершения урока вы сможете только сгенерированный конспект.</p>
+                </div>
+            ),
+            onOk: async () => {
+                 try {
+                    const result = await closeLesson(lesson.id);
+                    if (result?.id){
+                        setLessons((prev) => ({
+                            ...prev,
+                            ongoing: prev.ongoing.filter((l) => l.id !== lesson.id),
+                            completed: [result, ...prev.completed],
+                        }));
+                        setSelectedLesson(null);
+                        message.success("Урок успешно завершен");
+                    }
+                    else {
+                        message.error("Не удалось завершить урок");
+                    }
+                } catch (error) {
+                    console.error("Error ending lesson:", error);
+                    message.error("Не удалось завершить урок");
+                }
+            },
+            cancelText: "Отмена",
+            okText: "Завершить урок",
+            footer: (_, { OkBtn, CancelBtn }) => (
+                <>
+                  <Button onClick={()=>{Modal.destroyAll()}}>Отмена</Button>
+                  <OkBtn />
+                </>
+            ),
+        })
+       
+        
+    };
 
     const [loading, setLoading] = useState(false);
     const container = useRef<HTMLElement>(null);
@@ -196,6 +251,17 @@ export default function HomePage() {
                                     actions={[
                                         <Tooltip
                                             key="join"
+                                            title="Закончить урок"
+                                        >
+                                            <Button
+                                                shape="circle"
+                                                icon={<CloseCircleOutlined />}
+                                                onClick={() => handleLessonEnd(lesson)}
+                                                style={{ padding: '0px', width: '32px', height: '32px' }}
+                                            />
+                                        </Tooltip>,
+                                        <Tooltip
+                                            key="join"
                                             title="Присоединиться к уроку"
                                         >
                                             <Button
@@ -206,7 +272,6 @@ export default function HomePage() {
                                             />
                                         </Tooltip>,
                                     ]}
-                                    onClick={() => handleLessonJoin(lesson)}
                                 >
                                     <List.Item.Meta
                                         title={lesson.title}
@@ -248,7 +313,7 @@ export default function HomePage() {
                         </Title>
                         <List
                             itemLayout="horizontal"
-                            dataSource={lessons["ongoing"]}
+                            dataSource={lessons["completed"]}
                             renderItem={(lesson) => (
                                 <List.Item
                                     className={[
@@ -327,6 +392,56 @@ export default function HomePage() {
                     />
                 </Modal>
             </Layout>
+            <Modal
+                title="Подтвердите свои данные"
+                open={roleSelectModal}
+                footer={null}
+                closable={false}
+                onCancel={() => { }}
+            >
+                <Form
+                    form={updateForm}
+                >
+                    <Form.Item
+                        label="Имя"
+                        name="firstName"
+                        rules={[{ required: true, message: 'Пожалуйста, введите имя' }]}
+                    >
+                        <Input placeholder="Иван" className={styles.input} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Фамилия"
+                        name="lastName"
+                        rules={[{ required: true, message: 'Пожалуйста, введите фамилию' }]}
+                    >
+                        <Input placeholder="Иванов" className={styles.input} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Выберите роль"
+                        name="role"
+                        rules={[{ required: true, message: 'Пожалуйста, выберите роль' }]}
+                    >
+                        <Select
+                            placeholder="Выберите роль"
+                        >
+                            <Select.Option value="teacher">Учитель</Select.Option>
+                            <Select.Option value="student">Ученик</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                
+                                setRoleSelectModal(false)
+                            }}
+                            style={{ width: '100%' }}
+                        >
+                            Подтвердить
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 }

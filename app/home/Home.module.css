@@ -20,6 +20,10 @@
   overflow-y: auto;
 }
 
+.sidebarSection{
+  padding-bottom: 20px;
+}
+
 .sidebarTitle {
   margin-bottom: 16px !important;
   color: #3d8eff !important;

@@ -12,18 +12,21 @@ import {
 
 import styles from './signin.module.css'
 
-import { login } from '../../lib/auth';
+import { login, handleCallback, getCurrentUser } from '../../lib/auth';
 import { useAuth } from '../../context/AuthContext';
 
 import { useRouter } from 'next/navigation';
-
 const { Title } = Typography;
 const { Step } = Steps;
 
-export default function SignIn() {
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
+export default function SignIn() {
+    
     const { user, setUser } = useAuth();
     const router = useRouter();
+    
     
     useEffect(() => {
         if (user) {
@@ -81,9 +84,16 @@ export default function SignIn() {
                 <Button
                     icon={<GoogleOutlined />}
                     type="primary"
-                    href="/signin/google"
                     block
                     className={styles.button}
+                    onClick={async () => {
+                        supabase.auth.signInWithOAuth({
+                            provider: 'google',
+                            options: {
+                                redirectTo: `${window.location.origin}/callback`,
+                            }
+                        });
+                    }}
                 >
                     Войти через Google
                 </Button>
