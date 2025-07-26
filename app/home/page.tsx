@@ -33,6 +33,9 @@ import { fetchLessons, createLesson, attendLesson } from "@/app/lib/lessons";
 import HomeHeader from "@/components/HomeHeader/HomeHeader";
 import React from "react";
 
+import { Tldraw, useEditor, Editor } from 'tldraw'
+import 'tldraw/tldraw.css'
+
 
 export type Lesson = {
     id: string;
@@ -245,7 +248,7 @@ export default function HomePage() {
                         </Title>
                         <List
                             itemLayout="horizontal"
-                            dataSource={lessons["completed"]}
+                            dataSource={lessons["ongoing"]}
                             renderItem={(lesson) => (
                                 <List.Item
                                     className={[
@@ -259,6 +262,7 @@ export default function HomePage() {
                                             title="Открыть доску на весь экран"
                                         >
                                             <Button
+                                                style={{ padding: '0px', width: '32px', height: '32px' }}
                                                 shape="circle"
                                                 icon={<DesktopOutlined />}
                                                 onClick={(e) => {
@@ -307,7 +311,7 @@ export default function HomePage() {
 
                 {/* Whiteboard modal */}
                 <Modal
-                    title="Доска урока"
+                    title={`Доска урока: ${selectedLesson?.title}`}
                     open={isWhiteboardOpen}
                     footer={null}
                     onCancel={() => setIsWhiteboardOpen(false)}
@@ -316,13 +320,11 @@ export default function HomePage() {
                     bodyStyle={{ height: "80vh", padding: 0 }}
                     centered
                 >
-                    {/* {selectedLesson && (
-                        <iframe
-                            src={selectedLesson.whiteboardUrl}
-                            className={styles.whiteboardIframe}
-                            title="Whiteboard"
-                        />
-                    )} */}
+                    <Tldraw
+                        onMount={(editor) => {
+                            editor.updateInstanceState({ isReadonly: true })
+                        }}
+                    />
                 </Modal>
             </Layout>
         </>

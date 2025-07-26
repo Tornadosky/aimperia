@@ -4,7 +4,7 @@
   align-items: center;
   background: #fff;
   box-shadow: 0 2px 8px hsl(210, 7%, 95%);
-  z-index: 100;
+  z-index: 100000;
   position: sticky;
   top: 0;
   height: 80px;

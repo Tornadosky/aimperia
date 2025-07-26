@@ -6,7 +6,9 @@ export default function HomeLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div>
+        <div style={{
+            height: '100vh',
+        }}>
             <MeetingHeader />
             {children}
         </div>

@@ -1,64 +1,38 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Form, Input, Button, Spin, message } from "antd";
+import { Form, Input, Button, Spin, message, List, Layout, Image, ConfigProvider, Tooltip } from "antd";
 import { fetchLessons, createLesson, attendLesson, fetchLessonById, getZoomSignature } from "@/app/lib/lessons";
 import { useAuth } from '@/app/context/AuthContext'
 import styles from './meeting.module.css'
+import classNames from 'classnames'
+import { Tldraw, useEditor, Editor } from 'tldraw'
+import { useSyncDemo } from '@tldraw/sync'
+import 'tldraw/tldraw.css'
+import ruRU from 'antd/locale/ru_RU';
+import { DeleteOutlined } from "@ant-design/icons";
+const { Header, Sider, Content } = Layout;
 
 export default function MeetingPage({ params }: { params: { lessonId: string } }) {
     const { user } = useAuth();
     const [loading, setLoading] = useState(false);
-    const zoomContainerRef = useRef<HTMLDivElement>(null);
     const [client, setClient] = useState<any>(null);
     const [lessonInfo, setLessonInfo] = useState<any>(null);
     const [signature, setSignature] = useState<string | null>(null);
+    // const [whiteBoardId, setWhiteBoardId] = useState<string | null>('unique-id-465845654654');
+    const whiteBoardId = useSyncDemo({ roomId: 'unique-id-465845654654' })
 
     useEffect(() => {
-        if (!zoomContainerRef.current || !user) return;
-        let meetingSDKElement = document.getElementById('meetingSDKElement');
-        (async () => {
-            const { default: ZoomMtgEmbedded } = await import(
-                "@zoom/meetingsdk/embedded"
-            );
-            const client = ZoomMtgEmbedded.createClient();
-            client.init({
-                debug: true,
-                zoomAppRoot: zoomContainerRef.current as HTMLElement,
-                language: "ru-RU",
-            })
-            
-            setClient(client);
-        })();
     }, [user]);
     
     useEffect(() => {
-        
+        if (!user) return;
         const fetchLesson = async () => {
             try {
                 const lesson = await fetchLessonById(params.lessonId);
                 console.log("Fetched lesson:", lesson);
                 if (lesson?.id){
                     setLessonInfo(lesson);
-                    const signature = await getZoomSignature(lesson?.id);
-                    console.log("Zoom signature:", signature);
-                    if (signature?.signature){
-                        setSignature(signature);
-                        if (client) {
-                            client.join({
-                                signature: signature,
-                                meetingNumber: lesson.zoomMeetingId,
-                                password: lesson.zoomPassword || "",
-                                userName: user.firstName + " " + user.lastName,
-                                success: () => {
-                                        console.log('Joined meeting successfully')
-                                    },
-                                error: (error:any) => {
-                                        console.error('Failed to join meeting:', error)
-                                    }
-                            });
-                        }
-                    }
                 }
                 else
                     message.error("Не удалось загрузить информацию о встрече");
@@ -68,7 +42,7 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
             }
         }
         fetchLesson();
-    }, [params.lessonId]);
+    }, [params.lessonId, user]);
 
     const handleJoin = async (values: {
         meetingNumber: string;
@@ -83,18 +57,6 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
         setLoading(true);
         try {
 
-            // client.join({
-            //     signature: signature,
-            //     meetingNumber: values.meetingNumber,
-            //     password: values.meetingPassword || "",
-            //     userName: values.userName,
-            //     // userEmail can be added if you collect it in the form
-            // }).then(() => {
-            //     console.log('Joined meeting successfully')
-            // }).catch((error) => {
-            //     console.error('Failed to join meeting:', error)
-            // })
-
             message.success("Подключено к встрече");
         } catch (err) {
             console.error(err);
@@ -103,52 +65,85 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
             setLoading(false);
         }
     };
-
+    
+    const [editor, setEditor] = useState<Editor|null>(null);
+    const [screenshots, setScreenshots] = useState<string[]>([]);
+    
+    function InsideOfContext() {
+        const editor = useEditor()
+        setEditor(editor as Editor);
+        return null
+    }
+    
     return (
-        <div style={{ padding: 24 }}>
-            {/* Zoom SDK will mount here */}
-            <div
-                id="meetingSDKElement"
-                ref={zoomContainerRef}
-                style={{ width: "100%", height: "600px", marginBottom: 24 }}
-            />
-
-            <h1>Zoom Meeting</h1>
-            <p>Введите данные встречи, чтобы присоединиться:</p>
-
-            <Form
-                layout="vertical"
-                onFinish={handleJoin}
-                style={{ maxWidth: 400 }}
+        <Layout className={styles.container}>
+            
+            <Content
+                    className={classNames(
+                    styles.content,
+                    loading ? styles.loading : styles.loaded
+                    )}
+                >
+                <div style={{ 
+                    height: '90%',
+                }}>
+                    <Tldraw store={whiteBoardId}>
+                        <InsideOfContext />
+                    </Tldraw>
+                </div>
+            </Content>
+            
+            <Sider
+                width={300}
+                className={styles.sider}
+                breakpoint="lg"
+                collapsedWidth="0"
             >
-                <Form.Item
-                    name="meetingNumber"
-                    label="Номер встречи"
-                    rules={[
-                        { required: true, message: "Введите номер встречи" },
-                    ]}
-                >
-                    <Input placeholder="Например: 1234567890" />
-                </Form.Item>
+                
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        if (!editor) {
+                            message.error("Редактор не инициализирован");
+                            return;
+                        }
+                        const renderingShapes = editor.getCurrentPageRenderingShapesSorted()
+                        editor.toImage(renderingShapes, {padding:60}).then((value: {blob: Blob, height: number, width: number}) => {
+                            const url = URL.createObjectURL(value.blob);
+                            setScreenshots([url, ...screenshots]);
+                            message.success("Скриншот успешно создан");
+                        })
+                    }}
+                >Добавить скриншот в конспект</Button>
+                <ConfigProvider locale={ruRU}>
+                    <List
+                        className={styles.screenshotsList}
+                        itemLayout="horizontal"
+                        dataSource={screenshots}
+                        renderItem={(item) => (
+                            <List.Item
+                                actions={[
+                                    <Tooltip title="Удалить скриншот">
+                                        <Button
+                                            style={{ height: '32px' }}
+                                            onClick={() => {
+                                                setScreenshots(screenshots.filter(i => i !== item));
+                                                message.success("Скриншот успешно удален");
+                                            }}
+                                            icon={<DeleteOutlined />}
+                                        />
+                                    </Tooltip>
+                                ]}
+                            >
+                                <Image src={item} alt="Screenshot" className={styles.screenshotImage} />
+                            </List.Item>
+                        )}
+                        locale={{ emptyText: "Нет скриншотов" }}
+                    />
+                </ConfigProvider>
+                
+            </Sider>
 
-                <Form.Item
-                    name="userName"
-                    label="Ваше имя"
-                    rules={[{ required: true, message: "Введите ваше имя" }]}
-                >
-                    <Input placeholder="Например: Иван Иванов" />
-                </Form.Item>
-
-                <Form.Item name="meetingPassword" label="Пароль (если есть)">
-                    <Input placeholder="Пароль встречи" />
-                </Form.Item>
-
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" disabled={loading}>
-                        {loading ? <Spin /> : "Присоединиться"}
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+        </Layout>
     );
 }

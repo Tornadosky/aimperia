@@ -25,6 +25,8 @@ import {
     TeamOutlined,
     VideoCameraOutlined,
     LogoutOutlined,
+    InfoCircleOutlined,
+    InfoCircleFilled,
 } from "@ant-design/icons";
 import Link from "next/link";
 import styles from "./styles.module.css";
@@ -52,8 +54,11 @@ interface HomeHeaderProps {
 
 const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
     
+    const [form] = Form.useForm();
     const { setUser, user } = useAuth();
     const router = useRouter();
+    const [createLessonModal, setCreateLessonModal] = useState(false);
+    const [createLoading, setCreateLoading] = useState(false);
     
     return (
         <Header className={styles.header} id="app-header">
@@ -67,99 +72,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                             icon={<PlusOutlined />}
                             className={styles.button}
                             onClick={async () => {
-                                Modal.info({
-                                    title: "Создание нового урока",
-                                    content: (
-                                        <div>
-                                            <p style={{
-                                                marginBottom: "16px",
-                                                fontSize: "16px",
-                                            }}>Введите название и код приглашения для нового урока:</p>
-                                            <ConfigProvider locale={ruRU}>
-                                                <Form
-                                                    onFinish={async (values) => {
-                                                        const newLesson = await createLesson({
-                                                            title: values.title,
-                                                            description: values.description || "",
-                                                            zoomPassword: values.zoomPassword || "",
-                                                            scheduledAt: values.scheduledAt || undefined,
-                                                            startNow: true,
-                                                        });
-                                                        if (newLesson?.id) {
-                                                            if (!newLesson.startedAt) {
-                                                                setLessons((prevLessons: Lessons) => {
-                                                                    return {
-                                                                        ...prevLessons,
-                                                                        upcoming: [newLesson, ...prevLessons.ongoing],
-                                                                    }
-                                                                });
-                                                            }
-                                                            else {
-                                                                setLessons((prevLessons: Lessons) => {
-                                                                    return {
-                                                                        ...prevLessons,
-                                                                        ongoing: [newLesson, ...prevLessons.ongoing],
-                                                                    }
-                                                                });
-                                                            }
-                                                            message.success("Урок успешно создан");
-                                                            Modal.destroyAll();
-                                                        }
-                                                        else {
-                                                            message.error("Ошибка при создании урока");
-                                                        }
-                                                    }}
-                                                    layout="vertical"
-                                                    style={{ maxWidth: 400 }}
-                                                    
-                                                >
-                                                    <Form.Item
-                                                        name="title"
-                                                        rules={[{ required: true, message: "Введите название урока" }]}
-                                                    >
-                                                        <Input placeholder="Название урока" />
-                                                    </Form.Item>
-                                                    <Form.Item
-                                                        name="description"
-                                                        rules={[]}
-                                                    >
-                                                        <Input.TextArea placeholder="Описание (необязательно)" />
-                                                    </Form.Item>
-                                                    <Form.Item
-                                                        name="zoomPassword"
-                                                        rules={[]}
-                                                    >
-                                                        <Input placeholder="Пароль Zoom (необязательно)" />
-                                                    </Form.Item>
-                                                    <Form.Item
-                                                        name="scheduledAt"
-                                                        rules={[]}
-                                                    >
-                                                        <DatePicker
-                                                            style={{ width: "100%" }}
-                                                            placeholder="Дата и время начала (необязательно)"
-                                                            showTime
-                                                            format="YYYY-MM-DD HH:mm"
-                                                        />
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: "flex", justifyContent: "center", marginBottom: 0 }}>
-                                                        <Space>
-                                                            <Button type="primary" htmlType="submit">
-                                                                Создать урок
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => Modal.destroyAll()}
-                                                            >
-                                                                Отмена
-                                                            </Button>
-                                                        </Space>
-                                                    </Form.Item>
-                                                </Form>
-                                            </ConfigProvider>
-                                        </div>
-                                    ),
-                                    footer: null,
-                                })
+                                setCreateLessonModal(true);
                             }}
                         >
                             Создать урок
@@ -214,6 +127,121 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         </Popover>
                     </Space>
                 </div>
+                
+                
+                <Modal
+                    title={<div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "20px",
+                    }}><InfoCircleFilled style={{color:'#3d8eff', marginRight:'10px', fontSize:'20px'}}/>Создание нового урока</div>}
+                    open={createLessonModal}
+                    onCancel={() => setCreateLessonModal(false)}
+                    footer={null}
+                    centered
+                >
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "20px",
+                        width: "100%",
+                    }}>
+                        <p style={{
+                            marginBottom: "16px",
+                            fontSize: "16px",
+                        }}>Введите название и код приглашения для нового урока:</p>
+                        <ConfigProvider locale={ruRU}>
+                            <Form
+                                form={form}
+                                onFinish={async (values) => {
+                                    setCreateLoading(true);
+                                    const newLesson = await createLesson({
+                                        title: values.title,
+                                        description: values.description || "",
+                                        zoomPassword: values.zoomPassword || "",
+                                        scheduledAt: values.scheduledAt || undefined,
+                                        startNow: true,
+                                    });
+                                    if (newLesson?.id) {
+                                        if (!newLesson.startedAt) {
+                                            setLessons((prevLessons: Lessons) => {
+                                                return {
+                                                    ...prevLessons,
+                                                    upcoming: [newLesson, ...prevLessons.ongoing],
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            setLessons((prevLessons: Lessons) => {
+                                                return {
+                                                    ...prevLessons,
+                                                    ongoing: [newLesson, ...prevLessons.ongoing],
+                                                }
+                                            });
+                                        }
+                                        setCreateLoading(false);
+                                        message.success("Урок успешно создан");
+                                        setCreateLessonModal(false)
+                                        form.resetFields();
+                                    }
+                                    else {
+                                        message.error("Ошибка при создании урока");
+                                    }
+                                }}
+                                layout="vertical"
+                                style={{ maxWidth: 400, width: "100%" }}
+                                
+                            >
+                                <Form.Item
+                                    name="title"
+                                    rules={[{ required: true, message: "Введите название урока" }]}
+                                >
+                                    <Input placeholder="Название урока" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="description"
+                                    rules={[]}
+                                >
+                                    <Input.TextArea placeholder="Описание (необязательно)" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="zoomPassword"
+                                    rules={[]}
+                                >
+                                    <Input placeholder="Пароль Zoom (необязательно)" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="scheduledAt"
+                                    rules={[]}
+                                >
+                                    <DatePicker
+                                        style={{ width: "100%" }}
+                                        placeholder="Дата и время начала (необязательно)"
+                                        showTime
+                                        format="YYYY-MM-DD HH:mm"
+                                    />
+                                </Form.Item>
+                                <Form.Item style={{ display: "flex", justifyContent: "center", marginBottom: 0 }}>
+                                    <Space>
+                                        <Button type="primary" htmlType="submit"
+                                            loading={createLoading}
+                                        >
+                                            Создать урок
+                                        </Button>
+                                        <Button
+                                            onClick={() => setCreateLessonModal(false)}
+                                        >
+                                            Отмена
+                                        </Button>
+                                    </Space>
+                                </Form.Item>
+                            </Form>
+                        </ConfigProvider>
+                    </div>
+                </Modal>
                 
             </div>
         </Header>
