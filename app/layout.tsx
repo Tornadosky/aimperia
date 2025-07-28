@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import AppFooter from "@/components/Footer/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
-import { GoogleOAuthProvider } from '@react-oauth/google';
 
 
 export const metadata: Metadata = {
@@ -21,19 +20,17 @@ export default function RootLayout({
             <body
                 // className={`${geistSans.variable} ${geistMono.variable}`}
             >
-                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
-                    <AuthProvider>
-                        <div
-                        style={{
-                            minHeight: "100vh",
-                            display: "flex",
-                            flexDirection: "column",
-                        }}>
-                            <main style={{ flex: 1 }}>{children}</main>
-                            <AppFooter />
-                        </div>
-                    </AuthProvider>
-                </GoogleOAuthProvider>
+                <AuthProvider>
+                    <div
+                    style={{
+                        minHeight: "100vh",
+                        display: "flex",
+                        flexDirection: "column",
+                    }}>
+                        <main style={{ flex: 1 }}>{children}</main>
+                        <AppFooter />
+                    </div>
+                </AuthProvider>
             </body>
         </html>
     );

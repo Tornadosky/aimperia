@@ -96,3 +96,7 @@ textarea.ant-input {
 label.ant-form-item-required {
   font-size: 15px !important;
 }
+
+.agora_video_player{
+  transform: none !important;
+}

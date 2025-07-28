@@ -5,6 +5,7 @@
 
 .content{
     padding: 24px;
+    padding-top: 10px;
     background: #fff;
     min-height: 280px;
 }
@@ -12,11 +13,27 @@
     background: #f0f2f5;
     padding: 16px;
     overflow-y: auto;
-    height: calc(100vh - 64px);
+    height: calc(100vh);
     display: flex;
     flex-direction: column;
     gap: 16px;
     align-items: center;
+    overflow-x: hidden;
+}
+
+.leftSider {
+    background: #f0f2f5;
+    padding: 16px;
+    overflow-y: auto;
+    height: calc(100vh);
+    overflow-x: hidden;
+}
+
+.leftSider :global(.ant-layout-sider-children){
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 }
 
 .screenshotImage {

@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Form, Input, Button, Spin, message, List, Layout, Image, ConfigProvider, Tooltip } from "antd";
-import { fetchLessons, createLesson, attendLesson, fetchLessonById, getZoomSignature } from "@/app/lib/lessons";
+import { Form, Input, Button, Spin, message, List, Layout, Image, ConfigProvider, Tooltip, Collapse, Popover } from "antd";
+import { fetchLessons, createLesson, attendLesson, fetchLessonById } from "@/app/lib/lessons";
+import { logout } from "@/app/lib/auth";
 import { useAuth } from '@/app/context/AuthContext'
 import styles from './meeting.module.css'
 import classNames from 'classnames'
@@ -10,11 +11,16 @@ import { Tldraw, useEditor, Editor } from 'tldraw'
 import { useSyncDemo } from '@tldraw/sync'
 import 'tldraw/tldraw.css'
 import ruRU from 'antd/locale/ru_RU';
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, TeamOutlined, LogoutOutlined } from "@ant-design/icons";
 const { Header, Sider, Content } = Layout;
+import HeaderLogo from '@/components/HeaderLogo/HeaderLogo';
+
+import AgoraPage from "./agora";
+import { useRouter } from 'next/navigation';
 
 export default function MeetingPage({ params }: { params: { lessonId: string } }) {
-    const { user } = useAuth();
+    const router = useRouter();
+    const { user, setUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [client, setClient] = useState<any>(null);
     const [lessonInfo, setLessonInfo] = useState<any>(null);
@@ -23,6 +29,10 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
     const whiteBoardId = useSyncDemo({ roomId: 'unique-id-465845654654' })
 
     useEffect(() => {
+        if (!user) {
+            router.push('/signin');
+            return;
+        }
     }, [user]);
     
     useEffect(() => {
@@ -33,6 +43,11 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                 console.log("Fetched lesson:", lesson);
                 if (lesson?.id){
                     setLessonInfo(lesson);
+                    if (lesson.endedAt) {
+                        message.error("Встреча уже завершена");
+                        router.push('/home');
+                        return;
+                    }
                 }
                 else
                     message.error("Не удалось загрузить информацию о встрече");
@@ -78,6 +93,64 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
     return (
         <Layout className={styles.container}>
             
+            <Sider
+                width={180}
+                className={styles.leftSider}
+                breakpoint="lg"
+                collapsedWidth="0"
+            >   
+                
+                <HeaderLogo imageStyle={{height:'20px'}} textStyle={{fontSize:'20px', marginBottom:'5px'}}/>
+                < AgoraPage params={{
+                    lessonId: params.lessonId,
+                    user: user,
+                    router: router,
+                    channelName: lessonInfo?.agoraChannelName || '',
+                }} />
+                {/* <div style={{ height: '100%', }}>
+                    <div style={{ width: '150px', height: '150px', backgroundColor: '#000000FF' }} />
+                </div> */}
+                
+                <Popover
+                    content={
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '200px',
+                            padding: '10px',
+                            gap: '10px'
+                        }}>
+                            <p>
+                                <b>Имя:</b> {user?.firstName || 'Гость'}
+                            </p>
+                            <p>
+                                <b>Email:</b> {user?.email || 'Не указан'}
+                            </p>
+                            <Button
+                                icon={<LogoutOutlined />}
+                                // type="link"
+                                style={{ width: '100%' }}
+                                danger
+                                onClick={async () => {
+                                    try {
+                                        await logout();
+                                        setUser(null);
+                                        router.push('/signin');
+                                    } catch (error) {
+                                        console.error("Logout failed", error);
+                                    }
+                                }}
+                            >
+                                Выйти
+                            </Button>
+                        </div>
+                    }
+                    placement="topRight"
+                >
+                    <Button icon={<TeamOutlined />} className={styles.button}>Аккаунт</Button>
+                </Popover>
+            </Sider>
+            
             <Content
                     className={classNames(
                     styles.content,
@@ -85,7 +158,10 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                     )}
                 >
                 <div style={{ 
-                    height: '90%',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    paddingTop: '16px',
                 }}>
                     <Tldraw store={whiteBoardId}>
                         <InsideOfContext />

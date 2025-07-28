@@ -9,7 +9,7 @@ export default function HomeLayout({
         <div style={{
             height: '100vh',
         }}>
-            <MeetingHeader />
+            {/* <MeetingHeader /> */}
             {children}
         </div>
     );

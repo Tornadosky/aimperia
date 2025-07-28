@@ -15,7 +15,7 @@ import { Button } from "antd";
 
 import { Lesson } from "./page";
 
-export default function Notebook({ selectedLesson }: { selectedLesson: Lesson|null }) {
+export default function Notebook({ selectedLesson, user }: { selectedLesson: Lesson|null, user: any }) {
     const [content, setContent] = useState("");
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState("");
@@ -56,37 +56,41 @@ export default function Notebook({ selectedLesson }: { selectedLesson: Lesson|nu
 
     return (
         <div className={styles.notebookContainer} data-color-mode="light">
-            <div  className={styles.buttonsContainer}>
-                {editing ? (
-                    <>
+            
+            
+            {user?.role=== 'teacher'?
+                <div className={styles.buttonsContainer}>
+                    {editing ? (
+                        <>
+                            <Button
+                                onClick={handleCancel}
+                                disabled={saving}
+                                className={styles.button}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={handleSave}
+                                disabled={saving}
+                                icon={<SaveOutlined />}
+                                type="primary"
+                                className={styles.button}
+                            >
+                                {saving ? "Saving..." : "Save"}
+                            </Button>
+                        </>
+                    ) : (
                         <Button
-                            onClick={handleCancel}
-                            disabled={saving}
-                            className={styles.button}
+                                onClick={() => setEditing(true)}
+                                icon={<EditFilled />}
+                                className={styles.button}
                         >
-                            Cancel
+                            Edit
                         </Button>
-                        <Button
-                            onClick={handleSave}
-                            disabled={saving}
-                            icon={<SaveOutlined />}
-                            type="primary"
-                            className={styles.button}
-                        >
-                            {saving ? "Saving..." : "Save"}
-                        </Button>
-                    </>
-                ) : (
-                    <Button
-                            onClick={() => setEditing(true)}
-                            icon={<EditFilled />}
-                            className={styles.button}
-                    >
-                        Edit
-                    </Button>
-                )}
-            </div>
-
+                    )}
+                </div>
+                :
+                null}
             {editing ? (
                 <MDEditor
                     className={styles.markdownEditor}

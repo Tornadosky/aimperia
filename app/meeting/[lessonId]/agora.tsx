@@ -1,0 +1,285 @@
+import {
+  LocalUser, // Plays the microphone audio track and the camera video track
+  RemoteUser, // Plays the remote user audio and video tracks
+  useIsConnected, // Returns whether the SDK is connected to Agora's server
+  useJoin, // Automatically join and leave a channel on mount and unmount
+  useLocalMicrophoneTrack, // Create a local microphone audio track
+  useLocalCameraTrack, // Create a local camera video track
+  usePublish, // Publish the local tracks
+  useRemoteUsers, // Retrieve the list of remote users
+} from "agora-rtc-react";
+import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
+import { use, useEffect, useState } from "react";
+
+import { generateAgoraToken, closeLesson } from "@/app/lib/lessons";
+
+import styles from './agora.module.css';
+
+import { FiCamera, FiCameraOff } from "react-icons/fi";
+import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
+import { MdOutlineCallEnd } from "react-icons/md";
+
+import { Button, Modal, message } from "antd";
+import classNames from 'classnames';
+
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+interface AgoraPageParams {
+    lessonId: string;
+    user: any;
+    router: AppRouterInstance;
+    channelName: string;
+}
+
+interface AgoraViewParams {
+    lessonId: string;
+    user: any;
+    token: string;
+    router: AppRouterInstance;
+    channelName: string;
+}
+
+interface AgoraPageProps {
+    params: AgoraPageParams;
+}
+
+const AgoraView = ({ params }: {params:AgoraViewParams}) => {
+    
+    const [appId, setAppId] = useState<string>(process.env.NEXT_PUBLIC_AGORA_APP_ID || "<-- Insert App ID -->");
+    const [channel, setChannel] = useState<string>(params.channelName);
+    const [token, setToken] = useState<string>(params.token || '');
+    const [calling, setCalling] = useState<boolean>(false);
+    
+    useEffect(()=> {
+        console.log(appId, ' chn ',params.channelName, ' tk ', token, params.lessonId)
+        setCalling(true);
+    }, [params])
+    
+    
+    const [micOn, setMic] = useState<boolean>(true);
+    const [cameraOn, setCamera] = useState<boolean>(false);
+    const { localMicrophoneTrack } = useLocalMicrophoneTrack(micOn);
+    const { localCameraTrack } = useLocalCameraTrack(cameraOn);
+    
+    useJoin({ appid: appId, channel: channel, token: token ? token : null, uid: params?.user?.id ? params.user.id : null }, calling);
+    usePublish([localMicrophoneTrack, localCameraTrack]);
+    
+    const remoteUsers = useRemoteUsers();
+    
+    const [userSpeaking, setUserSpeaking] = useState<boolean>(false);
+    
+    useEffect(() => {
+        let interval: any;
+
+        if (localMicrophoneTrack) {
+            interval = setInterval(() => {
+                let volume = 0;
+                if (micOn)
+                    volume = localMicrophoneTrack.getVolumeLevel(); // value between 0 and 1
+                if (volume > 0.3) {
+                    setUserSpeaking(true);
+                } else {
+                    setUserSpeaking(false);
+                }
+            }, 100); // Poll every 100ms
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [localMicrophoneTrack, micOn]);
+    
+    const [remoteSpeakingUsers, setRemoteSpeakingUsers] = useState<Record<string, boolean>>({});
+    useEffect(() => {
+        console.log("Remote users:", remoteUsers);
+        const interval = setInterval(() => {
+            const speakingMap: Record<string, boolean> = {};
+
+            remoteUsers.forEach(user => {
+                const audioTrack = user.audioTrack;
+                if (audioTrack && audioTrack.getVolumeLevel) {
+                    const volume = audioTrack.getVolumeLevel(); // 0.0 to 1.0
+                    const isSpeaking = volume > 0.3;
+                    speakingMap[user.uid] = isSpeaking;
+                }
+            });
+
+            setRemoteSpeakingUsers(speakingMap);
+        }, 100);
+
+        return () => clearInterval(interval);
+    }, [remoteUsers]);
+    
+    return (
+        <div className={styles.agoraContainer}>
+            <div className={styles.usersContainer}>
+                <LocalUser
+                    audioTrack={localMicrophoneTrack}
+                    playAudio={false}
+                    playVideo={cameraOn}
+                    cameraOn={cameraOn}
+                    micOn={micOn}
+                    videoTrack={localCameraTrack}
+                    className={classNames(styles.localUser, userSpeaking? styles.userSpeaking : '')}
+                    cover={'/user.png'}
+                />
+                {remoteUsers.map((user: any) => (
+                    <RemoteUser
+                        user={user}
+                        className={classNames(styles.remoteUser, remoteSpeakingUsers[user.uid] ? styles.userSpeaking : '')}
+                        key={user.uid}
+                        cover={'/user.png'}
+                    >
+                    </RemoteUser>
+                ))}
+            </div>
+            <div className={styles.controls}>
+                <div className={styles.callControls}>
+                    <Button
+                        icon={!cameraOn?<FiCameraOff />:<FiCamera />}
+                        className={classNames(styles.callButton, cameraOn? styles.activeBtn : styles.inactiveBtn)}
+                        onClick={() => setCamera(!cameraOn)}
+                    >
+                    </Button>
+                    <Button
+                        icon={!micOn ? <BiMicrophoneOff /> : <BiMicrophone />}
+                        className={classNames(styles.callButton, micOn? styles.activeBtn : styles.inactiveBtn)}
+                        onClick={() => setMic(!micOn)}
+                    >
+                    </Button>
+                </div>
+                
+                <Button
+                    icon={<MdOutlineCallEnd />}
+                    className={styles.button}
+                    danger
+                    onClick={() => {
+                        if (params?.user?.role === 'teacher')
+                            Modal.info({
+                                title: 'Отключение от урока',
+                                content: (
+                                    <div>
+                                        <p style={{fontSize:'17px'}}>Вы уверены, что хотите отключиться от урока?</p>
+                                        <p style={{fontSize:'17px'}}>Вы можете полностью закончить урок или просто отключится и подключится позже.</p>
+                                    </div>
+                                ),
+                                footer: (_) => {
+                                    return <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                        <Button
+                                            onClick={() => {
+                                                Modal.destroyAll();
+                                            }}
+                                        >
+                                            Отмена
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={async () => {
+                                                localMicrophoneTrack?.close();
+                                                localCameraTrack?.close();
+                                                params.router.push('/home')
+                                                message.success("Вы успешно отключились от урока");
+                                                Modal.destroyAll();
+                                            }}
+                                        >
+                                            Отключиться
+                                        </Button>
+                                        <Button
+                                            type='primary'
+                                            onClick={async () => {
+                                                localMicrophoneTrack?.close();
+                                                localCameraTrack?.close();
+                                                const result = await closeLesson(params.lessonId);
+                                                if (!result.id) {
+                                                    message.error("Не удалось завершить урок");
+                                                    return;
+                                                }
+                                                Modal.destroyAll();
+                                                params.router.push('/home')
+                                                message.success("Вы успешно завершили урок");
+                                            }}
+                                        >
+                                            Завершить урок
+                                        </Button>
+                                    </div>
+                                },
+                                width: 600,
+                            })
+                        else {
+                            Modal.info({
+                                title: 'Отключение от урока',
+                                content: (
+                                    <div>
+                                        <p style={{fontSize:'17px'}}>Вы уверены, что хотите отключиться от урока?</p>
+                                        <p style={{fontSize:'17px'}}>Вы можете подключиться позже.</p>
+                                    </div>
+                                ),
+                                footer: (_) => {
+                                    return <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                        <Button
+                                            onClick={() => {
+                                                Modal.destroyAll();
+                                            }}
+                                        >
+                                            Отмена
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={async () => {
+                                                localMicrophoneTrack?.close();
+                                                localCameraTrack?.close();
+                                                params.router.push('/home')
+                                                message.success("Вы успешно отключились от урока");
+                                                Modal.destroyAll();
+                                            }}
+                                        >
+                                            Отключиться
+                                        </Button>
+                                    </div>
+                                },
+                                width: 600,
+                            })
+                        }
+                    }}
+                >
+                    Отключиться
+                </Button>
+            </div>
+        </div>
+    );
+}
+
+const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+AgoraRTC.setLogLevel(3);
+export default function AgoraPage({ params }: AgoraPageProps) {
+
+    const [token, setToken] = useState<string>('');
+    
+    useEffect(() => {
+        if (!params.lessonId) {
+            console.error("Lesson ID is required");
+            return;
+        }
+        const fetchToken = async () => {
+            try {
+                const response = await generateAgoraToken({ lessonId: params.lessonId });
+                if (response?.token) {
+                    console.log("Fetched Agora token:", response);
+                    setToken(response.token);
+                } else {
+                    console.error("Failed to fetch Agora token");
+                }
+            } catch (error) {
+                console.error("Error fetching Agora token:", error);
+            }
+        };
+        fetchToken();
+    }, [params.lessonId]);
+    
+    
+    return(
+            <AgoraRTCProvider client={client}>
+                {token&&params.channelName?<AgoraView params={{...params, token}} />:null}
+            </AgoraRTCProvider>
+    );
+}

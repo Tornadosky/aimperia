@@ -42,7 +42,7 @@ import HeaderLogo from '../HeaderLogo/HeaderLogo';
 import { useAuth } from '@/app/context/AuthContext';
 
 import { useRouter } from 'next/navigation';
-import { fetchLessons, createLesson, attendLesson } from "@/app/lib/lessons";
+import { fetchLessons, createLesson, joinLesson, fetchLessonById } from "@/app/lib/lessons";
 import { Dispatch, SetStateAction } from "react";
 
 import { Lesson, Lessons } from "@/app/home/page";
@@ -59,6 +59,9 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
     const router = useRouter();
     const [createLessonModal, setCreateLessonModal] = useState(false);
     const [createLoading, setCreateLoading] = useState(false);
+    
+    const [joinLessonModal, setJoinLessonModal] = useState(false);
+    const [joinLoading, setJoinLoading] = useState(false);
     
     return (
         <Header className={styles.header} id="app-header">
@@ -82,7 +85,10 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         {user?.role === 'student'?
                         <Button
                             icon={<LoginOutlined />}
-                            className={styles.button}
+                                className={styles.button}
+                                onClick={() => {
+                                    setJoinLessonModal(true);
+                                }}
                         >
                             Присоединиться к уроку
                         </Button>
@@ -161,7 +167,6 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                     const newLesson = await createLesson({
                                         title: values.title,
                                         description: values.description || "",
-                                        zoomPassword: values.zoomPassword || "",
                                         scheduledAt: values.scheduledAt || undefined,
                                         startNow: true,
                                     });
@@ -208,12 +213,6 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                     <Input.TextArea placeholder="Описание (необязательно)" />
                                 </Form.Item>
                                 <Form.Item
-                                    name="zoomPassword"
-                                    rules={[]}
-                                >
-                                    <Input placeholder="Пароль Zoom (необязательно)" />
-                                </Form.Item>
-                                <Form.Item
                                     name="scheduledAt"
                                     rules={[]}
                                 >
@@ -233,6 +232,87 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                         </Button>
                                         <Button
                                             onClick={() => setCreateLessonModal(false)}
+                                        >
+                                            Отмена
+                                        </Button>
+                                    </Space>
+                                </Form.Item>
+                            </Form>
+                        </ConfigProvider>
+                    </div>
+                </Modal>
+                
+                <Modal
+                    title={<div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "20px",
+                    }}><InfoCircleFilled style={{color:'#3d8eff', marginRight:'10px', fontSize:'20px'}}/>Присоединение к уроку</div>}
+                    open={joinLessonModal}
+                    onCancel={() => setJoinLessonModal(false)}
+                    footer={null}
+                    centered
+                >
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "20px",
+                        width: "100%",
+                    }}>
+                        <p style={{
+                            marginBottom: "16px",
+                            fontSize: "16px",
+                        }}>Введите код приглашения для присоединения к уроку:</p>
+                        <ConfigProvider locale={ruRU}>
+                            <Form
+                                form={form}
+                                onFinish={async (values) => {
+                                    setJoinLoading(true);
+                                    const lesson = await joinLesson(values.code);
+                                    if (lesson?.lessonId) {
+                                        const fullLesson = await fetchLessonById(lesson.lessonId);
+                                        if (fullLesson?.id){
+                                            setLessons((prevLessons: Lessons) => {
+                                                return {
+                                                    ...prevLessons,
+                                                    ongoing: [fullLesson, ...prevLessons.ongoing],
+                                                }
+                                            });
+                                            setJoinLoading(false);
+                                            message.success("Вы успешно присоединились к уроку");
+                                            setJoinLessonModal(false)
+                                            form.resetFields();
+                                        }
+                                        else {
+                                            message.error("Ошибка при получении информации о встрече");
+                                        }
+                                    }
+                                    else {
+                                        message.error("Ошибка при присоединении к уроку");
+                                    }
+                                }}
+                                layout="vertical"
+                                style={{ maxWidth: 400, width: "100%" }}
+                                
+                            >
+                                <Form.Item
+                                    name="code"
+                                    rules={[{ required: true, message: "Введите код приглашения" }]}
+                                >
+                                    <Input placeholder="Код приглашения" />
+                                </Form.Item>
+                                <Form.Item style={{ display: "flex", justifyContent: "center", marginBottom: 0 }}>
+                                    <Space>
+                                        <Button type="primary" htmlType="submit"
+                                            loading={joinLoading}
+                                        >
+                                            Присоединиться
+                                        </Button>
+                                        <Button
+                                            onClick={() => setJoinLessonModal(false)}
                                         >
                                             Отмена
                                         </Button>

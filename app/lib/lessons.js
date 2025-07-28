@@ -84,13 +84,22 @@ export async function updateLessonSummary(id, data) {
   });
   return await res.json();
 }
-
-export async function getZoomSignature(lessonId) {
-  const res = await fetch(`${API_BASE_URL}/api/zoom/signature`, {
-    method: 'POST',
+export async function generateAgoraToken({ lessonId }) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/agora/token`, {
+    method: "POST",
     headers: defaultHeaders,
     body: JSON.stringify({ lessonId }),
-    credentials: 'include',
+    credentials: "include",
+  });
+  return await res.json();
+}
+
+export async function joinLesson(inviteCode) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/join`, {
+    method: "POST",
+    headers: defaultHeaders,
+    body: JSON.stringify({ inviteCode }),
+    credentials: "include",
   });
   return await res.json();
 }

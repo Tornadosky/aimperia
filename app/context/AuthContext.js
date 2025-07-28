@@ -12,13 +12,9 @@ export const AuthProvider = ({ children }) => {
         async function loadUser() {
             try {
                 const data = await getCurrentUser();
-                if (data && !data.error) {
+                if (data?.user && !data.error) {
                     setUser({
-                        ...data.user || {
-                            ...data.profile,
-                            email: data.email,
-                            id: data.id,
-                        },
+                        ...data.user
                     });
                 }
             } catch (e) {

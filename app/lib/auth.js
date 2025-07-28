@@ -41,3 +41,23 @@ export async function handleCallback(access_token, expires_in) {
     });
     return await res.json();
 }
+
+export async function updateProfile(data) {
+    const res = await fetch(`${API_BASE_URL}/api/profile`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include',
+    });
+    return await res.json();
+}
+
+export async function setCookie(token, expires_in) {
+    const res = await fetch(`${API_BASE_URL}/api/auth/cookie`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, expires_in }),
+        credentials: 'include',
+    });
+    return await res.json();
+}

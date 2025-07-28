@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { message, Spin } from 'antd';
-import { handleCallback, getCurrentUser } from '../lib/auth';
+import { handleCallback, getCurrentUser, setCookie } from '../lib/auth';
 import { useAuth } from '../context/AuthContext';
 
 
@@ -24,12 +24,12 @@ export default function CallbackPage() {
         }
         
         const handleLogin = async () => {
-            const result = await handleCallback(access_token);
+            const result = await setCookie(access_token, expires_in);
             if (result?.ok) {
                 messageApi.open({type:'success',content:'Успешный вход', key:'loginSuccess'});
                 const user = await getCurrentUser();
-                if (user?.id) {
-                    setUser(user);
+                if (user?.user) {
+                    setUser(user.user);
                     messageApi.open({ type: 'success', content: 'Успешный вход через Google', key: 'loginSuccess' });
                     router.push('/home');
                 }

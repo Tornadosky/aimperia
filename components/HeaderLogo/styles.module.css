@@ -36,7 +36,7 @@
 }
 
 .logo a {
-  font-size: 30px;
+  /* font-size: 30px; */
   font-weight: bold;
   color: #1890ff;
   text-decoration: none;
@@ -51,8 +51,9 @@
 
 .logoImage {
   /* width: 40px; */
-  height: 55px;
+  /* height: 55px; */
   margin-right: 8px;
+  margin-bottom: 5px;
 }
 
 .buttons {

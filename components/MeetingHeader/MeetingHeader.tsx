@@ -36,7 +36,6 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 
-
 const MeetingHeader = () => {
     
     const { setUser, user } = useAuth();
@@ -48,18 +47,7 @@ const MeetingHeader = () => {
                 <HeaderLogo />
                 <div className={styles.buttons}>
                     <Space>
-                        <Button
-                            icon={<PlusOutlined />}
-                            className={styles.button}
-                        >
-                            Создать урок
-                        </Button>
-                        <Button
-                            icon={<LoginOutlined />}
-                            className={styles.button}
-                        >
-                            Присоединиться к уроку
-                        </Button>
+                        
                         <Popover
                             content={
                                 <div style={{

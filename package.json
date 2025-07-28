@@ -17,6 +17,7 @@
     "@uiw/react-markdown-preview": "^5.1.4",
     "@uiw/react-md-editor": "^4.0.8",
     "@zoom/meetingsdk": "^4.0.0",
+    "agora-rtc-react": "^2.4.0",
     "antd": "^5.26.5",
     "katex": "^0.16.22",
     "next": "14.2.30",

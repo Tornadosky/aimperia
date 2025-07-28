@@ -27,6 +27,7 @@ import {
     VideoCameraOutlined,
     LogoutOutlined,
     CloseCircleOutlined,
+    CopyOutlined,
 } from "@ant-design/icons";
 import Notebook from "./notebook";
 import styles from "./Home.module.css";
@@ -41,6 +42,7 @@ import React from "react";
 import { Tldraw, useEditor, Editor } from 'tldraw'
 import 'tldraw/tldraw.css'
 
+import UpdateUserModal from "./components/UpdateUserModal/UpdateUserModal";
 
 export type Lesson = {
     id: string;
@@ -72,7 +74,6 @@ const { Title, Text, Paragraph } = Typography;
 
 export default function HomePage() {
     
-    const updateForm = Form.useFormInstance();
     
     const router = useRouter();
     const { user, setUser } = useAuth();
@@ -82,23 +83,20 @@ export default function HomePage() {
             router.push("/signin");
             return;
         }
-        console.log("Current user:", user, !user.role);
-        if (!user.role && user.id) {
-            setRoleSelectModal(true);
-            return;
-        }
         
-        const loadLessons = async () => {
-            setLoading(true);
+        const loadLessons = async (setLoading_ = false) => {
+            if (setLoading_) {
+                setLoading(true);
+            }
             try {
                 const completedLessons = await fetchLessons({ status: 'completed', limit: 10 });
                 const ongoingLessons = await fetchLessons({ status: 'ongoing', limit: 10 });
                 const upcomingLessons = await fetchLessons({ status: 'upcoming', limit: 10 });
-                console.log("Fetched lessons:", {
-                    completed: completedLessons.lessons,
-                    ongoing: ongoingLessons.lessons,
-                    upcoming: upcomingLessons.lessons,
-                });
+                // console.log("Fetched lessons:", {
+                //     completed: completedLessons.lessons,
+                //     ongoing: ongoingLessons.lessons,
+                //     upcoming: upcomingLessons.lessons,
+                // });
                 setLessons({
                     completed: completedLessons.lessons,
                     ongoing: ongoingLessons.lessons,
@@ -109,11 +107,18 @@ export default function HomePage() {
             } catch (err) {
                 console.error("Failed to fetch lessons", err);
             } finally {
-                setLoading(false);
+                if (setLoading_) {
+                    setLoading(false);
+                }
             }
         };
 
-        loadLessons();
+        loadLessons(true);
+        
+        // const interval = setInterval(() => {
+        //     loadLessons();
+        // }, 1000); // Refresh lessons every 30 seconds
+        // return () => clearInterval(interval);
         
     }, [user]);
     
@@ -221,7 +226,7 @@ export default function HomePage() {
             });
         };
     }, [container]);
-
+    
     return (
         <>
             <HomeHeader lessons={lessons} setLessons={setLessons} />
@@ -240,8 +245,37 @@ export default function HomePage() {
                         <List
                             itemLayout="horizontal"
                             dataSource={lessons["ongoing"]}
-                            renderItem={(lesson) => (
-                                <List.Item
+                            renderItem={(lesson) => {
+                                
+                                if (user?.role === "student" && lesson.teacherId !== user.id)
+                                    return <List.Item
+                                        className={[
+                                            selectedLesson?.id === lesson.id
+                                                ? styles.selectedLesson
+                                                : styles.lessonItem,
+                                                styles.ongoingLesson
+                                        ].join(" ")}
+                                        actions={[
+                                            <Tooltip
+                                                key="join"
+                                                title="Присоединиться к уроку"
+                                            >
+                                                <Button
+                                                    shape="circle"
+                                                    icon={<LoginOutlined />}
+                                                    onClick={() => handleLessonJoin(lesson)}
+                                                    style={{ padding: '0px', width: '32px', height: '32px' }}
+                                                />
+                                            </Tooltip>,
+                                        ]}
+                                    >
+                                        <List.Item.Meta
+                                            title={lesson.title}
+                                            description={lesson.description}
+                                        />
+                                    </List.Item>
+                                
+                                return <List.Item
                                     className={[
                                         selectedLesson?.id === lesson.id
                                             ? styles.selectedLesson
@@ -250,7 +284,7 @@ export default function HomePage() {
                                     ].join(" ")}
                                     actions={[
                                         <Tooltip
-                                            key="join"
+                                            key="end"
                                             title="Закончить урок"
                                         >
                                             <Button
@@ -260,6 +294,21 @@ export default function HomePage() {
                                                 style={{ padding: '0px', width: '32px', height: '32px' }}
                                             />
                                         </Tooltip>,
+                                        <Tooltip
+                                            key="copy"
+                                            title="Скопировать код урока"
+                                        >
+                                            <Button
+                                                shape="circle"
+                                                icon={<CopyOutlined />}
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(lesson.inviteCode);
+                                                    message.success("Код урока скопирован в буфер обмена");
+                                                }}
+                                                style={{ padding: '0px', width: '32px', height: '32px' }}
+                                            />
+                                        </Tooltip>,
+                                        
                                         <Tooltip
                                             key="join"
                                             title="Присоединиться к уроку"
@@ -278,7 +327,7 @@ export default function HomePage() {
                                         description={lesson.description}
                                     />
                                 </List.Item>
-                            )}
+                            }}
                             locale={{ emptyText: "Нет текущих уроков" }}
                         />
                     </div>
@@ -365,7 +414,7 @@ export default function HomePage() {
                     ) : selectedLesson ? (
                         <>
                             <Title level={3} style={{marginBottom:'30px'}}>{selectedLesson.title}</Title>
-                            <Notebook selectedLesson={selectedLesson} />
+                            <Notebook selectedLesson={selectedLesson} user={user} />
                         </>
                     ) : (
                         <div className={styles.emptyState}>
@@ -392,56 +441,9 @@ export default function HomePage() {
                     />
                 </Modal>
             </Layout>
-            <Modal
-                title="Подтвердите свои данные"
-                open={roleSelectModal}
-                footer={null}
-                closable={false}
-                onCancel={() => { }}
-            >
-                <Form
-                    form={updateForm}
-                >
-                    <Form.Item
-                        label="Имя"
-                        name="firstName"
-                        rules={[{ required: true, message: 'Пожалуйста, введите имя' }]}
-                    >
-                        <Input placeholder="Иван" className={styles.input} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Фамилия"
-                        name="lastName"
-                        rules={[{ required: true, message: 'Пожалуйста, введите фамилию' }]}
-                    >
-                        <Input placeholder="Иванов" className={styles.input} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Выберите роль"
-                        name="role"
-                        rules={[{ required: true, message: 'Пожалуйста, выберите роль' }]}
-                    >
-                        <Select
-                            placeholder="Выберите роль"
-                        >
-                            <Select.Option value="teacher">Учитель</Select.Option>
-                            <Select.Option value="student">Ученик</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            onClick={() => {
-                                
-                                setRoleSelectModal(false)
-                            }}
-                            style={{ width: '100%' }}
-                        >
-                            Подтвердить
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
+            
+            <UpdateUserModal />
+            
         </>
     );
 }
