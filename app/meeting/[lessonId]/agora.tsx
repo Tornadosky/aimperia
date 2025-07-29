@@ -237,7 +237,7 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                                         </Button>
                                     </div>
                                 },
-                                width: 600,
+                                width: 500,
                             })
                         }
                     }}

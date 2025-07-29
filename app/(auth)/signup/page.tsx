@@ -32,7 +32,7 @@ export default function SignUp() {
 
     const { user, setUser } = useAuth();
     useEffect(() => {
-        if (user) {
+        if (!user?.loading && user) {
             router.push("/home");
         }
     }, [user]);

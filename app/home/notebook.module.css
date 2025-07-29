@@ -1,11 +1,12 @@
 .notebookContainer{
-    background-color: #f8f8f8;
-    padding: 50px;
-    padding-top: 30px;
-    border-radius: 8px;
-    line-height: 1.8;
-    bottom: 0;
-    overflow: auto;
+  background-color: #f8f8f8;
+  padding: 50px;
+  padding-top: 30px;
+  border-radius: 8px;
+  line-height: 1.8;
+  bottom: 0;
+  overflow: auto;
+  min-height: 100%;
 }
 
 .markdownPreview{
@@ -19,7 +20,7 @@
 }
 
 .markdownEditor{
-  height: auto !important;
+  min-height: 100vh !important;
 }
 
 .button{

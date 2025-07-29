@@ -58,7 +58,7 @@ const MeetingHeader = () => {
                                     gap: '10px'
                                 }}>
                                     <p>
-                                        <b>Имя:</b> {user?.firstName || 'Гость'}
+                                        <b>Имя:</b> {user?.firstName?user?.firstName+' '+user?.lastName : 'Гость'}
                                     </p>
                                     <p>
                                         <b>Email:</b> {user?.email || 'Не указан'}

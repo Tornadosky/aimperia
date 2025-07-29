@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AppFooter from "@/components/Footer/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
 
@@ -16,7 +15,7 @@ export default function RootLayout({
 }>) {
     
     return (
-        <html lang="en" style={{maxHeight: "100vh !important"}}>
+        <html lang="en">
             <body
                 // className={`${geistSans.variable} ${geistMono.variable}`}
             >
@@ -28,7 +27,6 @@ export default function RootLayout({
                         flexDirection: "column",
                     }}>
                         <main style={{ flex: 1 }}>{children}</main>
-                        <AppFooter />
                     </div>
                 </AuthProvider>
             </body>

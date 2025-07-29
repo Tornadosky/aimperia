@@ -1,4 +1,5 @@
 import AppHeader from "@/components/Header/Header";
+import AppFooter from "@/components/Footer/Footer";
 
 export default function LandingLayout({
     children,
@@ -9,6 +10,7 @@ export default function LandingLayout({
         <div>
             <AppHeader />
             {children}
+            <AppFooter />
         </div>
     );
 }

@@ -34,8 +34,7 @@ import styles from "./Home.module.css";
 
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
-import { fetchLessons, createLesson, attendLesson, closeLesson } from "@/app/lib/lessons";
-
+import { fetchLessons, createLesson, attendLesson, closeLesson, getLessonSummary, updateLessonSummary } from "@/app/lib/lessons";
 import HomeHeader from "@/components/HomeHeader/HomeHeader";
 import React from "react";
 
@@ -79,7 +78,7 @@ export default function HomePage() {
     const { user, setUser } = useAuth();
     const [roleSelectModal, setRoleSelectModal] = useState(false);
     useEffect(() => {
-        if (!user) {
+        if (!user?.loading && !user) {
             router.push("/signin");
             return;
         }
@@ -130,20 +129,30 @@ export default function HomePage() {
     }, [lessons]);
     
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+    const [lessonContent, setLessonContent] = useState<string>("");
     const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
     const [drawerVisible, setDrawerVisible] = useState(false);
 
     // Assume user is teacher or student
     const isTeacher = true; // You can set dynamically from auth
 
-    const handleLessonClick = (lesson: Lesson) => {
+    const handleLessonClick = async (lesson: Lesson) => {
         setLoading(true);
 
         setSelectedLesson(lesson);
-
-        setTimeout(() => {
-            setLoading(false);
-        }, 300);
+        
+        try {
+            const result = await getLessonSummary(lesson.id);
+            if (result.summary) {
+                setLessonContent(result.summary.content);
+            }
+            else {
+                setLessonContent("");
+            }
+        } catch (err) {
+            console.error("Error fetching lesson summary:", err);
+        }
+        setLoading(false);
     };
     
     const handleLessonJoin = async (lesson: Lesson) => {
@@ -414,7 +423,7 @@ export default function HomePage() {
                     ) : selectedLesson ? (
                         <>
                             <Title level={3} style={{marginBottom:'30px'}}>{selectedLesson.title}</Title>
-                            <Notebook selectedLesson={selectedLesson} user={user} />
+                            <Notebook selectedLesson={selectedLesson} user={user} lessonContent={lessonContent} />
                         </>
                     ) : (
                         <div className={styles.emptyState}>

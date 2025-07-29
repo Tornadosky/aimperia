@@ -27,6 +27,7 @@ import {
     LogoutOutlined,
     InfoCircleOutlined,
     InfoCircleFilled,
+    CopyOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import styles from "./styles.module.css";
@@ -72,6 +73,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         
                         {user?.role === 'teacher'?
                         <Button
+                            type="primary"
                             icon={<PlusOutlined />}
                             className={styles.button}
                             onClick={async () => {
@@ -84,6 +86,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         
                         {user?.role === 'student'?
                         <Button
+                            type="primary"
                             icon={<LoginOutlined />}
                                 className={styles.button}
                                 onClick={() => {
@@ -103,7 +106,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                     gap: '10px'
                                 }}>
                                     <p>
-                                        <b>Имя:</b> {user?.firstName || 'Гость'}
+                                        <b>Имя:</b> {user?.firstName?user?.firstName+' '+user?.lastName : 'Гость'}
                                     </p>
                                     <p>
                                         <b>Email:</b> {user?.email || 'Не указан'}
@@ -187,14 +190,64 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                 }
                                             });
                                         }
-                                        setCreateLoading(false);
-                                        message.success("Урок успешно создан");
+                                        Modal.success({
+                                            title: "Урок успешно создан",
+                                            content: (
+                                                <div style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    marginRight: '30px'
+                                                }}>
+                                                    <p style={{fontSize:'16px', fontWeight:'bold'}}>Название: {newLesson.title}</p>
+                                                    <p style={{ fontSize: '16px' }}>Скопируйте код и отправьте ученику, он должен будет ввести его для того, чтобы присоедениться:</p>
+                                                    
+                                                    <div style={{
+                                                        textWrap: 'nowrap',
+                                                        border: '1px solid #3d8eff',
+                                                        borderRadius: '50px',
+                                                        padding: '5px 20px',
+                                                        cursor: 'pointer',
+                                                        marginTop: '10px',
+                                                    }}
+                                                    onClick={() => {
+                                                        navigator.clipboard.writeText(newLesson.inviteCode);
+                                                        message.success("Код приглашения скопирован в буфер обмена");
+                                                    }}>
+                                                        <span
+                                                            style={{ cursor: "pointer", color: "#3d8eff" }}
+                                                        >
+                                                            {newLesson.inviteCode}
+                                                        </span>
+                                                        <Button
+                                                            type="primary"
+                                                            style={{ marginLeft: "10px", height: "32px" }}
+                                                            icon={<CopyOutlined />}
+                                                        />
+                                                    </div>
+                                                    <Button
+                                                        type="primary"
+                                                        style={{ marginTop: "10px" }}
+                                                        onClick={() => {
+                                                            router.push(`/meeting/${newLesson.id}`);
+                                                            Modal.destroyAll();
+                                                        }}
+                                                        icon={<DesktopOutlined />}
+                                                    >
+                                                        Перейти к уроку
+                                                    </Button>
+                                                    
+                                                </div>
+                                            ),
+                                        });
                                         setCreateLessonModal(false)
                                         form.resetFields();
                                     }
                                     else {
                                         message.error("Ошибка при создании урока");
                                     }
+                                    setCreateLoading(false);
                                 }}
                                 layout="vertical"
                                 style={{ maxWidth: 400, width: "100%" }}
@@ -212,7 +265,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                 >
                                     <Input.TextArea placeholder="Описание (необязательно)" />
                                 </Form.Item>
-                                <Form.Item
+                                {/* <Form.Item
                                     name="scheduledAt"
                                     rules={[]}
                                 >
@@ -222,7 +275,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                         showTime
                                         format="YYYY-MM-DD HH:mm"
                                     />
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item style={{ display: "flex", justifyContent: "center", marginBottom: 0 }}>
                                     <Space>
                                         <Button type="primary" htmlType="submit"
@@ -285,6 +338,37 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                             message.success("Вы успешно присоединились к уроку");
                                             setJoinLessonModal(false)
                                             form.resetFields();
+                                            
+                                            Modal.success({
+                                                title: "Вы присоединились к уроку",
+                                                content: (
+                                                    <div style={{
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        marginRight: '30px'
+                                                    }}>
+                                                        <p style={{fontSize:'16px', fontWeight:'bold'}}>Название: {fullLesson.title}</p>
+                                                        <p style={{ fontSize: '16px' }}>Вы можете перейти к уроку, нажав на кнопку ниже:</p>
+                                                        
+                                                        <Button
+                                                            type="primary"
+                                                            style={{ marginTop: "10px" }}
+                                                            onClick={() => {
+                                                                router.push(`/meeting/${fullLesson.id}`);
+                                                                Modal.destroyAll();
+                                                            }}
+                                                            icon={<DesktopOutlined />}
+                                                        >
+                                                            Перейти к уроку
+                                                        </Button>
+                                                        
+                                                    </div>
+                                                ),
+                                            });
+                                            
+                                            
                                         }
                                         else {
                                             message.error("Ошибка при получении информации о встрече");

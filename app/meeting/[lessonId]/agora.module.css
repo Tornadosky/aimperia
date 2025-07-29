@@ -19,6 +19,10 @@
     transition: all 0.3s ease !important;
 }
 
+.localUser :global(div){
+    background: none !important;
+}
+
 .localUser:hover {
     transform: translateY(-2px) !important;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; */
@@ -34,6 +38,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
+}
+
+.remoteUser :global(div){
+    background: none !important;
 }
 
 .remoteUser:hover {

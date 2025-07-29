@@ -29,7 +29,7 @@ export default function SignIn() {
     
     
     useEffect(() => {
-        if (user) {
+        if (!user?.loading && user) {
             router.push('/home');
         }
     }, [user, router]);

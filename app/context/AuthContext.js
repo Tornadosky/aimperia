@@ -5,7 +5,7 @@ import { getCurrentUser } from '../lib/auth';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({loading: true});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -16,6 +16,9 @@ export const AuthProvider = ({ children }) => {
                     setUser({
                         ...data.user
                     });
+                }
+                else {
+                    setUser(null)
                 }
             } catch (e) {
                 console.error('Failed to fetch current user:', e);

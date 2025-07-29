@@ -103,3 +103,40 @@ export async function joinLesson(inviteCode) {
   });
   return await res.json();
 }
+
+export async function uploadLessonSummaryImage(lessonId, { fileName, dataUrl }) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/summary/image`, {
+    method: "POST",
+    headers: defaultHeaders,
+    body: JSON.stringify({ fileName, dataUrl }),
+    credentials: "include",
+  });
+  return await res.json();
+}
+
+export async function uploadBoardHighlight(lessonId, { dataUrl, description }) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/board/highlight`, {
+    method: "POST",
+    headers: defaultHeaders,
+    body: JSON.stringify({ dataUrl, description }),
+    credentials: "include",
+  });
+  return await res.json();
+}
+
+
+export async function fetchBoardHighlights(lessonId) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/board/highlights`, {
+    credentials: "include",
+  });
+  return await res.json();
+}
+
+export async function deleteBoardHighlight(lessonId, highlightId) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/board/highlights/${highlightId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (res.status === 204) return { success: true };
+  return await res.json();
+}
