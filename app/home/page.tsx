@@ -42,6 +42,7 @@ import { Tldraw, useEditor, Editor } from 'tldraw'
 import 'tldraw/tldraw.css'
 
 import UpdateUserModal from "./components/UpdateUserModal/UpdateUserModal";
+import { useTranslations } from 'next-intl';
 
 export type Lesson = {
     id: string;
@@ -72,7 +73,7 @@ const { Header, Sider, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
 
 export default function HomePage() {
-    
+    const t = useTranslations('Home');
     
     const router = useRouter();
     const { user, setUser } = useAuth();
@@ -163,11 +164,11 @@ export default function HomePage() {
     const handleLessonEnd = async (lesson: Lesson) => {
         if (!user) return;
         Modal.info({
-            title: "Завершение урока",
+            title: t('endLessonModal.title'),
             content: (
                 <div>
-                    <p>Вы уверены, что хотите завершить этот урок?</p>
-                    <p>После завершения урока вы сможете только сгенерированный конспект.</p>
+                    <p>{t('endLessonModal.content.confirmation')}</p>
+                    <p>{t('endLessonModal.content.warning')}</p>
                 </div>
             ),
             onOk: async () => {
@@ -180,21 +181,21 @@ export default function HomePage() {
                             completed: [result, ...prev.completed],
                         }));
                         setSelectedLesson(null);
-                        message.success("Урок успешно завершен");
+                        message.success(t('endLessonModal.success'));
                     }
                     else {
-                        message.error("Не удалось завершить урок");
+                        message.error(t('endLessonModal.error'));
                     }
                 } catch (error) {
                     console.error("Error ending lesson:", error);
-                    message.error("Не удалось завершить урок");
+                    message.error(t('endLessonModal.error'));
                 }
             },
-            cancelText: "Отмена",
-            okText: "Завершить урок",
+            cancelText: t('endLessonModal.buttons.cancel'),
+            okText: t('endLessonModal.buttons.end'),
             footer: (_, { OkBtn, CancelBtn }) => (
                 <>
-                  <Button onClick={()=>{Modal.destroyAll()}}>Отмена</Button>
+                  <Button onClick={()=>{Modal.destroyAll()}}>{t('endLessonModal.buttons.cancel')}</Button>
                   <OkBtn />
                 </>
             ),
@@ -249,7 +250,7 @@ export default function HomePage() {
                 >
                     <div className={styles.sidebarSection}>
                         <Title level={4} className={styles.sidebarTitle}>
-                            Текущие уроки
+                            {t('sidebar.currentLessons')}
                         </Title>
                         <List
                             itemLayout="horizontal"
@@ -267,7 +268,7 @@ export default function HomePage() {
                                         actions={[
                                             <Tooltip
                                                 key="join"
-                                                title="Присоединиться к уроку"
+                                                title={t('lessonActions.join')}
                                             >
                                                 <Button
                                                     shape="circle"
@@ -294,7 +295,7 @@ export default function HomePage() {
                                     actions={[
                                         <Tooltip
                                             key="end"
-                                            title="Закончить урок"
+                                            title={t('lessonActions.end')}
                                         >
                                             <Button
                                                 shape="circle"
@@ -305,14 +306,14 @@ export default function HomePage() {
                                         </Tooltip>,
                                         <Tooltip
                                             key="copy"
-                                            title="Скопировать код урока"
+                                            title={t('lessonActions.copyCode')}
                                         >
                                             <Button
                                                 shape="circle"
                                                 icon={<CopyOutlined />}
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(lesson.inviteCode);
-                                                    message.success("Код урока скопирован в буфер обмена");
+                                                    message.success(t('messages.codeCopied'));
                                                 }}
                                                 style={{ padding: '0px', width: '32px', height: '32px' }}
                                             />
@@ -320,7 +321,7 @@ export default function HomePage() {
                                         
                                         <Tooltip
                                             key="join"
-                                            title="Присоединиться к уроку"
+                                            title={t('lessonActions.join')}
                                         >
                                             <Button
                                                 shape="circle"
@@ -337,12 +338,12 @@ export default function HomePage() {
                                     />
                                 </List.Item>
                             }}
-                            locale={{ emptyText: "Нет текущих уроков" }}
+                            locale={{ emptyText: t('sidebar.noCurrentLessons') }}
                         />
                     </div>
                     {/* <div className={styles.sidebarSection}>
                         <Title level={4} className={styles.sidebarTitle}>
-                            Предстоящие уроки
+                            {t('sidebar.upcomingLessons')}
                         </Title>
                         <List
                             itemLayout="horizontal"
@@ -362,12 +363,12 @@ export default function HomePage() {
                                     />
                                 </List.Item>
                             )}
-                            locale={{ emptyText: "Нет предстоящих уроков" }}
+                            locale={{ emptyText: t('sidebar.noUpcomingLessons') }}
                         />
                     </div> */}
                     <div className={styles.sidebarSection}>
                         <Title level={4} className={styles.sidebarTitle}>
-                            Предыдущие уроки
+                            {t('sidebar.previousLessons')}
                         </Title>
                         <List
                             itemLayout="horizontal"
@@ -382,7 +383,7 @@ export default function HomePage() {
                                     actions={[
                                         <Tooltip
                                             key="board"
-                                            title="Открыть доску на весь экран"
+                                            title={t('lessonActions.openBoard')}
                                         >
                                             <Button
                                                 style={{ padding: '0px', width: '32px', height: '32px' }}
@@ -404,7 +405,7 @@ export default function HomePage() {
                                     />
                                 </List.Item>
                             )}
-                            locale={{ emptyText: "Пока нет уроков" }}
+                            locale={{ emptyText: t('sidebar.noPreviousLessons') }}
                         />
                     </div>
                 </Sider>
@@ -418,7 +419,7 @@ export default function HomePage() {
                 >
                     {loading ? (
                         <div className={styles.loadingContainer}>
-                            <Spin size="large" tip="Загрузка урока..." />
+                            <Spin size="large" tip={t('loading.lesson')} />
                         </div>
                     ) : selectedLesson ? (
                         <>
@@ -427,14 +428,14 @@ export default function HomePage() {
                         </>
                     ) : (
                         <div className={styles.emptyState}>
-                            Выберите урок слева, чтобы просмотреть конспект
+                            {t('emptyState.selectLesson')}
                         </div>
                     )}
                 </Content>
 
                 {/* Whiteboard modal */}
                 <Modal
-                    title={`Доска урока: ${selectedLesson?.title}`}
+                    title={t('whiteboardModal_title')+' ' + (selectedLesson?.title || '')}
                     open={isWhiteboardOpen}
                     footer={null}
                     onCancel={() => setIsWhiteboardOpen(false)}

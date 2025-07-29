@@ -28,18 +28,18 @@ import { logout } from "@/app/lib/auth";
 const { Header, Content, Sider } = Layout;
 const { Title, Paragraph } = Typography;
 
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 
 import { useAuth } from '@/app/context/AuthContext';
 
 import { useRouter } from 'next/navigation';
-
+import { useTranslations } from 'next-intl';
 
 const MeetingHeader = () => {
-    
     const { setUser, user } = useAuth();
     const router = useRouter();
+    const t = useTranslations('Header');
     
     return (
         <Header className={styles.header} id="app-header">
@@ -47,7 +47,6 @@ const MeetingHeader = () => {
                 <HeaderLogo />
                 <div className={styles.buttons}>
                     <Space>
-                        
                         <Popover
                             content={
                                 <div style={{
@@ -58,14 +57,13 @@ const MeetingHeader = () => {
                                     gap: '10px'
                                 }}>
                                     <p>
-                                        <b>Имя:</b> {user?.firstName?user?.firstName+' '+user?.lastName : 'Гость'}
+                                        <b>{t('name')}:</b> {user?.firstName ? user?.firstName + ' ' + user?.lastName : t('guest')}
                                     </p>
                                     <p>
-                                        <b>Email:</b> {user?.email || 'Не указан'}
+                                        <b>Email:</b> {user?.email || t('noEmail')}
                                     </p>
                                     <Button
                                         icon={<LogoutOutlined />}
-                                        // type="link"
                                         style={{ width: '100%' }}
                                         danger
                                         onClick={async () => {
@@ -78,17 +76,18 @@ const MeetingHeader = () => {
                                             }
                                         }}
                                     >
-                                        Выйти
+                                        {t('logout')}
                                     </Button>
                                 </div>
                             }
                             placement="bottomRight"
                         >
-                            <Button icon={<TeamOutlined />} className={styles.button}>Аккаунт</Button>
+                            <Button icon={<TeamOutlined />} className={styles.button}>
+                                {t('account')}
+                            </Button>
                         </Popover>
                     </Space>
                 </div>
-                
             </div>
         </Header>
     );

@@ -1,35 +1,43 @@
 "use client";
 
 import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form, Table, Collapse } from "antd";
-import {useState, useEffect} from "react";
-
+import { useState } from "react";
 import { LineChartOutlined, DesktopOutlined, CheckCircleOutlined, CloseCircleOutlined, MailOutlined } from "@ant-design/icons";
-import { BsStars, BsSliders  } from "react-icons/bs";
+import { BsStars, BsSliders } from "react-icons/bs";
 import Link from "next/link";
 import styles from "./page.module.css";
+import { useTranslations } from 'next-intl';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 const { Content } = Layout;
 
 export default function LandingPage() {
-    
-    
+    const t = useTranslations('Landing');
     const [collapseActiveKey, setCollapseActiveKey] = useState<string | string[]>(['1']);
-    
+
     return (
         <Layout className={styles.layout}>
             <Content className={styles.content}>
                 {/* Hero Section */}
                 <section className={styles.hero}>
                     <div>
-                        <Title level={1} style={{
-                            marginBottom: "50px !important",
-                        }}>AImperia: Первая платформа в мире, которая позволяет тебе учится в разы <span style={{textWrap:'nowrap'}}>быстрее <LineChartOutlined style={{color:'#3d8eff'}} /></span></Title>
-                        {/* <Paragraph>
-                            Интерактивная платформа для онлайн-занятий с
-                            возможностью видеосвязи, доской и автоконспектами.
-                        </Paragraph> */}
-                        <div>
+                        <Title level={1} style={{ marginBottom: "50px !important" }}>
+                            {
+                                // Split the heroTitle into words, show all except the last word
+                                (() => {
+                                    const heroTitle = t('heroTitle');
+                                    const words = heroTitle.split(' ');
+                                    const allExceptLast = words.slice(0, -1).join(' ');
+                                    const lastWord = words[words.length - 1];
+                                    return (
+                                        <>
+                                            {allExceptLast} <span style={{ textWrap: 'nowrap' }}>{lastWord}<LineChartOutlined style={{ color: '#3d8eff', marginLeft:'10px' }} /></span>
+                                        </>
+                                    );
+                                })()
+                            }
+                        </Title>
+                        <div className={styles.heroButtons}>
                             <Link href="/signup">
                                 <Button
                                     type="primary"
@@ -37,69 +45,60 @@ export default function LandingPage() {
                                     style={{ marginRight: "10px", width: "200px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
                                     className={styles.landingButton}
                                 >
-                                    Начать
+                                    {t('heroStartButton')}
                                 </Button>
                             </Link>
                             <Link href="/signin">
-                                <Button size="large" style={{width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px"}}
+                                <Button size="large" style={{ width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
                                     className={styles.landingButton}
-                                >Смотреть видео</Button>
+                                >{t('heroWatchVideoButton')}</Button>
                             </Link>
                         </div>
                     </div>
-                    <div
-                        className={styles.heroImageContainer}
-                    >
+                    <div className={styles.heroImageContainer}>
                         <img src='/landing/hero.png' alt="Hero" className={styles.heroImage} />
                         <div className={styles.heroImageOverlay}>
-                            Начните пользоваться уже сегодня!
+                            {t('heroOverlay')}
                         </div>
                     </div>
                 </section>
-                
+
                 {/* Features Section */}
                 <section className={styles.section}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'center', gap:'50px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'center', gap: '50px' }}>
                         <div className={styles.info1Item}>
                             <div className={styles.info1ItemTitle}>
-                                <DesktopOutlined className={styles.info1ItemIcon}/> Уроки с видео и доской
+                                <DesktopOutlined className={styles.info1ItemIcon} /> {t('features.videoBoardTitle')}
                             </div>
                             <Divider style={{ margin: '20px 0' }} />
                             <div className={styles.info1ItemDescription}>
-                                Платформа позволяет проводить уроки с
-                                видеосвязью и интерактивной доской, что делает
-                                обучение более эффективным.
+                                {t('features.videoBoardDesc')}
                             </div>
                         </div>
                         <div className={styles.info1Item}>
                             <div className={styles.info1ItemTitle}>
-                                <BsStars className={styles.info1ItemIcon}/> ИИ для автоматического конспекта
+                                <BsStars className={styles.info1ItemIcon} /> {t('features.aiNotesTitle')}
                             </div>
                             <Divider style={{ margin: '20px 0' }} />
                             <div className={styles.info1ItemDescription}>
-                                Искусственный интеллект автоматически
-                                создаёт конспект из сказанного на уроке и
-                                выделенного на доске, что позволяет ученикам
-                                сосредоточиться на обучении.
+                                {t('features.aiNotesDesc')}
                             </div>
                         </div>
                         <div className={styles.info1Item}>
                             <div className={styles.info1ItemTitle}>
-                                <BsSliders className={styles.info1ItemIcon}/> Удобный интерфейс
+                                <BsSliders className={styles.info1ItemIcon} /> {t('features.easyInterfaceTitle')}
                             </div>
                             <Divider style={{ margin: '20px 0' }} />
                             <div className={styles.info1ItemDescription}>
-                                Платформа имеет простой и интуитивно понятный
-                                интерфейс, что позволяет легко начать обучение
-                                без лишних настроек.
+                                {t('features.easyInterfaceDesc')}
                             </div>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* How It Works Section */}
                 <section className={styles.section}>
-                    <div className={styles.sectionTitle}>Легко начать пользоваться</div>
+                    <div className={styles.sectionTitle}>{t('easyStartTitle')}</div>
                     <div>
                         <Row gutter={24}>
                             <Col span={18}>
@@ -110,29 +109,26 @@ export default function LandingPage() {
                                             style={{
                                                 backgroundImage: 'url(/landing/imageInfo1.png)',
                                             }}
-                                        >   
+                                        >
                                             <div className={styles.imageInfoItemContent}>
-                                                <div className={styles.imageInfoTitle}>Создание урока</div>
-                                                <div  className={styles.imageInfoDescription}>
-                                                    Создайте новый урок с помощью
-                                                    простого интерфейса.
+                                                <div className={styles.imageInfoTitle}>{t('easyStart.createLessonTitle')}</div>
+                                                <div className={styles.imageInfoDescription}>
+                                                    {t('easyStart.createLessonDesc')}
                                                 </div>
                                             </div>
                                         </div>
                                     </Col>
                                     <Col span={16}>
-                                        <div 
+                                        <div
                                             className={styles.imageInfoItem}
                                             style={{
                                                 backgroundImage: 'url(/landing/imageInfo2.png)',
                                             }}
                                         >
                                             <div className={styles.imageInfoItemContent}>
-                                                <div className={styles.imageInfoTitle}>Присоединение к уроку</div>
+                                                <div className={styles.imageInfoTitle}>{t('easyStart.joinLessonTitle')}</div>
                                                 <div className={styles.imageInfoDescription}>
-                                                    Присоединяйтесь к уроку по уникальному
-                                                    коду, который предоставляет
-                                                    преподаватель.
+                                                    {t('easyStart.joinLessonDesc')}
                                                 </div>
                                             </div>
                                         </div>
@@ -140,35 +136,31 @@ export default function LandingPage() {
                                 </Row>
                                 <Row gutter={24}>
                                     <Col span={16}>
-                                        <div 
+                                        <div
                                             className={styles.imageInfoItem}
                                             style={{
                                                 backgroundImage: 'url(/landing/imageInfo3.png)',
                                             }}
                                         >
                                             <div className={styles.imageInfoItemContent}>
-                                                <div className={styles.imageInfoTitle}>Видеозвонок и доска</div>
+                                                <div className={styles.imageInfoTitle}>{t('easyStart.videoBoardTitle')}</div>
                                                 <div className={styles.imageInfoDescription}>
-                                                    Используйте встроенный видеозвонок и
-                                                    интерактивную доску для проведения
-                                                    уроков.
+                                                    {t('easyStart.videoBoardDesc')}
                                                 </div>
                                             </div>
                                         </div>
                                     </Col>
                                     <Col span={8}>
-                                        <div 
+                                        <div
                                             className={styles.imageInfoItem}
                                             style={{
                                                 backgroundImage: 'url(/landing/imageInfo4.png)',
                                             }}
                                         >
                                             <div className={styles.imageInfoItemContent}>
-                                                <div className={styles.imageInfoTitle}>Автоконспект</div>
+                                                <div className={styles.imageInfoTitle}>{t('easyStart.autoNotesTitle')}</div>
                                                 <div className={styles.imageInfoDescription}>
-                                                    Платформа автоматически создаёт
-                                                    конспект из сказанного на уроке и
-                                                    выделенного на доске.
+                                                    {t('easyStart.autoNotesDesc')}
                                                 </div>
                                             </div>
                                         </div>
@@ -176,7 +168,7 @@ export default function LandingPage() {
                                 </Row>
                             </Col>
                             <Col span={6}>
-                                <div 
+                                <div
                                     className={styles.imageInfoItem}
                                     style={{
                                         backgroundImage: 'url(/landing/imageInfo5.png)',
@@ -184,10 +176,9 @@ export default function LandingPage() {
                                     }}
                                 >
                                     <div className={styles.imageInfoItemContent}>
-                                        <div className={styles.imageInfoTitle}>Начните обучение</div>
+                                        <div className={styles.imageInfoTitle}>{t('easyStart.startLearningTitle')}</div>
                                         <div className={styles.imageInfoDescription}>
-                                            Зарегистрируйтесь и начните обучение уже
-                                            сегодня!
+                                            {t('easyStart.startLearningDesc')}
                                         </div>
                                     </div>
                                 </div>
@@ -195,45 +186,39 @@ export default function LandingPage() {
                         </Row>
                     </div>
                 </section>
-                
+
                 {/* Statistics Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionUsers}>
                         <div className={styles.sectionUsersItem}>
                             <div className={styles.sectionUsersTitle}>
-                                1000+ пользователей
+                                {t('statistics.usersTitle')}
                             </div>
                             <div className={styles.sectionUsersDescription}>
-                                Платформа уже используется более чем 1000
-                                пользователями, которые оценили её удобство и
-                                функциональность.
+                                {t('statistics.usersDesc')}
                             </div>
                         </div>
-                        <div className={styles.sectionUsersVertDivider}></div>
+                        <div className={styles.sectionUsersVertDivider}/>
                         <div className={styles.sectionUsersItem}>
                             <div className={styles.sectionUsersTitle}>
-                                500+ уроков
+                                {t('statistics.lessonsTitle')}
                             </div>
                             <div className={styles.sectionUsersDescription}>
-                                На платформе уже проведено более 500 уроков,
-                                что подтверждает её эффективность и
-                                востребованность.
+                                {t('statistics.lessonsDesc')}
                             </div>
                         </div>
-                        <div className={styles.sectionUsersVertDivider}></div>
+                        <div className={styles.sectionUsersVertDivider}/>
                         <div className={styles.sectionUsersItem}>
                             <div className={styles.sectionUsersTitle}>
-                                40+ стран
+                                {t('statistics.countriesTitle')}
                             </div>
                             <div className={styles.sectionUsersDescription}>
-                                Платформа доступна в более чем 40 странах,
-                                что позволяет пользователям из разных уголков
-                                мира учиться и преподавать.
+                                {t('statistics.countriesDesc')}
                             </div>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* Contact Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionFormBackground}>
@@ -243,29 +228,28 @@ export default function LandingPage() {
                             marginBottom: '10px',
                             fontSize: '36px',
                             color: '#fff',
-                        }}>Задайте нам любой вопрос</div>
+                        }}>{t('contact.title')}</div>
                         <div style={{ color: '#fff', textAlign: 'center', marginBottom: '50px', fontSize: '18px' }}>
-                            Если у вас есть вопросы или предложения, пожалуйста, заполните форму
-                            ниже. Мы обязательно свяжемся с вами!
+                            {t('contact.subtitle')}
                         </div>
                         <div className={styles.sectionFormContainer}>
-                            <Input placeholder="Имя"  className={styles.sectionFormInput}/>
-                            <Input type="email" placeholder="Email"  className={styles.sectionFormInput}/>
-                            <Input placeholder="Телефон"  className={styles.sectionFormInput}/>
+                            <Input placeholder={t('contact.namePlaceholder')} className={styles.sectionFormInput} />
+                            <Input type="email" placeholder={t('contact.emailPlaceholder')} className={styles.sectionFormInput} />
+                            <Input placeholder={t('contact.phonePlaceholder')} className={styles.sectionFormInput} />
                             <Button color="purple" variant="solid" style={{ width: '100%' }}
                                 className={styles.sectionFormInput}
-                                onClick={() => alert('Спасибо за ваш вопрос! Мы свяжемся с вами в ближайшее время.')}>
-                                Задать вопрос
+                                onClick={() => alert(t('contact.successMessage'))}>
+                                {t('contact.askButton')}
                             </Button>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* About Section */}
                 <section className={styles.section} id="aboutSection">
                     <div className={styles.sectionAbout}>
                         <div className={styles.sectionTitle}>
-                            Что такое платформа AImperia?
+                            {t('about.title')}
                         </div>
                         <div style={{
                             width: '60%',
@@ -277,165 +261,95 @@ export default function LandingPage() {
                         <div className={styles.sectionAboutItems}>
                             <div className={styles.sectionAboutItem}>
                                 <div className={styles.sectionAboutItemTitle}>
-                                    Лучшая платформа для онлайн-занятий
+                                    {t('about.bestPlatformTitle')}
                                 </div>
                                 <ul className={styles.sectionAboutItemDescription}>
-                                    <li>
-                                        Платформа AImperia - это первая в мире
-                                        платформа, которая позволяет учиться в
-                                        разы быстрее благодаря использованию
-                                        искусственного интеллекта.
-                                    </li>
-                                    <li>
-                                        Она предоставляет возможность проводить
-                                        онлайн-занятия с видеосвязью и
-                                        интерактивной доской.
-                                    </li>
-                                    <li>
-                                        Искусственный интеллект автоматически
-                                        создаёт конспект из сказанного на уроке
-                                        и выделенного на доске.
-                                    </li>
+                                    {t.raw('about.bestPlatformList').map((item: string, idx: number) => (
+                                        <li key={idx}>{item}</li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className={styles.sectionAboutItem}>
                                 <div className={styles.sectionAboutItemTitle}>
-                                    Простота и удобство
+                                    {t('about.simplicityTitle')}
                                 </div>
                                 <ul className={styles.sectionAboutItemDescription}>
-                                    <li>
-                                        Платформа имеет простой и интуитивно
-                                        понятный интерфейс, что позволяет легко
-                                        начать обучение без лишних настроек.
-                                    </li>
-                                    <li>
-                                        Платформа доступна в более чем 40 странах,
-                                        что позволяет пользователям из разных
-                                        уголков мира учиться и преподавать.
-                                    </li>
-                                    <li>
-                                        Платформа уже используется более чем 1000
-                                        пользователями, которые оценили её
-                                        удобство и функциональность.
-                                    </li>
+                                    {t.raw('about.simplicityList').map((item: string, idx: number) => (
+                                        <li key={idx}>{item}</li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className={styles.sectionAboutItem}>
                                 <div className={styles.sectionAboutItemTitle}>
-                                    Начните обучение уже сегодня!
+                                    {t('about.startTodayTitle')}
                                 </div>
                                 <ul className={styles.sectionAboutItemDescription}>
-                                    <li>
-                                        Зарегистрируйтесь на платформе и начните
-                                        обучение уже сегодня!
-                                    </li>
-                                    <li>
-                                        Платформа предоставляет возможность
-                                        создавать уроки, присоединяться к ним и
-                                        использовать встроенный видеозвонок и
-                                        интерактивную доску.
-                                    </li>
-                                    <li>
-                                        Платформа автоматически создаёт конспект
-                                        из сказанного на уроке и выделенного на
-                                        доске, что позволяет сосредоточиться на
-                                        обучении.
-                                    </li>
+                                    {t.raw('about.startTodayList').map((item: string, idx: number) => (
+                                        <li key={idx}>{item}</li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* Pricing Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionPrice}>
+                        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
                         <div className={styles.sectionTitle}>
-                            Стоимость занятий
+                            {t('pricing.title')}
                         </div>
                         <Divider style={{ marginBottom: '40px' }} />
-                        <div
-                            className={styles.priceCardsContainer}
-                        >
-                            <Card
-                                className={styles.priceCard}
-                            >
+                        <div className={styles.priceCardsContainer}>
+                            <Card className={styles.priceCard}>
                                 <div className={styles.priceCardTitle}>
-                                    Одна лекция со своим преподавателем (2 часа)
+                                    {t('pricing.basicTitle')}
                                 </div>
                                 <div className={styles.priceCardPrice}>
-                                    350 ₽
+                                    {t('pricing.basicPrice')}
                                 </div>
-                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
                                 <ul className={styles.priceCardFeatures}>
-                                    <li>Генерация конспекта с помощью ИИ</li>
-                                    <li>Видеозвонок с преподавателем</li>
-                                    <li>Интерактивная доска</li>
-                                    <li>Поддержка в чате</li>
-                                    <li className={styles.priceCardNotFeature}>Запись урока</li>
-                                    <li className={styles.priceCardNotFeature}>Возможность задать вопрос ИИ</li>
-                                    <li className={styles.priceCardNotFeature}>Возсожность создать pdf файл конспекта</li>
-                                    <li className={styles.priceCardNotFeature}>Занятие с опытным преподавателем</li>
-                                    <li className={styles.priceCardNotFeature}>Домашнее задание</li>
-                                    <li className={styles.priceCardNotFeature}>Проверка домашнего задания</li>
-                                    <li className={styles.priceCardNotFeature}>Индивидуальный подход</li>
+                                    {t.raw('pricing.features').map((feature: string, idx: number) => (
+                                        <li key={idx} className={idx >= 4 ? styles.priceCardNotFeature : undefined}>{feature}</li>
+                                    ))}
                                 </ul>
                             </Card>
-                            <Card
-                                className={styles.priceCard}
-                            >
+                            <Card className={styles.priceCard}>
                                 <div className={styles.priceCardTitle}>
-                                    Одна лекция со своим преподавателем<span style={{ color: '#3d8eff', fontWeight: 'bold' }}>+</span>(2 часа)
+                                    {t('pricing.plusTitle')}
                                 </div>
                                 <div className={styles.priceCardPrice}>
-                                    500 ₽
+                                    {t('pricing.plusPrice')}
                                 </div>
                                 <ul className={styles.priceCardFeatures}>
-                                    <li>Генерация конспекта с помощью ИИ</li>
-                                    <li>Видеозвонок с преподавателем</li>
-                                    <li>Интерактивная доска</li>
-                                    <li>Поддержка в чате</li>
-                                    <li>Запись урока</li>
-                                    <li>Возможность задать вопрос ИИ</li>
-                                    <li>Возсожность создать pdf файл конспекта</li>
-                                    <li className={styles.priceCardNotFeature}>Занятие с опытным преподавателем</li>
-                                    <li className={styles.priceCardNotFeature}>Домашнее задание</li>
-                                    <li className={styles.priceCardNotFeature}>Проверка домашнего задания</li>
-                                    <li className={styles.priceCardNotFeature}>Индивидуальный подход</li>
+                                    {t.raw('pricing.features').map((feature: string, idx: number) => (
+                                        <li key={idx} className={idx >= 7 ? styles.priceCardNotFeature : undefined}>{feature}</li>
+                                    ))}
                                 </ul>
                             </Card>
-                            <Card
-                                className={styles.priceCardAnimated}
-                            >
+                            <Card className={styles.priceCardAnimated}>
                                 <div className={styles.priceCardTitle}>
-                                    Одна лекция с преподавателем AImperia (2 часа)
+                                    {t('pricing.premiumTitle')}
                                 </div>
                                 <div className={styles.priceCardPrice}>
-                                    1400 ₽
+                                    {t('pricing.premiumPrice')}
                                 </div>
                                 <ul className={styles.priceCardFeatures}>
-                                    <li>Генерация конспекта с помощью ИИ</li>
-                                    <li>Видеозвонок с преподавателем</li>
-                                    <li>Интерактивная доска</li>
-                                    <li>Поддержка в чате</li>
-                                    <li>Запись урока</li>
-                                    <li>Возможность задать вопрос ИИ</li>
-                                    <li>Возсожность создать pdf файл конспекта</li>
-                                    <li>Занятие с опытным преподавателем</li>
-                                    <li>Домашнее задание</li>
-                                    <li>Проверка домашнего задания</li>
-                                    <li>Индивидуальный подход</li>
+                                    {t.raw('pricing.features').map((feature: string, idx: number) => (
+                                        <li key={idx}>{feature}</li>
+                                    ))}
                                 </ul>
                             </Card>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* For Who Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionForWho}>
                         <div className={styles.sectionTitle}>
-                            Для кого подходит платформа AImperia?
+                            {t('forWho.title')}
                         </div>
                         <Divider style={{ marginBottom: '40px' }} />
                         <div className={styles.sectionForWhoItems}
@@ -446,9 +360,8 @@ export default function LandingPage() {
                                 <div className={styles.sectionForWhoItemIcon}>
                                     &#129299;
                                 </div>
-                                <div className={styles.sectionForWhoItemTitle}
-                                >
-                                    Для учеников
+                                <div className={styles.sectionForWhoItemTitle}>
+                                    {t('forWho.students')}
                                 </div>
                             </div>
                             <div className={styles.sectionForWhoItem}>
@@ -456,7 +369,7 @@ export default function LandingPage() {
                                     &#129488;
                                 </div>
                                 <div className={styles.sectionForWhoItemTitle}>
-                                    Для преподавателей
+                                    {t('forWho.teachers')}
                                 </div>
                             </div>
                             <div className={styles.sectionForWhoItem}>
@@ -464,7 +377,7 @@ export default function LandingPage() {
                                     &#128640;
                                 </div>
                                 <div className={styles.sectionForWhoItemTitle}>
-                                    Кто хочет учится быстрее
+                                    {t('forWho.fastLearners')}
                                 </div>
                             </div>
                             <div className={styles.sectionForWhoItem}>
@@ -472,7 +385,7 @@ export default function LandingPage() {
                                     &#129302;
                                 </div>
                                 <div className={styles.sectionForWhoItemTitle}>
-                                    Кто хочет использовать ИИ в обучении
+                                    {t('forWho.aiLearners')}
                                 </div>
                             </div>
                             <div className={styles.sectionForWhoItem}>
@@ -480,8 +393,7 @@ export default function LandingPage() {
                                     &#128187;
                                 </div>
                                 <div className={styles.sectionForWhoItemTitle}>
-                                    Преподаватели, которые хотят
-                                    использовать новые технологии в обучении
+                                    {t('forWho.innovativeTeachers')}
                                 </div>
                             </div>
                             <div className={styles.sectionForWhoItem}>
@@ -489,8 +401,7 @@ export default function LandingPage() {
                                     &#128106;
                                 </div>
                                 <div className={styles.sectionForWhoItemTitle}>
-                                    Родители, которые хотят
-                                    обеспечить своим детям качественное образование
+                                    {t('forWho.parents')}
                                 </div>
                             </div>
                         </div>
@@ -500,19 +411,19 @@ export default function LandingPage() {
                 {/* How It Works Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionTitle}>
-                        Как начать пользоваться платформой AImperia?
+                        {t('howToStart.title')}
                     </div>
                     <Divider style={{ marginBottom: '40px' }} />
                     <div className={styles.sectionHowToStartContainer}>
                         <div className={styles.sectionHowToStartTopText}>
-                            Через минуту вы уже на уроке!
+                            {t('howToStart.topText')}
                         </div>
                         <div className={styles.sectionHowToStartItem}>
                             <div className={styles.sectionHowToStartItemTitle}>
                                 01
                             </div>
                             <div className={styles.sectionHowToStartItemDescription}>
-                                Зарегистрируйтесь на платформе AImperia
+                                {t('howToStart.step1')}
                             </div>
                         </div>
                         <img src="/landing/arrow.png" alt="Arrow" className={styles.sectionHowToStartArrow} />
@@ -521,7 +432,7 @@ export default function LandingPage() {
                                 02
                             </div>
                             <div className={styles.sectionHowToStartItemDescription}>
-                                Создайте новый урок или присоединитесь к уже существующему
+                                {t('howToStart.step2')}
                             </div>
                         </div>
                         <img src="/landing/arrow.png" alt="Arrow" className={styles.sectionHowToStartArrow} />
@@ -530,7 +441,7 @@ export default function LandingPage() {
                                 03
                             </div>
                             <div className={styles.sectionHowToStartItemDescription}>
-                                Вы пользуетесь платформой :)
+                                {t('howToStart.step3')}
                             </div>
                         </div>
                     </div>
@@ -541,50 +452,50 @@ export default function LandingPage() {
                         className={styles.landingButton}
                         onClick={() => window.location.href = '/signup'}
                     >
-                        Начать сейчас
+                        {t('howToStart.startNowButton')}
                     </Button>
                 </section>
-                
+
                 {/* Statistics Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionTitle}>
-                        Лучшая платформа для онлайн-занятий
+                        {t('advantages.title')}
                     </div>
                     <Divider style={{ marginBottom: '40px' }} />
                     <div className={styles.sectionAdvantagesItems}>
                         <div className={styles.sectionAdvantagesItem}>
                             <div className={styles.sectionAdvantagesItemTitle}>
-                                +200%
+                                {t('advantages.faster')}
                             </div>
                             <div className={styles.sectionAdvantagesItemDescription}>
-                                Пользователи AImperia учатся на 200% быстрее, чем на традиционных платформах.
+                                {t('advantages.fasterDesc')}
                             </div>
                         </div>
-                        <div className={styles.sectionAdvantagesVertDivider}></div>
+                        <div className={styles.sectionAdvantagesVertDivider}/>
                         <div className={styles.sectionAdvantagesItem}>
                             <div className={styles.sectionAdvantagesItemTitle}>
-                                40%
+                                {t('advantages.higherGrades')}
                             </div>
                             <div className={styles.sectionAdvantagesItemDescription}>
-                                Пользователи AImperia в среднем имеют оценки на 40% выше, чем на традиционных платформах.
+                                {t('advantages.higherGradesDesc')}
                             </div>
                         </div>
-                        <div className={styles.sectionAdvantagesVertDivider}></div>
+                        <div className={styles.sectionAdvantagesVertDivider}/>
                         <div className={styles.sectionAdvantagesItem}>
                             <div className={styles.sectionAdvantagesItemTitle}>
-                                89
+                                {t('advantages.averageScore')}
                             </div>
                             <div className={styles.sectionAdvantagesItemDescription}>
-                                Средний балл по ЕГЭ у пользователей AImperia составляет 89 баллов.
+                                {t('advantages.averageScoreDesc')}
                             </div>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* Features Comparison Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionTitle}>
-                        Особенности платформы AImperia
+                        {t('featuresComparison.title')}
                     </div>
                     <Divider style={{ marginBottom: '40px' }} />
                     <Table
@@ -604,7 +515,7 @@ export default function LandingPage() {
                                 render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
                             },
                             {
-                                title: 'Другие школы',
+                                title: t('featuresComparison.title'),
                                 dataIndex: 'other',
                                 key: 'other',
                                 render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
@@ -619,57 +530,56 @@ export default function LandingPage() {
                         dataSource={[
                             {
                                 key: '1',
-                                feature: 'Видеозвонок',
+                                feature: t('featuresComparison.videoCall'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CheckCircleOutlined className={styles.featuresCheckmark} />
                             },
                             {
                                 key: '2',
-                                feature: 'Интерактивная доска',
+                                feature: t('featuresComparison.interactiveBoard'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CheckCircleOutlined className={styles.featuresCheckmark} />
                             },
                             {
                                 key: '8',
-                                feature:
-                                    'Занятие с опытным преподавателем',
+                                feature: t('featuresComparison.experiencedTeacher'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '4',
-                                feature: 'Поддержка в чате',
+                                feature: t('featuresComparison.chatSupport'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '3',
-                                feature: 'Автоконспект',
+                                feature: t('featuresComparison.autoNotes'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '5',
-                                feature: 'Запись урока',
+                                feature: t('featuresComparison.lessonRecording'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '6',
-                                feature: 'Возможность задать вопрос ИИ',
+                                feature: t('featuresComparison.aiQuestions'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
                             },
                             {
                                 key: '7',
-                                feature: 'Создание pdf файла конспекта',
+                                feature: t('featuresComparison.pdfNotes'),
                                 AImperia: <CheckCircleOutlined className={styles.featuresCheckmark} />,
                                 other: <CloseCircleOutlined className={styles.featuresCross} />,
                                 zoom: <CloseCircleOutlined className={styles.featuresCross} />
@@ -677,321 +587,160 @@ export default function LandingPage() {
                         ]}
                     />
                 </section>
-                
+
                 {/* Teachers Section */}
                 <section className={styles.section} id="teachersSection">
                     <div className={styles.sectionTitle}>
-                        Преподаватели AImperia
+                        {t('teachers.title')}
                     </div>
                     <Divider style={{ marginBottom: '40px' }} />
                     <div className={styles.sectionTeachers}>
                         <div className={styles.sectionTeachersItem}>
                             <img src="/landing/teacher1.png" alt="Teacher 1" className={styles.sectionTeachersItemImage} />
                             <div className={styles.sectionTeachersItemName}>
-                                Иван Иванов
+                                {t('teachers.teacher1.name')}
                             </div>
                             <div className={styles.sectionTeachersItemSubject}>
-                                Математика
+                                {t('teachers.math')}
                             </div>
                             <div className={styles.sectionTeachersItemDescription}>
-                                Преподаватель математики с 10-летним опытом работы. Помог
-                                более 1000 ученикам подготовиться к ЕГЭ и ОГЭ.
+                                {t('teachers.teacher1.desc')}
                             </div>
                         </div>
                         <div className={styles.sectionTeachersItem}>
                             <img src="/landing/teacher2.png" alt="Teacher 2" className={styles.sectionTeachersItemImage} />
                             <div className={styles.sectionTeachersItemName}>
-                                Анна Петрова
+                                {t('teachers.teacher2.name')}
                             </div>
                             <div className={styles.sectionTeachersItemSubject}>
-                                Физика
+                                {t('teachers.physics')}
                             </div>
                             <div className={styles.sectionTeachersItemDescription}>
-                                Преподаватель физики с 8-летним опытом работы. Помогла
-                                более 800 ученикам подготовиться к ЕГЭ и ОГЭ.
-                            </div> 
+                                {t('teachers.teacher2.desc')}
+                            </div>
                         </div>
                         <div className={styles.sectionTeachersItem}>
                             <img src="/landing/teacher3.png" alt="Teacher 3" className={styles.sectionTeachersItemImage} />
                             <div className={styles.sectionTeachersItemName}>
-                                Мария Смирнова
+                                {t('teachers.teacher3.name')}
                             </div>
                             <div className={styles.sectionTeachersItemSubject}>
-                                Химия
+                                {t('teachers.chemistry')}
                             </div>
                             <div className={styles.sectionTeachersItemDescription}>
-                                Преподаватель химии с 5-летним опытом работы. Помогла
-                                более 500 ученикам подготовиться к ЕГЭ и ОГЭ.
+                                {t('teachers.teacher3.desc')}
                             </div>
                         </div>
                         <div className={styles.sectionTeachersItem}>
                             <img src="/landing/teacher4.png" alt="Teacher 4" className={styles.sectionTeachersItemImage} />
                             <div className={styles.sectionTeachersItemName}>
-                                Алексей Кузнецов
+                                {t('teachers.teacher4.name')}
                             </div>
                             <div className={styles.sectionTeachersItemSubject}>
-                                Информатика
+                                {t('teachers.informatics')}
                             </div>
                             <div className={styles.sectionTeachersItemDescription}>
-                                Преподаватель информатики с 7-летним опытом работы. Помог
-                                более 600 ученикам подготовиться к ЕГЭ и ОГЭ.
+                                {t('teachers.teacher4.desc')}
                             </div>
                         </div>
                         <div className={styles.sectionTeachersItem}>
                             <img src="/landing/teacher5.png" alt="Teacher 5" className={styles.sectionTeachersItemImage} />
                             <div className={styles.sectionTeachersItemName}>
-                                Дмитрий Сидоров
+                                {t('teachers.teacher5.name')}
                             </div>
                             <div className={styles.sectionTeachersItemSubject}>
-                                Биология
+                                {t('teachers.biology')}
                             </div>
                             <div className={styles.sectionTeachersItemDescription}>
-                                Преподаватель биологии с 6-летним опытом работы. Помог
-                                более 700 ученикам подготовиться к ЕГЭ и ОГЭ.
+                                {t('teachers.teacher5.desc')}
                             </div>
                         </div>
                     </div>
                 </section>
-                
+
                 {/* Reviews Section */}
                 <section className={styles.sectionReviews}
                     style={{
                         backgroundImage: 'url(/landing/reviewsBackground.png)',
                         backgroundRepeat: 'repeat',
                         backgroundSize: '800px auto',
-                 }}
+                    }}
                 >
                     <div className={styles.sectionReviewsTitle}>
-                        Отзывы пользователей
+                        {t('reviews.title')}
                     </div>
-                    <div className={styles.sectionReviewsItems}
-                    >
-                        <div className={styles.sectionReviewItem}>
-                            <div className={styles.sectionReviewText}>
-                                &quot;Платформа AImperia - это просто находка! Я
-                                учусь на ней уже несколько месяцев и заметил,
-                                что стал учиться гораздо быстрее. Очень
-                                рекомендую!&quot;
+                    <div className={styles.sectionReviewsItems}>
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div className={styles.sectionReviewItem} key={i}>
+                                <div className={styles.sectionReviewText}>
+                                    {t(`reviews.review${i}.text`)}
+                                </div>
+                                <div className={styles.sectionReviewAuthor}>
+                                    {t(`reviews.review${i}.author`)}
+                                </div>
                             </div>
-                            <div className={styles.sectionReviewAuthor}>
-                                Алексей, ученик
-                            </div>
-                        </div>
-                        <div className={styles.sectionReviewItem}>
-                            <div className={styles.sectionReviewText}>
-                                &quot;Я использую платформу AImperia для своих
-                                уроков и очень доволен. Интерактивная доска и
-                                автоконспект - это просто супер!&quot;
-                            </div>
-                            <div className={styles.sectionReviewAuthor}>
-                                Мария, преподаватель
-                            </div>
-                        </div>
-                        <div className={styles.sectionReviewItem}>
-                            <div className={styles.sectionReviewText}>
-                                &quot;Платформа AImperia - это лучший способ
-                                учиться! Я уже подготовился к ЕГЭ на 90 баллов
-                                благодаря этой платформе.&quot;
-                            </div>
-                            <div className={styles.sectionReviewAuthor}>
-                                Иван, ученик
-                            </div>
-                        </div>
-                        <div className={styles.sectionReviewItem}>
-                            <div className={styles.sectionReviewText}>
-                                &quot;Я использую платформу AImperia для своих
-                                уроков и очень доволен. Интерактивная доска и
-                                автоконспект - это просто супер!&quot;
-                            </div>
-                            <div className={styles.sectionReviewAuthor}>
-                                Анна, преподаватель
-                            </div>
-                        </div>
-                        <div className={styles.sectionReviewItem}>
-                            <div className={styles.sectionReviewText}>
-                                &quot;Платформа AImperia - это просто находка! Я
-                                учусь на ней уже несколько месяцев и заметил,
-                                что стал учиться гораздо быстрее. Очень
-                                рекомендую!&quot;
-                            </div>
-                            <div className={styles.sectionReviewAuthor}>
-                                Дмитрий, ученик
-                            </div>
-                        </div>
-                        <div className={styles.sectionReviewItem}>
-                            <div className={styles.sectionReviewText}>
-                                &quot;Я использую платформу AImperia для своих
-                                уроков и очень доволен. Интерактивная доска и
-                                автоконспект - это просто супер!&quot;
-                            </div>
-                            <div className={styles.sectionReviewAuthor}>
-                                Алексей, преподаватель
-                            </div>
-                        </div>
-                        
+                        ))}
                     </div>
                 </section>
-                
+
                 {/* FAQ */}
                 <section className={styles.section} id="faqSection">
                     <div className={styles.sectionTitle}>
-                        Часто задаваемые вопросы
+                        {t('faq.title')}
                     </div>
                     <Divider style={{ marginBottom: '40px' }} />
                     <Collapse
                         activeKey={collapseActiveKey}
                         onChange={(key) => {
-                            if (key.length>0)
-                                setCollapseActiveKey([key[key.length - 1]])
-                            
+                            if (key.length > 0)
+                                setCollapseActiveKey([key[key.length - 1]]);
                         }}
                         expandIconPosition="end"
                         className={styles.faqCollapse}
-                        items={[
-                            {
-                                key: '1',
-                                label: 'Чем отличается AImperia от таких платформ как Zoom, Microsoft Teams или Google Meets?',
-                                children: <span>AImperia - это специализированная платформа для онлайн-занятий, которая включает в себя все необходимые инструменты для обучения: 
-                                видеозвонок, интерактивную доску, автоконспект и многое другое. В отличие от Zoom,
-                                Microsoft Teams или Google Meets, AImperia предоставляет готовое решение для образовательных учреждений и преподавателей.
-                                В дополнение, AImperia автоматически создаёт конспект из сказанного на уроке и выделенного на доске, что позволяет сосредоточиться на обучении,
-                                а не на написании конспекта и попытках успеть понять преподавателя и суммаризировать информацию.</span>,
-                            },
-                            {
-                                key: '2',
-                                label: 'Насколько качественно проводятся занятия и насколько сильно ИИ помогает при обучении?',
-                                children: <span>
-                                    AImperia предоставляет возможность проводить занятия с опытными преподавателями, которые имеют большой опыт работы в сфере образования.
-                                    ИИ помогает в создании автоконспекта, который автоматически записывает все, что говорится на уроке, и выделяет важные моменты на интерактивной доске.
-                                    После урока вы сможете просмотреть, повторить или скачать конспект в формате PDF.
-                                    Также, ИИ позволяет задавать вопросы во время урока и получать ответы на них, что делает обучение более интерактивным и эффективным.
-                                </span>,
-                            },
-                            {
-                                key: '3',
-                                label: 'Как записаться на занятие и как выбрать преподавателя?',
-                                children: <span>
-                                    Чтобы записаться на занятие, вам нужно зарегистрироваться на платформе AImperia и написать нам, какой предмет и уровень обучения вас интересует.
-                                    Мы поможем вам выбрать подходящего преподавателя и договориться о времени занятия.
-                                </span>,
-                            },
-                            {
-                                key: '4',
-                                label: 'Как проходит занятие и какие инструменты используются?',
-                                children: <span>
-                                    Занятие проходит в формате видеозвонка с использованием интерактивной доски, на которой преподаватель может рисовать, писать и выделять важные моменты.
-                                    Также используется автоконспект, который автоматически записывает все, что говорится на уроке, и выделяет важные моменты на интерактивной доске.
-                                    После урока вы сможете просмотреть, повторить или скачать конспект в формате PDF.
-                                </span>,
-                            },
-                            {
-                                key: '5',
-                                label: 'Могу ли я заниматься на этой платформе, если у меня есть свой преподаватель?',
-                                children: <span>
-                                    Да, вы можете использовать платформу AImperia для проведения занятий со своим преподавателем.
-                                    Для этого вам и преподавателю нужно зарегистрироваться на платформе и договориться о времени занятия.
-                                    Вы сможете использовать все инструменты платформы, включая видеозвонок, интерактивную доску и автоконспект.
-                                </span>,
-                            },
-                            {
-                                key: '6',
-                                label: 'Предоставляет ли AImperia поддержку, если я занимаюсь со своим преподавателем?',
-                                children: <span>
-                                    Да, AImperia предоставляет поддержку всем пользователям, независимо от того, занимаются ли они со своим преподавателем или с преподавателями платформы.
-                                    Вы можете обратиться в службу поддержки по любым вопросам, связанным с использованием платформы, и мы постараемся помочь вам как можно быстрее.
-                                </span>,
-                            },
-                            {
-                                key: '7',
-                                label: 'Какие предметы я могу изучать на платформе AImperia?',
-                                children: <span>
-                                    На платформе AImperia вы можете изучать различные предметы, включая математику, физику, химию, информатику и другие.
-                                    Если вас интересует какой-то конкретный предмет, напишите нам, и мы постараемся найти подходящего преподавателя для вас.
-                                </span>,
-                            },
-                            {
-                                key: '8',
-                                label: 'Как я могу связаться с поддержкой AImperia?',
-                                children: <span>
-                                    Вы можете связаться с поддержкой AImperia через форму обратной связи на сайте, по электронной почте или в чате на платформе.
-                                    Мы постараемся ответить на ваш вопрос как можно быстрее.
-                                </span>,
-                            },
-                         ]}
-                    >
-                    </Collapse>
+                        items={Array.from({ length: 8 }, (_, i) => ({
+                            key: `${i + 1}`,
+                            label: t(`faq.q${i + 1}.question`),
+                            children: <span>{t(`faq.q${i + 1}.answer`)}</span>,
+                        }))}
+                    />
                 </section>
-                
+
                 {/* News Section */}
                 <section className={styles.section}>
                     <div className={styles.sectionTitle}>
-                        Последние новости AImperia
+                        {t('news.title')}
                     </div>
                     <div className={styles.sectionNews}>
-                        <div className={styles.sectionNewsItem}>
-                            <img src="/landing/news1.png" alt="News 1" className={styles.sectionNewsItemImage} />
-                            <div className={styles.sectionNewsItemTitle}>
-                                Новая версия AImperia
+                        {[1, 2, 3, 4].map((i) => (
+                            <div className={styles.sectionNewsItem} key={i}>
+                                <img src={`/landing/news${i}.png`} alt={`News ${i}`} className={styles.sectionNewsItemImage} />
+                                <div className={styles.sectionNewsItemTitle}>
+                                    {t(`news.news${i}.title`)}
+                                </div>
+                                <div className={styles.sectionNewsItemDate}>
+                                    {t(`news.news${i}.date`)}
+                                </div>
+                                <div className={styles.sectionNewsItemDescription}>
+                                    {t(`news.news${i}.desc`)}
+                                </div>
                             </div>
-                            <div className={styles.sectionNewsItemDate}>
-                                01.10.2023
-                            </div>
-                            <div className={styles.sectionNewsItemDescription}>
-                                Мы выпустили новую версию платформы AImperia с улучшенным интерфейсом и новыми функциями.
-                            </div>
-                        </div>
-                        <div className={styles.sectionNewsItem}>
-                            <img src="/landing/news2.png" alt="News 1" className={styles.sectionNewsItemImage} />
-                            <div className={styles.sectionNewsItemTitle}>
-                                Новый курс по математике
-                            </div>
-                            <div className={styles.sectionNewsItemDate}>
-                                15.09.2023
-                            </div>
-                            <div className={styles.sectionNewsItemDescription}>
-                                Мы запустили новый курс по математике для учеников 9-11 классов.
-                            </div>
-                        </div>
-                        <div className={styles.sectionNewsItem}>
-                            <img src="/landing/news3.png" alt="News 1" className={styles.sectionNewsItemImage} />
-                            <div className={styles.sectionNewsItemTitle}>
-                                Новый преподаватель
-                            </div>
-                            <div className={styles.sectionNewsItemDate}>
-                                01.09.2023
-                            </div>
-                            <div className={styles.sectionNewsItemDescription}>
-                                Мы пригласили нового преподавателя по физике, который будет проводить занятия на платформе AImperia.
-                            </div>
-                        </div>
-                        <div className={styles.sectionNewsItem}>
-                            <img src="/landing/news4.png" alt="News 1" className={styles.sectionNewsItemImage} />
-                            <div className={styles.sectionNewsItemTitle}>
-                                Новый курс по информатике
-                            </div>
-                            <div className={styles.sectionNewsItemDate}>
-                                20.08.2023
-                            </div>
-                            <div className={styles.sectionNewsItemDescription}>
-                                Мы запустили новый курс по информатике для учеников 9-11 классов.
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </section>
-                
+
                 {/* Newsletter */}
                 <section className={styles.section}>
                     <div className={styles.sectionNewsletterTitle}>
-                        Подпишитесь на нашу рассылку
+                        {t('newsletter.title')}
                     </div>
                     <Divider />
                     <div className={styles.sectionNewsletterSubTitle}>
-                        Будьте в курсе последних новостей и обновлений AImperia
+                        {t('newsletter.subtitle')}
                     </div>
                     <Form layout="inline" className={styles.newsletterForm}>
                         <Form.Item>
-                            <Input placeholder="Введите ваш email"
-                                style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px', textAlign: 'center' }} 
+                            <Input placeholder={t('newsletter.emailPlaceholder')}
+                                style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px', textAlign: 'center' }}
                                 className={styles.landingInput}
                             />
                         </Form.Item>
@@ -1001,12 +750,11 @@ export default function LandingPage() {
                                 style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px' }}
                                 className={styles.landingButton}
                             >
-                                Подписаться
+                                {t('newsletter.subscribeButton')}
                             </Button>
                         </Form.Item>
                     </Form>
                 </section>
-                
             </Content>
         </Layout>
     );

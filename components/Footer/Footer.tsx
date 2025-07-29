@@ -2,16 +2,17 @@
 
 import { Layout } from "antd";
 import styles from "./Footer.module.css";
-
+import { useTranslations } from 'next-intl';
 const { Footer } = Layout;
 
 const AppFooter = () => {
+    const t = useTranslations('Footer');
     return (
         <Footer className={styles.footer} id="app-footer">
             <div className={styles.socialLinks}>
-                <div style={{paddingTop:'4px'}}>Наши соц. сети:</div>
+                <div style={{paddingTop:'4px'}}>{t('socialTitle')}</div>
                 <div className={styles.socialLink}>
-                    Telegram
+                    {t('telegram')}
                     <img
                         src="/footer/telegramicon.svg"
                         alt="Logo"
@@ -19,11 +20,11 @@ const AppFooter = () => {
                     />
                 </div>
                 <div className={styles.socialLink}>
-                    ВКонтакте
+                    {t('vk')}
                     <img src="/footer/vkicon.svg" alt="Logo" className={styles.logo} />
                 </div>
             </div>
-            ©{" "} {new Date().getFullYear()} AImperia. All rights reserved.
+            ©{" "} {new Date().getFullYear()} AImperia. {t('copyright')}
         </Footer>
     );
 };

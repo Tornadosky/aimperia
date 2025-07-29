@@ -1,0 +1,476 @@
+{
+    "Landing": {
+        "heroTitle": "AImperia: The world's first platform that lets you learn much faster",
+        "heroStartButton": "Start",
+        "heroWatchVideoButton": "Watch Video",
+        "heroOverlay": "Start using today!",
+        "features": {
+            "videoBoardTitle": "Lessons with video and board",
+            "videoBoardDesc": "The platform allows you to conduct lessons with video calls and an interactive board, making learning more effective.",
+            "aiNotesTitle": "AI for automatic notes",
+            "aiNotesDesc": "Artificial intelligence automatically creates notes from what is said in the lesson and highlighted on the board, allowing students to focus on learning.",
+            "easyInterfaceTitle": "User-friendly interface",
+            "easyInterfaceDesc": "The platform has a simple and intuitive interface, making it easy to start learning without unnecessary settings."
+        },
+        "easyStartTitle": "Easy to get started",
+        "easyStart": {
+            "createLessonTitle": "Create a lesson",
+            "createLessonDesc": "Create a new lesson using a simple interface.",
+            "joinLessonTitle": "Join a lesson",
+            "joinLessonDesc": "Join a lesson using a unique code provided by the teacher.",
+            "videoBoardTitle": "Video call and board",
+            "videoBoardDesc": "Use the built-in video call and interactive board for lessons.",
+            "autoNotesTitle": "Auto notes",
+            "autoNotesDesc": "The platform automatically creates notes from what is said in the lesson and highlighted on the board.",
+            "startLearningTitle": "Start learning",
+            "startLearningDesc": "Register and start learning today!"
+        },
+        "statistics": {
+            "usersTitle": "1000+ users",
+            "usersDesc": "The platform is already used by more than 1000 users who appreciate its convenience and functionality.",
+            "lessonsTitle": "500+ lessons",
+            "lessonsDesc": "More than 500 lessons have already been conducted on the platform, confirming its effectiveness and demand.",
+            "countriesTitle": "40+ countries",
+            "countriesDesc": "The platform is available in more than 40 countries, allowing users from around the world to learn and teach."
+        },
+        "contact": {
+            "title": "Ask us any question",
+            "subtitle": "If you have questions or suggestions, please fill out the form below. We will definitely contact you!",
+            "namePlaceholder": "Name",
+            "emailPlaceholder": "Email",
+            "phonePlaceholder": "Phone",
+            "askButton": "Ask a question",
+            "successMessage": "Thank you for your question! We will contact you soon."
+        },
+        "about": {
+            "title": "What is the AImperia platform?",
+            "bestPlatformTitle": "The best platform for online lessons",
+            "bestPlatformList": [
+                "AImperia is the world's first platform that lets you learn much faster thanks to artificial intelligence.",
+                "It provides the ability to conduct online lessons with video calls and an interactive board.",
+                "Artificial intelligence automatically creates notes from what is said in the lesson and highlighted on the board."
+            ],
+            "simplicityTitle": "Simplicity and convenience",
+            "simplicityList": [
+                "The platform has a simple and intuitive interface, making it easy to start learning without unnecessary settings.",
+                "The platform is available in more than 40 countries, allowing users from around the world to learn and teach.",
+                "The platform is already used by more than 1000 users who appreciate its convenience and functionality."
+            ],
+            "startTodayTitle": "Start learning today!",
+            "startTodayList": [
+                "Register on the platform and start learning today!",
+                "The platform allows you to create lessons, join them, and use the built-in video call and interactive board.",
+                "The platform automatically creates notes from what is said in the lesson and highlighted on the board, allowing you to focus on learning."
+            ]
+        },
+        "pricing": {
+            "title": "Lesson pricing",
+            "basicTitle": "One lecture with your teacher (2 hours)",
+            "basicPrice": "350 ₽",
+            "plusTitle": "One lecture with your teacher+ (2 hours)",
+            "plusPrice": "500 ₽",
+            "premiumTitle": "One lecture with AImperia teacher (2 hours)",
+            "premiumPrice": "1400 ₽",
+            "features": [
+                "AI-powered notes generation",
+                "Video call with teacher",
+                "Interactive board",
+                "Chat support",
+                "Lesson recording",
+                "Ability to ask AI questions",
+                "Ability to create PDF notes",
+                "Lesson with experienced teacher",
+                "Homework",
+                "Homework checking",
+                "Individual approach"
+            ],
+            "notIncluded": "Not included"
+        },
+        "forWho": {
+            "title": "Who is AImperia for?",
+            "students": "For students",
+            "teachers": "For teachers",
+            "fastLearners": "For those who want to learn faster",
+            "aiLearners": "For those who want to use AI in learning",
+            "innovativeTeachers": "Teachers who want to use new technologies in teaching",
+            "parents": "Parents who want to provide quality education for their children"
+        },
+        "howToStart": {
+            "title": "How to start using AImperia?",
+            "topText": "In a minute, you're already in a lesson!",
+            "step1": "Register on the AImperia platform",
+            "step2": "Create a new lesson or join an existing one",
+            "step3": "You are using the platform :)",
+            "startNowButton": "Start now"
+        },
+        "advantages": {
+            "title": "The best platform for online lessons",
+            "faster": "+200%",
+            "fasterDesc": "AImperia users learn 200% faster than on traditional platforms.",
+            "higherGrades": "40%",
+            "higherGradesDesc": "AImperia users have grades 40% higher on average than on traditional platforms.",
+            "averageScore": "89",
+            "averageScoreDesc": "The average Unified State Exam score for AImperia users is 89."
+        },
+        "featuresComparison": {
+            "title": "AImperia platform features",
+            "videoCall": "Video call",
+            "interactiveBoard": "Interactive board",
+            "experiencedTeacher": "Lesson with experienced teacher",
+            "chatSupport": "Chat support",
+            "autoNotes": "Auto notes",
+            "lessonRecording": "Lesson recording",
+            "aiQuestions": "Ability to ask AI questions",
+            "pdfNotes": "Create PDF notes"
+        },
+        "teachers": {
+            "title": "AImperia teachers",
+            "math": "Mathematics",
+            "physics": "Physics",
+            "chemistry": "Chemistry",
+            "informatics": "Informatics",
+            "biology": "Biology",
+            "teacher1": {
+                "name": "Ivan Ivanov",
+                "desc": "Mathematics teacher with 10 years of experience. Helped over 1000 students prepare for exams."
+            },
+            "teacher2": {
+                "name": "Anna Petrova",
+                "desc": "Physics teacher with 8 years of experience. Helped over 800 students prepare for exams."
+            },
+            "teacher3": {
+                "name": "Maria Smirnova",
+                "desc": "Chemistry teacher with 5 years of experience. Helped over 500 students prepare for exams."
+            },
+            "teacher4": {
+                "name": "Alexey Kuznetsov",
+                "desc": "Informatics teacher with 7 years of experience. Helped over 600 students prepare for exams."
+            },
+            "teacher5": {
+                "name": "Dmitry Sidorov",
+                "desc": "Biology teacher with 6 years of experience. Helped over 700 students prepare for exams."
+            }
+        },
+        "reviews": {
+            "title": "User reviews",
+            "review1": {
+                "text": "\"AImperia is a real find! I've been studying on it for several months and noticed that I learn much faster. Highly recommend!\"",
+                "author": "Alexey, student"
+            },
+            "review2": {
+                "text": "\"I use AImperia for my lessons and am very satisfied. The interactive board and auto notes are just awesome!\"",
+                "author": "Maria, teacher"
+            },
+            "review3": {
+                "text": "\"AImperia is the best way to learn! I already prepared for the exam and scored 90 thanks to this platform.\"",
+                "author": "Ivan, student"
+            },
+            "review4": {
+                "text": "\"I use AImperia for my lessons and am very satisfied. The interactive board and auto notes are just awesome!\"",
+                "author": "Anna, teacher"
+            },
+            "review5": {
+                "text": "\"AImperia is a real find! I've been studying on it for several months and noticed that I learn much faster. Highly recommend!\"",
+                "author": "Dmitry, student"
+            },
+            "review6": {
+                "text": "\"I use AImperia for my lessons and am very satisfied. The interactive board and auto notes are just awesome!\"",
+                "author": "Alexey, teacher"
+            }
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "q1": {
+                "question": "How is AImperia different from platforms like Zoom, Microsoft Teams, or Google Meets?",
+                "answer": "AImperia is a specialized platform for online lessons that includes all the necessary tools for learning: video call, interactive board, auto notes, and much more. Unlike Zoom, Microsoft Teams, or Google Meets, AImperia provides a ready-made solution for educational institutions and teachers. In addition, AImperia automatically creates notes from what is said in the lesson and highlighted on the board, allowing you to focus on learning, not on writing notes and trying to summarize information."
+            },
+            "q2": {
+                "question": "How high is the quality of lessons and how much does AI help in learning?",
+                "answer": "AImperia provides the opportunity to study with experienced teachers who have extensive experience in education. AI helps create auto notes that automatically record everything said in the lesson and highlight important points on the interactive board. After the lesson, you can review, repeat, or download the notes as a PDF. Also, AI allows you to ask questions during the lesson and get answers, making learning more interactive and effective."
+            },
+            "q3": {
+                "question": "How do I sign up for a lesson and choose a teacher?",
+                "answer": "To sign up for a lesson, you need to register on the AImperia platform and let us know which subject and level you are interested in. We will help you choose a suitable teacher and arrange a lesson time."
+            },
+            "q4": {
+                "question": "How does a lesson go and what tools are used?",
+                "answer": "The lesson takes place as a video call using an interactive board where the teacher can draw, write, and highlight important points. Auto notes are also used, which automatically record everything said in the lesson and highlight important points on the board. After the lesson, you can review, repeat, or download the notes as a PDF."
+            },
+            "q5": {
+                "question": "Can I use this platform if I have my own teacher?",
+                "answer": "Yes, you can use the AImperia platform for lessons with your own teacher. Both you and your teacher need to register on the platform and agree on a lesson time. You will be able to use all the platform's tools, including video call, interactive board, and auto notes."
+            },
+            "q6": {
+                "question": "Does AImperia provide support if I study with my own teacher?",
+                "answer": "Yes, AImperia provides support to all users, regardless of whether they study with their own teacher or with platform teachers. You can contact support for any questions related to using the platform, and we will try to help you as soon as possible."
+            },
+            "q7": {
+                "question": "What subjects can I study on the AImperia platform?",
+                "answer": "On the AImperia platform, you can study various subjects, including mathematics, physics, chemistry, informatics, and others. If you are interested in a specific subject, let us know and we will try to find a suitable teacher for you."
+            },
+            "q8": {
+                "question": "How can I contact AImperia support?",
+                "answer": "You can contact AImperia support through the feedback form on the website, by email, or in the platform chat. We will try to answer your question as soon as possible."
+            }
+        },
+        "news": {
+            "title": "Latest AImperia news",
+            "news1": {
+                "title": "New version of AImperia",
+                "date": "01.10.2023",
+                "desc": "We have released a new version of the AImperia platform with an improved interface and new features."
+            },
+            "news2": {
+                "title": "New math course",
+                "date": "15.09.2023",
+                "desc": "We have launched a new math course for students in grades 9-11."
+            },
+            "news3": {
+                "title": "New teacher",
+                "date": "01.09.2023",
+                "desc": "We have invited a new physics teacher who will conduct lessons on the AImperia platform."
+            },
+            "news4": {
+                "title": "New informatics course",
+                "date": "20.08.2023",
+                "desc": "We have launched a new informatics course for students in grades 9-11."
+            }
+        },
+        "newsletter": {
+            "title": "Subscribe to our newsletter",
+            "subtitle": "Stay up to date with the latest news and updates from AImperia",
+            "emailPlaceholder": "Enter your email",
+            "subscribeButton": "Subscribe"
+        }
+    },
+    
+    "Header": {
+        "login": "Login",
+        "signup": "Sign Up",
+        "profile": "Profile",
+        "logout": "Logout",
+        "myLessons": "My Lessons",
+        "createLesson": "Create Lesson",
+        "joinLesson": "Join Lesson",
+        "dashboard": "Dashboard",
+        "students": "Students",
+        "teachers": "Teachers",
+        "news": "News",
+        "pricing": "Pricing",
+        "about": "About",
+        "contact": "Contact",
+        "account": "Account",
+        "guest": "Guest",
+        "noEmail": "Not specified",
+        "createLessonModal": {
+            "title": "Create a new lesson",
+            "instruction": "Enter the name and invitation code for the new lesson:",
+            "namePlaceholder": "Lesson name",
+            "descriptionPlaceholder": "Description (optional)",
+            "submit": "Create lesson",
+            "cancel": "Cancel",
+            "successTitle": "Lesson created successfully",
+            "successCopyInstruction": "Copy the code and send it to the student, they will need to enter it to join:",
+            "codeCopied": "Invitation code copied to clipboard",
+            "lessonName": "Name",
+            "goToLesson": "Go to lesson",
+            "error": "Error creating lesson"
+        },
+        "joinLessonModal": {
+            "title": "Join a lesson",
+            "instruction": "Enter the invitation code to join the lesson:",
+            "codePlaceholder": "Invitation code",
+            "submit": "Join",
+            "cancel": "Cancel",
+            "successTitle": "You have joined the lesson",
+            "goToLesson": "Go to lesson",
+            "errorJoin": "Error joining the lesson",
+            "errorFetch": "Error fetching meeting information"
+        },
+        "scrollLinks": {
+            "about": "About us",
+            "teachers": "Teachers",
+            "faq": "FAQ"
+        }
+    },
+    
+    "Footer": {
+        "socialTitle": "Our social networks:",
+        "telegram": "Telegram",
+        "vk": "VK",
+        "copyright": "All rights reserved."
+    },
+    
+    "Auth": {
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "email": "Email",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "you@example.com",
+        "emailRequired": "Please enter your email",
+        "emailInvalid": "Enter a valid email",
+        "password": "Password",
+        "passwordPlaceholder": "••••••••",
+        "passwordRequired": "Please enter your password",
+        "passwordEnter": "Enter your password",
+        "firstName": "First Name",
+        "firstNamePlaceholder": "Ivan",
+        "firstNameRequired": "Please enter your first name",
+        "lastName": "Last Name",
+        "lastNamePlaceholder": "Ivanov",
+        "lastNameRequired": "Please enter your last name",
+        "role": "You are —",
+        "roleRequired": "Please select a role",
+        "roleStudent": "Student",
+        "roleTeacher": "Teacher",
+        "signInButton": "Sign In",
+        "signUpButton": "Sign Up",
+        "or": "or",
+        "orUseGoogle": "Or use Google",
+        "signInWithGoogle": "Sign in with Google",
+        "signUpWithGoogle": "Sign up with Google",
+        "signInSuccess": "Sign in successful",
+        "signUpSuccess": "Registration successful",
+        "signInError": "Sign in error",
+        "signUpError": "Registration error"
+    },
+    
+    "Home": {
+        "updateUserModal": {
+            "title": "Confirm your details",
+            "firstName": {
+                "label": "First Name",
+                "placeholder": "Ivan",
+                "error": "Please enter your first name"
+            },
+            "lastName": {
+                "label": "Last Name",
+                "placeholder": "Ivanov",
+                "error": "Please enter your last name"
+            },
+            "role": {
+                "label": "Select role",
+                "placeholder": "Select role",
+                "error": "Please select a role",
+                "options": {
+                    "teacher": "Teacher",
+                    "student": "Student"
+                }
+            },
+            "submitButton": "Confirm",
+            "errors": {
+                "fillFields": "Please fill in all required fields.",
+                "updateFailed": "Failed to update profile. Please try again later."
+            }
+        },
+        "notebook": {
+            "buttons": {
+                "edit": "Edit",
+                "cancel": "Cancel",
+                "save": "Save",
+                "saving": "Saving..."
+            },
+            "emptyState": {
+                "title": "Notes are still being generated",
+                "description": "If the notes have not been generated after 10 minutes, please contact support."
+            },
+            "errors": {
+                "saveFailed": "Error saving notes, please save your changes locally and try again."
+            }
+        },
+        "sidebar": {
+            "currentLessons": "Current lessons",
+            "upcomingLessons": "Upcoming lessons",
+            "previousLessons": "Previous lessons",
+            "noCurrentLessons": "No current lessons",
+            "noUpcomingLessons": "No upcoming lessons",
+            "noPreviousLessons": "No lessons yet"
+        },
+        "lessonActions": {
+            "join": "Join lesson",
+            "end": "End lesson",
+            "copyCode": "Copy lesson code",
+            "openBoard": "Open board fullscreen"
+        },
+        "endLessonModal": {
+            "title": "End lesson",
+            "content": {
+                "confirmation": "Are you sure you want to end this lesson?",
+                "warning": "After ending the lesson, only the generated notes will be available."
+            },
+            "buttons": {
+                "cancel": "Cancel",
+                "end": "End lesson"
+            },
+            "success": "Lesson ended successfully",
+            "error": "Failed to end lesson"
+        },
+        "messages": {
+            "codeCopied": "Lesson code copied to clipboard"
+        },
+        "loading": {
+            "lesson": "Loading lesson..."
+        },
+        "emptyState": {
+            "selectLesson": "Select a lesson on the left to view notes"
+        },
+        "whiteboardModal_title": "Lesson board:"
+    },
+    
+    "Meeting": {
+        "errors": {
+            "meetingEnded": "The meeting has already ended",
+            "loadMeetingFailed": "Failed to load meeting information",
+            "loadScreenshotsFailed": "Failed to load board screenshots",
+            "zoomNotReady": "Zoom SDK is not ready yet",
+            "connectionError": "Error connecting to the meeting",
+            "editorNotInitialized": "Editor is not initialized",
+            "screenshotAddFailed": "Failed to add screenshot, please try again later",
+            "screenshotDeleteFailed": "Failed to delete screenshot, please try again later",
+            "closeLessonFailed": "Failed to end the lesson"
+        },
+        "success": {
+            "connected": "Connected to the meeting",
+            "screenshotAdded": "Screenshot added successfully",
+            "screenshotDeleted": "Screenshot deleted successfully",
+            "disconnected": "You have successfully disconnected from the lesson",
+            "lessonEnded": "You have successfully ended the lesson"
+        },
+        "buttons": {
+            "account": "Account",
+            "addScreenshot": "Add screenshot to notes",
+            "deleteScreenshot": "Delete screenshot",
+            "disconnect": "Disconnect",
+            "endLesson": "End lesson",
+            "cancel": "Cancel",
+            "logout": "Logout"
+        },
+        "accountPopover": {
+            "name": "Name",
+            "email": "Email",
+            "guest": "Guest",
+            "notSpecified": "Not specified"
+        },
+        "screenshots": {
+            "emptyText": "No screenshots"
+        },
+        "modals": {
+            "disconnectTitle": "Disconnect from lesson",
+            "teacherDisconnect": {
+                "confirmMessage": "Are you sure you want to disconnect from the lesson?",
+                "optionsMessage": "You can completely end the lesson or just disconnect and reconnect later."
+            },
+            "studentDisconnect": {
+                "confirmMessage": "Are you sure you want to disconnect from the lesson?",
+                "reconnectMessage": "You can reconnect later."
+            }
+        },
+        "agora": {
+            "errors": {
+                "lessonIdRequired": "Lesson ID is required",
+                "tokenFetchFailed": "Failed to fetch Agora token",
+                "tokenFetchError": "Error fetching Agora token"
+            }
+        }
+    }
+}

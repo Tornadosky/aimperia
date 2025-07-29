@@ -1,15 +1,16 @@
-
 import React, { useContext } from 'react';
 import { Modal, Form, Input, Button, Select, message } from 'antd';
 import { useAuth } from '../../../context/AuthContext';
 import styles from './UpdateUserModal.module.css';
 import { useState, useEffect } from 'react';
 import { updateProfile } from '@/app/lib/auth';
+import { useTranslations } from 'next-intl';
 
 export default function UpdateUserModal() {
     const [updateForm] = Form.useForm();
     const { user, setUser } = useAuth();
     const [roleSelectModal, setRoleSelectModal] = useState(false);
+    const t = useTranslations('Home.updateUserModal');
     
     useEffect(() => {
         if (user?.role==='pending' && user?.id) {
@@ -21,7 +22,7 @@ export default function UpdateUserModal() {
     
     return (
         <Modal
-                title="Подтвердите свои данные"
+                title={t('title')}
                 open={roleSelectModal}
                 footer={null}
                 closable={false}
@@ -31,29 +32,29 @@ export default function UpdateUserModal() {
                     form={updateForm}
                 >
                     <Form.Item
-                        label="Имя"
+                        label={t('firstName.label')}
                         name="firstName"
-                        rules={[{ required: true, message: 'Пожалуйста, введите имя' }]}
+                        rules={[{ required: true, message: t('firstName.error') }]}
                     >
-                        <Input placeholder="Иван" className={styles.input} />
+                        <Input placeholder={t('firstName.placeholder')} className={styles.input} />
                     </Form.Item>
                     <Form.Item
-                        label="Фамилия"
+                        label={t('lastName.label')}
                         name="lastName"
-                        rules={[{ required: true, message: 'Пожалуйста, введите фамилию' }]}
+                        rules={[{ required: true, message: t('lastName.error') }]}
                     >
-                        <Input placeholder="Иванов" className={styles.input} />
+                        <Input placeholder={t('lastName.placeholder')} className={styles.input} />
                     </Form.Item>
                     <Form.Item
-                        label="Выберите роль"
+                        label={t('role.label')}
                         name="role"
-                        rules={[{ required: true, message: 'Пожалуйста, выберите роль' }]}
+                        rules={[{ required: true, message: t('role.error') }]}
                     >
                         <Select
-                            placeholder="Выберите роль"
+                            placeholder={t('role.placeholder')}
                         >
-                            <Select.Option value="teacher">Учитель</Select.Option>
-                            <Select.Option value="student">Ученик</Select.Option>
+                            <Select.Option value="teacher">{t('role.options.teacher')}</Select.Option>
+                            <Select.Option value="student">{t('role.options.student')}</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item>
@@ -67,7 +68,7 @@ export default function UpdateUserModal() {
                                 });
                                 console.log('formValidation', formValidation);
                                 if (formValidation.errorFields) {
-                                    message.error('Пожалуйста, заполните все обязательные поля.');
+                                    message.error(t('errors.fillFields'));
                                     return;
                                 }
                                 const result = await updateProfile(updateForm.getFieldsValue());
@@ -79,7 +80,7 @@ export default function UpdateUserModal() {
                                     setRoleSelectModal(false)
                                 }
                                 else {
-                                    message.error('Не удалось обновить профиль. Пожалуйста, попробуйте позже.');
+                                    message.error(t('errors.updateFailed'));
                                     console.error('Ошибка при обновлении профиля:', result);
                                     return;
                                 }
@@ -87,7 +88,7 @@ export default function UpdateUserModal() {
                             }}
                             style={{ width: '100%' }}
                         >
-                            Подтвердить
+                            {t('submitButton')}
                         </Button>
                     </Form.Item>
                 </Form>

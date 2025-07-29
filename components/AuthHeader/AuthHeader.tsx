@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import styles from "./styles.module.css";
+import { useTranslations } from 'next-intl';
 
 const { Header, Content, Sider } = Layout;
 const { Title, Paragraph } = Typography;
@@ -30,21 +31,9 @@ import { usePathname } from 'next/navigation'
 
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 
-const fakeLessons = [
-    {
-        id: "1",
-        title: "Математика: Уравнения",
-        summary: "Обсудили основные методы решения линейных уравнений.",
-    },
-    {
-        id: "2",
-        title: "Физика: Законы Ньютона",
-        summary: "Разобрали примеры применения второго закона Ньютона.",
-    },
-];
 
 const AuthHeader = () => {
-    
+    const t = useTranslations('Header');
     const pathname = usePathname()
     
     return (
@@ -59,7 +48,7 @@ const AuthHeader = () => {
                                 style={{ marginRight: "8px" }}
                                 className={styles.button}
                             >
-                                Вход
+                                {t('login')}
                             </Button>
                         </Link>
                         <Link href="/signup">
@@ -67,7 +56,7 @@ const AuthHeader = () => {
                                 type="primary"
                                 className={styles.button}
                             >
-                                Регистрация
+                                {t('signup')}
                             </Button>
                         </Link>
                     </div>

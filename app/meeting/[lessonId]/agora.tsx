@@ -23,6 +23,7 @@ import { Button, Modal, message } from "antd";
 import classNames from 'classnames';
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useTranslations } from 'next-intl';
 
 interface AgoraPageParams {
     lessonId: string;
@@ -44,6 +45,7 @@ interface AgoraPageProps {
 }
 
 const AgoraView = ({ params }: {params:AgoraViewParams}) => {
+    const t = useTranslations('Meeting');
     
     const [appId, setAppId] = useState<string>(process.env.NEXT_PUBLIC_AGORA_APP_ID || "<-- Insert App ID -->");
     const [channel, setChannel] = useState<string>(params.channelName);
@@ -156,11 +158,11 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                     onClick={() => {
                         if (params?.user?.role === 'teacher')
                             Modal.info({
-                                title: 'Отключение от урока',
+                                title: t('modals.disconnectTitle'),
                                 content: (
                                     <div>
-                                        <p style={{fontSize:'17px'}}>Вы уверены, что хотите отключиться от урока?</p>
-                                        <p style={{fontSize:'17px'}}>Вы можете полностью закончить урок или просто отключится и подключится позже.</p>
+                                        <p style={{fontSize:'17px'}}>{t('modals.teacherDisconnect.confirmMessage')}</p>
+                                        <p style={{fontSize:'17px'}}>{t('modals.teacherDisconnect.optionsMessage')}</p>
                                     </div>
                                 ),
                                 footer: (_) => {
@@ -170,7 +172,7 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                                                 Modal.destroyAll();
                                             }}
                                         >
-                                            Отмена
+                                            {t('buttons.cancel')}
                                         </Button>
                                         <Button
                                             type="primary"
@@ -178,11 +180,11 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                                                 localMicrophoneTrack?.close();
                                                 localCameraTrack?.close();
                                                 params.router.push('/home')
-                                                message.success("Вы успешно отключились от урока");
+                                                message.success(t('success.disconnected'));
                                                 Modal.destroyAll();
                                             }}
                                         >
-                                            Отключиться
+                                            {t('buttons.disconnect')}
                                         </Button>
                                         <Button
                                             type='primary'
@@ -191,15 +193,15 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                                                 localCameraTrack?.close();
                                                 const result = await closeLesson(params.lessonId);
                                                 if (!result.id) {
-                                                    message.error("Не удалось завершить урок");
+                                                    message.error(t('errors.closeLessonFailed'));
                                                     return;
                                                 }
                                                 Modal.destroyAll();
                                                 params.router.push('/home')
-                                                message.success("Вы успешно завершили урок");
+                                                message.success(t('success.lessonEnded'));
                                             }}
                                         >
-                                            Завершить урок
+                                            {t('buttons.endLesson')}
                                         </Button>
                                     </div>
                                 },
@@ -207,11 +209,11 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                             })
                         else {
                             Modal.info({
-                                title: 'Отключение от урока',
+                                title: t('modals.disconnectTitle'),
                                 content: (
                                     <div>
-                                        <p style={{fontSize:'17px'}}>Вы уверены, что хотите отключиться от урока?</p>
-                                        <p style={{fontSize:'17px'}}>Вы можете подключиться позже.</p>
+                                        <p style={{fontSize:'17px'}}>{t('modals.studentDisconnect.confirmMessage')}</p>
+                                        <p style={{fontSize:'17px'}}>{t('modals.studentDisconnect.reconnectMessage')}</p>
                                     </div>
                                 ),
                                 footer: (_) => {
@@ -221,7 +223,7 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                                                 Modal.destroyAll();
                                             }}
                                         >
-                                            Отмена
+                                            {t('buttons.cancel')}
                                         </Button>
                                         <Button
                                             type="primary"
@@ -229,11 +231,11 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                                                 localMicrophoneTrack?.close();
                                                 localCameraTrack?.close();
                                                 params.router.push('/home')
-                                                message.success("Вы успешно отключились от урока");
+                                                message.success(t('success.disconnected'));
                                                 Modal.destroyAll();
                                             }}
                                         >
-                                            Отключиться
+                                            {t('buttons.disconnect')}
                                         </Button>
                                     </div>
                                 },
@@ -242,7 +244,7 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                         }
                     }}
                 >
-                    Отключиться
+                    {t('buttons.disconnect')}
                 </Button>
             </div>
         </div>
@@ -252,12 +254,13 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 AgoraRTC.setLogLevel(3);
 export default function AgoraPage({ params }: AgoraPageProps) {
+    const t = useTranslations('Meeting');
 
     const [token, setToken] = useState<string>('');
     
     useEffect(() => {
         if (!params.lessonId) {
-            console.error("Lesson ID is required");
+            console.error(t('agora.errors.lessonIdRequired'));
             return;
         }
         const fetchToken = async () => {
@@ -267,14 +270,14 @@ export default function AgoraPage({ params }: AgoraPageProps) {
                     console.log("Fetched Agora token:", response);
                     setToken(response.token);
                 } else {
-                    console.error("Failed to fetch Agora token");
+                    console.error(t('agora.errors.tokenFetchFailed'));
                 }
             } catch (error) {
-                console.error("Error fetching Agora token:", error);
+                console.error(t('agora.errors.tokenFetchError'), error);
             }
         };
         fetchToken();
-    }, [params.lessonId]);
+    }, [params.lessonId, t]);
     
     
     return(

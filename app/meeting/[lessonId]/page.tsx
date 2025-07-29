@@ -6,6 +6,7 @@ import { fetchLessons, createLesson, attendLesson, fetchLessonById, uploadBoardH
 import { uploadBoardAsset } from "@/app/lib/tldrawAPI";
 import { logout } from "@/app/lib/auth";
 import { useAuth } from '@/app/context/AuthContext'
+import { useTranslations } from 'next-intl'; // Add this import
 import styles from './meeting.module.css'
 import classNames from 'classnames'
 import {
@@ -87,6 +88,7 @@ interface BoardHighlight {
 export default function MeetingPage({ params }: { params: { lessonId: string } }) {
     const router = useRouter();
     const { user, setUser } = useAuth();
+    const t = useTranslations('Meeting'); // Add translation hook
     const [loading, setLoading] = useState(false);
     const [client, setClient] = useState<any>(null);
     const [lessonInfo, setLessonInfo] = useState<any>(null);
@@ -124,16 +126,16 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                 if (lesson?.id){
                     setLessonInfo(lesson);
                     if (lesson.endedAt) {
-                        message.error("Встреча уже завершена");
+                        message.error(t('errors.meetingEnded'));
                         router.push('/home');
                         return;
                     }
                 }
                 else
-                    message.error("Не удалось загрузить информацию о встрече");
+                    message.error(t('errors.loadMeetingFailed'));
             } catch (error) {
                 console.error("Error fetching lesson:", error);
-                message.error("Не удалось загрузить информацию о встрече");
+                message.error(t('errors.loadMeetingFailed'));
             }
         }
         fetchLesson();
@@ -144,16 +146,16 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                 if (Array.isArray(highlights?.highlights)) {
                     setScreenshots(highlights?.highlights as BoardHighlight[]);
                 } else {
-                    message.error("Не удалось загрузить скриншоты доски");
+                    message.error(t('errors.loadScreenshotsFailed'));
                 }
             } catch (error) {
                 console.error("Error fetching board highlights:", error);
-                message.error("Не удалось загрузить скриншоты доски");
+                message.error(t('errors.loadScreenshotsFailed'));
             }
         }
         fetchBoardHighlights_();
         
-    }, [params.lessonId, user]);
+    }, [params.lessonId, user, t]);
 
     const handleJoin = async (values: {
         meetingNumber: string;
@@ -161,17 +163,17 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
         meetingPassword?: string;
     }) => {
         if (!client) {
-            message.error("Zoom SDK еще не готов");
+            message.error(t('errors.zoomNotReady'));
             return;
         }
 
         setLoading(true);
         try {
 
-            message.success("Подключено к встрече");
+            message.success(t('success.connected'));
         } catch (err) {
             console.error(err);
-            message.error("Ошибка при подключении к встрече");
+            message.error(t('errors.connectionError'));
         } finally {
             setLoading(false);
         }
@@ -216,10 +218,10 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                             gap: '10px'
                         }}>
                             <p>
-                                <b>Имя:</b> {user?.firstName?user?.firstName+' '+user?.lastName : 'Гость'}
+                                <b>{t('accountPopover.name')}:</b> {user?.firstName ? user?.firstName + ' ' + user?.lastName : t('accountPopover.guest')}
                             </p>
                             <p>
-                                <b>Email:</b> {user?.email || 'Не указан'}
+                                <b>{t('accountPopover.email')}:</b> {user?.email || t('accountPopover.notSpecified')}
                             </p>
                             <Button
                                 icon={<LogoutOutlined />}
@@ -236,13 +238,13 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                                     }
                                 }}
                             >
-                                Выйти
+                                {t('buttons.logout')}
                             </Button>
                         </div>
                     }
                     placement="topRight"
                 >
-                    <Button icon={<TeamOutlined />} className={styles.button}>Аккаунт</Button>
+                    <Button icon={<TeamOutlined />} className={styles.button}>{t('buttons.account')}</Button>
                 </Popover>
             </Sider>
             
@@ -278,7 +280,8 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                         onClick={() => {
                             setAddScreenshotLoading(true);
                             if (!editor) {
-                                message.error("Редактор не инициализирован");
+                                message.error(t('errors.editorNotInitialized'));
+                                setAddScreenshotLoading(false);
                                 return;
                             }
                             const renderingShapes = editor.getCurrentPageRenderingShapesSorted()
@@ -305,16 +308,16 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                                         createdAt: uploadedHighlight.createdAt,
                                         updatedAt: uploadedHighlight.updatedAt
                                     }, ...screenshots]);
-                                    message.success("Скриншот успешно добавлен");
+                                    message.success(t('success.screenshotAdded'));
                                 }
                                 else {
-                                    message.error("Не удалось добавить скриншот, попробуйте позже");
+                                    message.error(t('errors.screenshotAddFailed'));
                                 }
                                 setAddScreenshotLoading(false);
                             })
                         }}
                     >
-                        Добавить скриншот в конспект
+                        {t('buttons.addScreenshot')}
                     </Button>
                     
                     <ConfigProvider locale={ruRU}>
@@ -325,17 +328,17 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                             renderItem={(item) => (
                                 <List.Item
                                     actions={[
-                                        <Tooltip title="Удалить скриншот">
+                                        <Tooltip title={t('buttons.deleteScreenshot')} key="delete">
                                             <Button
                                                 style={{ height: '32px' }}
                                                 onClick={async () => {
                                                     const result = await deleteBoardHighlight(params.lessonId, item.id);
                                                     if (result?.ok){
                                                         setScreenshots(screenshots.filter(i => i !== item));
-                                                        message.success("Скриншот успешно удален");
+                                                        message.success(t('success.screenshotDeleted'));
                                                     }
                                                     else {
-                                                        message.error("Не удалось удалить скриншот, попробуйте позже");
+                                                        message.error(t('errors.screenshotDeleteFailed'));
                                                     }
                                                 }}
                                                 icon={<DeleteOutlined />}
@@ -346,7 +349,7 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                                     <Image src={item.url} className={styles.screenshotImage} />
                                 </List.Item>
                             )}
-                            locale={{ emptyText: "Нет скриншотов" }}
+                            locale={{ emptyText: t('screenshots.emptyText') }}
                         />
                     </ConfigProvider>
                     

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useTranslations } from 'next-intl';
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
@@ -23,23 +24,15 @@ const PublicMDEditorData = {
 }
 
 export default function Notebook({ selectedLesson, lessonContent, user }: { selectedLesson: Lesson|null, lessonContent: string, user: any }) {
+    const t = useTranslations('Home.notebook');
     const [content, setContent] = useState("");
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState("");
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        // fetch("/notebook.md")
-        //     .then((res) => res.text())
-        //     .then((text) => {
-        //         setContent(text);
-        //         setDraft(text);
-        //     })
-        //     .catch((err) => console.error("Error loading markdown:", err));
-        
         setContent(lessonContent);
         setDraft(lessonContent);
-        
     }, [lessonContent]);
 
     const handleSave = async () => {
@@ -47,7 +40,7 @@ export default function Notebook({ selectedLesson, lessonContent, user }: { sele
         try {
             const result = await updateLessonSummary(selectedLesson?.id || "", {summaryContent:draft});
             if (!result.id) {
-                message.error("Ошибка при сохранении конспекта, сохраните то, что вы изменили у себя на компьютере и попробуйте ещё раз");
+                message.error(t('errors.saveFailed'));
             }
             else {
                 setContent(draft);
@@ -56,7 +49,7 @@ export default function Notebook({ selectedLesson, lessonContent, user }: { sele
             
         } catch (err) {
             console.error("Error saving markdown:", err);
-            alert("Failed to save changes.");
+            message.error(t('errors.saveFailed'));
         } finally {
             setSaving(false);
         }
@@ -124,7 +117,7 @@ export default function Notebook({ selectedLesson, lessonContent, user }: { sele
                                 disabled={saving}
                                 className={styles.button}
                             >
-                                Cancel
+                                {t('buttons.cancel')}
                             </Button>
                             <Button
                                 onClick={handleSave}
@@ -133,7 +126,7 @@ export default function Notebook({ selectedLesson, lessonContent, user }: { sele
                                 type="primary"
                                 className={styles.button}
                             >
-                                {saving ? "Saving..." : "Save"}
+                                {saving ? t('buttons.saving') : t('buttons.save')}
                             </Button>
                         </>
                     ) : (
@@ -142,7 +135,7 @@ export default function Notebook({ selectedLesson, lessonContent, user }: { sele
                                 icon={<EditFilled />}
                                 className={styles.button}
                         >
-                            Edit
+                            {t('buttons.edit')}
                         </Button>
                     )}
                 </div>
@@ -196,8 +189,8 @@ export default function Notebook({ selectedLesson, lessonContent, user }: { sele
                 
             :
                 <div className={styles.emptyState}>
-                    <h2>Конспект ещё генерируется</h2>
-                    <p>Если конспект ещё не сгенерировался и прошло 10 минут, то обратитесь пожалуйста в поддержку</p>
+                    <h2>{t('emptyState.title')}</h2>
+                    <p>{t('emptyState.description')}</p>
                 </div>
             }
             

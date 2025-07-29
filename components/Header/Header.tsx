@@ -27,23 +27,11 @@ const { Header, Content, Sider } = Layout;
 const { Title, Paragraph } = Typography;
 
 import { usePathname } from 'next/navigation'
-
-const fakeLessons = [
-    {
-        id: "1",
-        title: "Математика: Уравнения",
-        summary: "Обсудили основные методы решения линейных уравнений.",
-    },
-    {
-        id: "2",
-        title: "Физика: Законы Ньютона",
-        summary: "Разобрали примеры применения второго закона Ньютона.",
-    },
-];
+import { useTranslations } from 'next-intl';
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 
 const AppHeader = () => {
-    
+    const t = useTranslations('Header');
     const pathname = usePathname()
     
     return (
@@ -62,7 +50,7 @@ const AppHeader = () => {
                                 }
                             }
                         >
-                            О нас
+                            {t('scrollLinks.about')}
                         </div>
                         <div className={styles.scrollToLink}
                             onClick={() => {
@@ -74,7 +62,7 @@ const AppHeader = () => {
                                 }
                             }
                         >
-                            Преподаватели
+                            {t('scrollLinks.teachers')}
                         </div>
                         <div className={styles.scrollToLink}
                             onClick={() => {
@@ -86,7 +74,7 @@ const AppHeader = () => {
                                 }
                             }
                         >
-                            Вопросы
+                            {t('scrollLinks.faq')}
                         </div>
                     </div>
                     <div className={styles.registrationButtons}>
@@ -96,7 +84,7 @@ const AppHeader = () => {
                                 style={{ marginRight: "8px" }}
                                 className={styles.button}
                             >
-                                Вход
+                                {t('login')}
                             </Button>
                         </Link>
                         <Link href="/signup">
@@ -104,7 +92,7 @@ const AppHeader = () => {
                                 type="primary"
                                 className={styles.button}
                             >
-                                Регистрация
+                                {t('signup')}
                             </Button>
                         </Link>
                     </div>

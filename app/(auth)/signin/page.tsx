@@ -14,6 +14,7 @@ import styles from './signin.module.css'
 
 import { login, handleCallback, getCurrentUser } from '../../lib/auth';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslations } from 'next-intl';
 
 import { useRouter } from 'next/navigation';
 const { Title } = Typography;
@@ -23,7 +24,7 @@ import { createClient } from '@supabase/supabase-js'
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 export default function SignIn() {
-    
+    const t = useTranslations('Auth');
     const { user, setUser } = useAuth();
     const router = useRouter();
     
@@ -36,7 +37,7 @@ export default function SignIn() {
     
     return (
         <div style={{ maxWidth: 400, margin: 'auto', padding: '40px 20px' }}>
-            <Title level={2} style={{ textAlign: 'center' }}>Вход</Title>
+            <Title level={2} style={{ textAlign: 'center' }}>{t('signIn')}</Title>
             <Form layout="vertical" onFinish={async (values) => {
                     try {
                         const data = await login(values.email, values.password);
@@ -45,27 +46,28 @@ export default function SignIn() {
                             message.error(data.error);
                             return;
                         }
-                        message.success('Успешный вход');
+                        message.success(t('signInSuccess'));
                         router.push('/home');
                     } catch (err) {
                         console.error(err);
+                        message.error(t('signInError'));
                     }
                 }
             }>
                 <Form.Item
-                    label="Email"
+                    label={t('email')}
                     name="email"
-                    rules={[{ required: true, message: 'Пожалуйста, введите email' }]}
+                    rules={[{ required: true, message: t('emailRequired') }]}
                 >
-                    <Input prefix={<MailOutlined style={{marginRight:'10px'}}/>} placeholder="you@example.com" className={styles.input} />
+                    <Input prefix={<MailOutlined style={{marginRight:'10px'}}/>} placeholder={t('emailPlaceholder')} className={styles.input} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Пароль"
+                    label={t('password')}
                     name="password"
-                    rules={[{ required: true, message: 'Пожалуйста, введите пароль' }]}
+                    rules={[{ required: true, message: t('passwordRequired') }]}
                 >
-                    <Input.Password prefix={<LockOutlined style={{marginRight:'10px'}} />} placeholder="••••••••" className={styles.input} />
+                    <Input.Password prefix={<LockOutlined style={{marginRight:'10px'}} />} placeholder={t('passwordPlaceholder')} className={styles.input} />
                 </Form.Item>
 
                 <Form.Item>
@@ -76,11 +78,11 @@ export default function SignIn() {
                         icon={<LoginOutlined />}
                         className={styles.button}
                     >
-                        Войти
+                        {t('signInButton')}
                     </Button>
                 </Form.Item>
                 
-                <Divider plain>Или используйте Google</Divider>
+                <Divider plain>{t('orUseGoogle')}</Divider>
                 <Button
                     icon={<GoogleOutlined />}
                     type="primary"
@@ -95,7 +97,7 @@ export default function SignIn() {
                         });
                     }}
                 >
-                    Войти через Google
+                    {t('signInWithGoogle')}
                 </Button>
             </Form>
         </div>

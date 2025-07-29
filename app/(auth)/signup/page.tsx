@@ -23,13 +23,14 @@ import { signup, handleCallback, getCurrentUser } from "../../lib/auth";
 
 import { useRouter } from "next/navigation";
 import { createClient } from '@supabase/supabase-js'
+import { useTranslations } from 'next-intl';
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 const { Title } = Typography;
 
 export default function SignUp() {
     const [role, setRole] = useState<"student" | "teacher" | null>(null);
-
+    const t = useTranslations('Auth');
     const { user, setUser } = useAuth();
     useEffect(() => {
         if (!user?.loading && user) {
@@ -55,13 +56,13 @@ export default function SignUp() {
                 message.error(data.error);
                 return;
             }
-            message.success("Регистрация успешна");
+            message.success(t('signUpSuccess'));
             router.push("/home");
         } catch (error: unknown) {
             if (error instanceof Error) {
-                message.error(error.message || "Ошибка при регистрации");
+                message.error(error.message || t('signUpError'));
             } else {
-                message.error("Ошибка при регистрации");
+                message.error(t('signUpError'));
             }
         }
     };
@@ -69,40 +70,40 @@ export default function SignUp() {
     return (
         <div style={{ maxWidth: 400, margin: "auto", padding: "20px 20px" }}>
             <Title level={2} style={{ textAlign: "center" }}>
-                Регистрация
+                {t('signUp')}
             </Title>
 
             <Form layout="vertical" onFinish={handleFinish}>
                 <Form.Item
-                    label="Имя"
+                    label={t('firstName')}
                     name="firstName"
                     rules={[
-                        { required: true, message: "Пожалуйста, введите имя" },
+                        { required: true, message: t('firstNameRequired') },
                     ]}
                 >
-                    <Input placeholder="Иван" className={styles.input} />
+                    <Input placeholder={t('firstNamePlaceholder')} className={styles.input} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Фамилия"
+                    label={t('lastName')}
                     name="lastName"
                     rules={[
                         {
                             required: true,
-                            message: "Пожалуйста, введите фамилию",
+                            message: t('lastNameRequired'),
                         },
                     ]}
                 >
-                    <Input placeholder="Иванов" className={styles.input} />
+                    <Input placeholder={t('lastNamePlaceholder')} className={styles.input} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Электронная почта"
+                    label={t('emailLabel')}
                     name="email"
                     rules={[
                         {
                             required: true,
-                            message: "Введите корректный email",
+                            message: t('emailInvalid'),
                             type: "email",
                         },
                     ]}
@@ -111,32 +112,32 @@ export default function SignUp() {
                         prefix={
                             <MailOutlined style={{ marginRight: "10px" }} />
                         }
-                        placeholder="you@example.com"
+                        placeholder={t('emailPlaceholder')}
                         className={styles.input}
                     />
                 </Form.Item>
 
                 <Form.Item
-                    label="Пароль"
+                    label={t('password')}
                     name="password"
-                    rules={[{ required: true, message: "Введите пароль" }]}
+                    rules={[{ required: true, message: t('passwordEnter') }]}
                 >
                     <Input.Password
                         prefix={
                             <LockOutlined style={{ marginRight: "10px" }} />
                         }
-                        placeholder="••••••••"
+                        placeholder={t('passwordPlaceholder')}
                         className={styles.input}
                     />
                 </Form.Item>
 
                 <Form.Item
-                    label="Вы —"
+                    label={t('role')}
                     name="role"
                     rules={[
                         {
                             required: true,
-                            message: "Пожалуйста, выберите роль",
+                            message: t('roleRequired'),
                         },
                     ]}
                 >
@@ -149,14 +150,14 @@ export default function SignUp() {
                             style={{ width: "50%" }}
                             className={styles.radio}
                         >
-                            Ученик
+                            {t('roleStudent')}
                         </Radio.Button>
                         <Radio.Button
                             value="teacher"
                             style={{ width: "50%" }}
                             className={styles.radio}
                         >
-                            Преподаватель
+                            {t('roleTeacher')}
                         </Radio.Button>
                     </Radio.Group>
                 </Form.Item>
@@ -169,12 +170,12 @@ export default function SignUp() {
                         block
                         className={styles.button}
                     >
-                        Зарегистрироваться
+                        {t('signUpButton')}
                     </Button>
                 </Form.Item>
             </Form>
 
-            <Divider plain>или</Divider>
+            <Divider plain>{t('or')}</Divider>
 
             <Space direction="vertical" style={{ width: "100%" }}>
                 <Button
@@ -191,7 +192,7 @@ export default function SignUp() {
                         });
                     }}
                 >
-                    Зарегистрироваться через Google
+                    {t('signUpWithGoogle')}
                 </Button>
             </Space>
         </div>

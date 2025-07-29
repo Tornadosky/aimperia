@@ -31,6 +31,7 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import styles from "./styles.module.css";
+import { useTranslations } from 'next-intl';
 
 import { logout } from "@/app/lib/auth";
 
@@ -54,6 +55,7 @@ interface HomeHeaderProps {
 }
 
 const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
+    const t = useTranslations('Header');
     
     const [form] = Form.useForm();
     const { setUser, user } = useAuth();
@@ -80,7 +82,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                 setCreateLessonModal(true);
                             }}
                         >
-                            Создать урок
+                            {t('createLesson')}
                         </Button>:
                         null}
                         
@@ -93,7 +95,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                     setJoinLessonModal(true);
                                 }}
                         >
-                            Присоединиться к уроку
+                            {t('joinLesson')}
                         </Button>
                         :null}
                         <Popover
@@ -106,14 +108,13 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                     gap: '10px'
                                 }}>
                                     <p>
-                                        <b>Имя:</b> {user?.firstName?user?.firstName+' '+user?.lastName : 'Гость'}
+                                        <b>{t('profile')}:</b> {user?.firstName ? user?.firstName + ' ' + user?.lastName : t('guest')}
                                     </p>
                                     <p>
-                                        <b>Email:</b> {user?.email || 'Не указан'}
+                                        <b>Email:</b> {user?.email || t('noEmail')}
                                     </p>
                                     <Button
                                         icon={<LogoutOutlined />}
-                                        // type="link"
                                         style={{ width: '100%' }}
                                         danger
                                         onClick={async () => {
@@ -126,13 +127,13 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                             }
                                         }}
                                     >
-                                        Выйти
+                                        {t('logout')}
                                     </Button>
                                 </div>
                             }
                             placement="bottomRight"
                         >
-                            <Button icon={<TeamOutlined />} className={styles.button}>Аккаунт</Button>
+                            <Button icon={<TeamOutlined />} className={styles.button}>{t('account')}</Button>
                         </Popover>
                     </Space>
                 </div>
@@ -144,7 +145,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: "20px",
-                    }}><InfoCircleFilled style={{color:'#3d8eff', marginRight:'10px', fontSize:'20px'}}/>Создание нового урока</div>}
+                    }}><InfoCircleFilled style={{color:'#3d8eff', marginRight:'10px', fontSize:'20px'}}/>{t('createLessonModal.title')}</div>}
                     open={createLessonModal}
                     onCancel={() => setCreateLessonModal(false)}
                     footer={null}
@@ -161,7 +162,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         <p style={{
                             marginBottom: "16px",
                             fontSize: "16px",
-                        }}>Введите название и код приглашения для нового урока:</p>
+                        }}>{t('createLessonModal.instruction')}</p>
                         <ConfigProvider locale={ruRU}>
                             <Form
                                 form={form}
@@ -191,7 +192,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                             });
                                         }
                                         Modal.success({
-                                            title: "Урок успешно создан",
+                                            title: t('createLessonModal.successTitle'),
                                             content: (
                                                 <div style={{
                                                     display: "flex",
@@ -200,8 +201,8 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                     justifyContent: "center",
                                                     marginRight: '30px'
                                                 }}>
-                                                    <p style={{fontSize:'16px', fontWeight:'bold'}}>Название: {newLesson.title}</p>
-                                                    <p style={{ fontSize: '16px' }}>Скопируйте код и отправьте ученику, он должен будет ввести его для того, чтобы присоедениться:</p>
+                                                    <p style={{fontSize:'16px', fontWeight:'bold'}}>{t('createLessonModal.lessonName')}: {newLesson.title}</p>
+                                                    <p style={{ fontSize: '16px' }}>{t('createLessonModal.successCopyInstruction')}</p>
                                                     
                                                     <div style={{
                                                         textWrap: 'nowrap',
@@ -213,7 +214,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                     }}
                                                     onClick={() => {
                                                         navigator.clipboard.writeText(newLesson.inviteCode);
-                                                        message.success("Код приглашения скопирован в буфер обмена");
+                                                        message.success(t('createLessonModal.codeCopied'));
                                                     }}>
                                                         <span
                                                             style={{ cursor: "pointer", color: "#3d8eff" }}
@@ -235,7 +236,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                         }}
                                                         icon={<DesktopOutlined />}
                                                     >
-                                                        Перейти к уроку
+                                                        {t('createLessonModal.goToLesson')}
                                                     </Button>
                                                     
                                                 </div>
@@ -245,7 +246,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                         form.resetFields();
                                     }
                                     else {
-                                        message.error("Ошибка при создании урока");
+                                        message.error(t('createLessonModal.error'));
                                     }
                                     setCreateLoading(false);
                                 }}
@@ -255,38 +256,27 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                             >
                                 <Form.Item
                                     name="title"
-                                    rules={[{ required: true, message: "Введите название урока" }]}
+                                    rules={[{ required: true, message: t('createLessonModal.namePlaceholder') }]}
                                 >
-                                    <Input placeholder="Название урока" />
+                                    <Input placeholder={t('createLessonModal.namePlaceholder')} />
                                 </Form.Item>
                                 <Form.Item
                                     name="description"
                                     rules={[]}
                                 >
-                                    <Input.TextArea placeholder="Описание (необязательно)" />
+                                    <Input.TextArea placeholder={t('createLessonModal.descriptionPlaceholder')} />
                                 </Form.Item>
-                                {/* <Form.Item
-                                    name="scheduledAt"
-                                    rules={[]}
-                                >
-                                    <DatePicker
-                                        style={{ width: "100%" }}
-                                        placeholder="Дата и время начала (необязательно)"
-                                        showTime
-                                        format="YYYY-MM-DD HH:mm"
-                                    />
-                                </Form.Item> */}
                                 <Form.Item style={{ display: "flex", justifyContent: "center", marginBottom: 0 }}>
                                     <Space>
                                         <Button type="primary" htmlType="submit"
                                             loading={createLoading}
                                         >
-                                            Создать урок
+                                            {t('createLessonModal.submit')}
                                         </Button>
                                         <Button
                                             onClick={() => setCreateLessonModal(false)}
                                         >
-                                            Отмена
+                                            {t('createLessonModal.cancel')}
                                         </Button>
                                     </Space>
                                 </Form.Item>
@@ -301,7 +291,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: "20px",
-                    }}><InfoCircleFilled style={{color:'#3d8eff', marginRight:'10px', fontSize:'20px'}}/>Присоединение к уроку</div>}
+                    }}><InfoCircleFilled style={{color:'#3d8eff', marginRight:'10px', fontSize:'20px'}}/>{t('joinLessonModal.title')}</div>}
                     open={joinLessonModal}
                     onCancel={() => setJoinLessonModal(false)}
                     footer={null}
@@ -318,7 +308,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                         <p style={{
                             marginBottom: "16px",
                             fontSize: "16px",
-                        }}>Введите код приглашения для присоединения к уроку:</p>
+                        }}>{t('joinLessonModal.instruction')}</p>
                         <ConfigProvider locale={ruRU}>
                             <Form
                                 form={form}
@@ -335,12 +325,12 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                 }
                                             });
                                             setJoinLoading(false);
-                                            message.success("Вы успешно присоединились к уроку");
+                                            message.success(t('joinLessonModal.successTitle'));
                                             setJoinLessonModal(false)
                                             form.resetFields();
                                             
                                             Modal.success({
-                                                title: "Вы присоединились к уроку",
+                                                title: t('joinLessonModal.successTitle'),
                                                 content: (
                                                     <div style={{
                                                         display: "flex",
@@ -349,8 +339,8 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                         justifyContent: "center",
                                                         marginRight: '30px'
                                                     }}>
-                                                        <p style={{fontSize:'16px', fontWeight:'bold'}}>Название: {fullLesson.title}</p>
-                                                        <p style={{ fontSize: '16px' }}>Вы можете перейти к уроку, нажав на кнопку ниже:</p>
+                                                        <p style={{fontSize:'16px', fontWeight:'bold'}}>{t('createLessonModal.lessonName')}: {fullLesson.title}</p>
+                                                        <p style={{ fontSize: '16px' }}>{t('joinLessonModal.instruction')}</p>
                                                         
                                                         <Button
                                                             type="primary"
@@ -361,7 +351,7 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                                             }}
                                                             icon={<DesktopOutlined />}
                                                         >
-                                                            Перейти к уроку
+                                                            {t('joinLessonModal.goToLesson')}
                                                         </Button>
                                                         
                                                     </div>
@@ -371,12 +361,13 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                                             
                                         }
                                         else {
-                                            message.error("Ошибка при получении информации о встрече");
+                                            message.error(t('joinLessonModal.errorFetch'));
                                         }
                                     }
                                     else {
-                                        message.error("Ошибка при присоединении к уроку");
+                                        message.error(t('joinLessonModal.errorJoin'));
                                     }
+                                    setJoinLoading(false);
                                 }}
                                 layout="vertical"
                                 style={{ maxWidth: 400, width: "100%" }}
@@ -384,21 +375,21 @@ const HomeHeader = ({ lessons, setLessons }: HomeHeaderProps) => {
                             >
                                 <Form.Item
                                     name="code"
-                                    rules={[{ required: true, message: "Введите код приглашения" }]}
+                                    rules={[{ required: true, message: t('joinLessonModal.codePlaceholder') }]}
                                 >
-                                    <Input placeholder="Код приглашения" />
+                                    <Input placeholder={t('joinLessonModal.codePlaceholder')} />
                                 </Form.Item>
                                 <Form.Item style={{ display: "flex", justifyContent: "center", marginBottom: 0 }}>
                                     <Space>
                                         <Button type="primary" htmlType="submit"
                                             loading={joinLoading}
                                         >
-                                            Присоединиться
+                                            {t('joinLessonModal.submit')}
                                         </Button>
                                         <Button
                                             onClick={() => setJoinLessonModal(false)}
                                         >
-                                            Отмена
+                                            {t('joinLessonModal.cancel')}
                                         </Button>
                                     </Space>
                                 </Form.Item>
