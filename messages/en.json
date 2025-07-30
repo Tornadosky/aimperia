@@ -66,11 +66,11 @@
         "pricing": {
             "title": "Lesson pricing",
             "basicTitle": "One lecture with your teacher (2 hours)",
-            "basicPrice": "350 ₽",
+            "basicPrice": "$3.99",
             "plusTitle": "One lecture with your teacher+ (2 hours)",
-            "plusPrice": "500 ₽",
+            "plusPrice": "$5.99",
             "premiumTitle": "One lecture with AImperia teacher (2 hours)",
-            "premiumPrice": "1400 ₽",
+            "premiumPrice": "$29.99",
             "features": [
                 "AI-powered notes generation",
                 "Video call with teacher",
@@ -406,7 +406,8 @@
             "error": "Failed to end lesson"
         },
         "messages": {
-            "codeCopied": "Lesson code copied to clipboard"
+            "codeCopied": "Lesson code copied to clipboard",
+            "noBoardSnapshot": "No board snapshot available for this lesson"
         },
         "loading": {
             "lesson": "Loading lesson..."

@@ -34,7 +34,7 @@ import styles from "./Home.module.css";
 
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
-import { fetchLessons, createLesson, attendLesson, closeLesson, getLessonSummary, updateLessonSummary } from "@/app/lib/lessons";
+import { fetchLessons, createLesson, attendLesson, closeLesson, getLessonSummary, updateLessonSummary, fetchBoardSnapshot } from "@/app/lib/lessons";
 import HomeHeader from "@/components/HomeHeader/HomeHeader";
 import React from "react";
 
@@ -130,6 +130,7 @@ export default function HomePage() {
     }, [lessons]);
     
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+    const [boardSnapshot, setBoardSnapshot] = useState<string | null>(null);
     const [lessonContent, setLessonContent] = useState<string>("");
     const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
     const [drawerVisible, setDrawerVisible] = useState(false);
@@ -150,6 +151,8 @@ export default function HomePage() {
             else {
                 setLessonContent("");
             }
+            // const content = await (await fetch('/notebookEN.md')).text();
+            // setLessonContent(content);
         } catch (err) {
             console.error("Error fetching lesson summary:", err);
         }
@@ -389,9 +392,17 @@ export default function HomePage() {
                                                 style={{ padding: '0px', width: '32px', height: '32px' }}
                                                 shape="circle"
                                                 icon={<DesktopOutlined />}
-                                                onClick={(e) => {
+                                                onClick={async (e) => {
                                                     e.stopPropagation();
                                                     setSelectedLesson(lesson);
+                                                    
+                                                    const result = await fetchBoardSnapshot(lesson.id);
+                                                    if (result?.snapshot) {
+                                                        setBoardSnapshot(result.snapshot);
+                                                    } else {
+                                                        message.error(t('messages.noBoardSnapshot'));
+                                                        return;
+                                                    }
                                                     setIsWhiteboardOpen(true);
                                                 }}
                                             />
@@ -447,6 +458,7 @@ export default function HomePage() {
                     <Tldraw
                         onMount={(editor) => {
                             editor.updateInstanceState({ isReadonly: true })
+                            editor.loadSnapshot(boardSnapshot)
                         }}
                     />
                 </Modal>

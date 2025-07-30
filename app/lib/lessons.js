@@ -140,3 +140,10 @@ export async function deleteBoardHighlight(lessonId, highlightId) {
   if (res.status === 204) return { success: true };
   return await res.json();
 }
+
+export async function fetchBoardSnapshot(lessonId) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/board`, {
+    credentials: "include",
+  });
+  return await res.json();
+}

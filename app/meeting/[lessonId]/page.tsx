@@ -36,7 +36,14 @@ const multiplayerAssetStore: TLAssetStore = {
         const id = uniqueId()
         const objectName = `${id}-${file.name}`.replace(/[^a-zA-Z0-9.]/g, '-')
         
-        const response = await uploadBoardAsset(publicLessonId.lessonId, objectName, file);
+        const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+        
+        const response = await uploadBoardAsset(publicLessonId.lessonId, objectName, base64);
 
         if (!response.url) {
             throw new Error(`Failed to upload asset: ${response}`)
@@ -98,7 +105,7 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
     
     
     
-    const store = useSync({ uri: `${process.env.NEXT_PUBLIC_WS_URL}/connect/test-room`, assets: multiplayerAssets })
+    const store = useSync({ uri: `${process.env.NEXT_PUBLIC_WS_URL}/connect/${params.lessonId}`, assets: multiplayerAssetStore })
     
     // useEffect(() => {
     //     if (!store) return;

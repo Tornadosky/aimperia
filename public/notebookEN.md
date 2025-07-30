@@ -19,8 +19,6 @@
 ### The Unit Circle
 The **unit circle** is a circle with radius 1 centered at the origin $(0,0)$ of the coordinate plane.
 
-![Unit Circle](https://upload.wikimedia.org/wikipedia/commons/4/4c/Unit_circle_angles_common.svg)
-*Figure 1: Unit circle with common angles and their coordinates*
 
 **Important Properties:**
 - Radius = 1
