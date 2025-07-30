@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import classNames from 'classnames';
 import {
     Layout,
@@ -38,7 +38,8 @@ import { fetchLessons, createLesson, attendLesson, closeLesson, getLessonSummary
 import HomeHeader from "@/components/HomeHeader/HomeHeader";
 import React from "react";
 
-import { Tldraw, useEditor, Editor } from 'tldraw'
+import { Tldraw, useEditor, Editor, TLEditorSnapshot, getSnapshot, loadSnapshot, TLAssetStore } from 'tldraw'
+import { useSyncDemo, useSync } from '@tldraw/sync'
 import 'tldraw/tldraw.css'
 
 import UpdateUserModal from "./components/UpdateUserModal/UpdateUserModal";
@@ -72,8 +73,12 @@ export type Lessons = {
 const { Header, Sider, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
 
+
+import Whiteboard from "./whiteboard";
+
 export default function HomePage() {
     const t = useTranslations('Home');
+    // const [editor, setEditor] = useState<Editor | null>(null);
     
     const router = useRouter();
     const { user, setUser } = useAuth();
@@ -130,7 +135,7 @@ export default function HomePage() {
     }, [lessons]);
     
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-    const [boardSnapshot, setBoardSnapshot] = useState<string | null>(null);
+    // const [boardSnapshot, setBoardSnapshot] = useState<TLEditorSnapshot | undefined>(undefined);
     const [lessonContent, setLessonContent] = useState<string>("");
     const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
     const [drawerVisible, setDrawerVisible] = useState(false);
@@ -239,6 +244,8 @@ export default function HomePage() {
             });
         };
     }, [container]);
+    
+    
     
     return (
         <>
@@ -396,13 +403,18 @@ export default function HomePage() {
                                                     e.stopPropagation();
                                                     setSelectedLesson(lesson);
                                                     
-                                                    const result = await fetchBoardSnapshot(lesson.id);
-                                                    if (result?.snapshot) {
-                                                        setBoardSnapshot(result.snapshot);
-                                                    } else {
-                                                        message.error(t('messages.noBoardSnapshot'));
-                                                        return;
-                                                    }
+                                                    // const result = await fetchBoardSnapshot(lesson.id);
+                                                    // if (result?.snapshot) {
+                                                    //     setBoardSnapshot(result.snapshot);
+                                                    //     if (editor) {
+                                                    //         console.log(editor, result.snapshot);
+                                                    //         loadSnapshot(editor.store, result.snapshot);
+                                                    //         console.log(getSnapshot(editor.store));
+                                                    //     }
+                                                    // } else {
+                                                    //     message.error(t('messages.noBoardSnapshot'));
+                                                    //     return;
+                                                    // }
                                                     setIsWhiteboardOpen(true);
                                                 }}
                                             />
@@ -455,12 +467,10 @@ export default function HomePage() {
                     bodyStyle={{ height: "80vh", padding: 0 }}
                     centered
                 >
-                    <Tldraw
-                        onMount={(editor) => {
-                            editor.updateInstanceState({ isReadonly: true })
-                            editor.loadSnapshot(boardSnapshot)
-                        }}
-                    />
+                    {selectedLesson?.id ?
+                        <Whiteboard lessonId={selectedLesson.id} />
+                        :null
+                    }
                 </Modal>
             </Layout>
             

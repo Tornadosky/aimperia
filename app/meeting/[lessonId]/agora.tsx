@@ -24,6 +24,7 @@ import classNames from 'classnames';
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useTranslations } from 'next-intl';
+import { InfoCircleFilled } from "@ant-design/icons";
 
 interface AgoraPageParams {
     lessonId: string;
@@ -51,6 +52,9 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
     const [channel, setChannel] = useState<string>(params.channelName);
     const [token, setToken] = useState<string>(params.token || '');
     const [calling, setCalling] = useState<boolean>(false);
+    
+    const [teacherDisconnectModal, setTeacherDisconnectModal] = useState<boolean>(false);
+    const [ endLessonLoading, setEndLessonLoading ] = useState<boolean>(false);
     
     useEffect(()=> {
         console.log(appId, ' chn ',params.channelName, ' tk ', token, params.lessonId)
@@ -157,56 +161,7 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                     danger
                     onClick={() => {
                         if (params?.user?.role === 'teacher')
-                            Modal.info({
-                                title: t('modals.disconnectTitle'),
-                                content: (
-                                    <div>
-                                        <p style={{fontSize:'17px'}}>{t('modals.teacherDisconnect.confirmMessage')}</p>
-                                        <p style={{fontSize:'17px'}}>{t('modals.teacherDisconnect.optionsMessage')}</p>
-                                    </div>
-                                ),
-                                footer: (_) => {
-                                    return <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                                        <Button
-                                            onClick={() => {
-                                                Modal.destroyAll();
-                                            }}
-                                        >
-                                            {t('buttons.cancel')}
-                                        </Button>
-                                        <Button
-                                            type="primary"
-                                            onClick={async () => {
-                                                localMicrophoneTrack?.close();
-                                                localCameraTrack?.close();
-                                                params.router.push('/home')
-                                                message.success(t('success.disconnected'));
-                                                Modal.destroyAll();
-                                            }}
-                                        >
-                                            {t('buttons.disconnect')}
-                                        </Button>
-                                        <Button
-                                            type='primary'
-                                            onClick={async () => {
-                                                localMicrophoneTrack?.close();
-                                                localCameraTrack?.close();
-                                                const result = await closeLesson(params.lessonId);
-                                                if (!result.id) {
-                                                    message.error(t('errors.closeLessonFailed'));
-                                                    return;
-                                                }
-                                                Modal.destroyAll();
-                                                params.router.push('/home')
-                                                message.success(t('success.lessonEnded'));
-                                            }}
-                                        >
-                                            {t('buttons.endLesson')}
-                                        </Button>
-                                    </div>
-                                },
-                                width: 600,
-                            })
+                            setTeacherDisconnectModal(true);
                         else {
                             Modal.info({
                                 title: t('modals.disconnectTitle'),
@@ -247,6 +202,68 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                     {t('buttons.disconnect')}
                 </Button>
             </div>
+            
+            <Modal
+                open={teacherDisconnectModal}
+                onCancel={() => setTeacherDisconnectModal(false)}
+                width={600}
+                title={<div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'start',
+                    gap: '10px',
+                    fontSize: '20px',
+                }}> <InfoCircleFilled style={{color:'#3d8eff', fontSize:'25px'}}/> { t('modals.disconnectTitle') }</div>}
+                footer={(_) => {
+                    return <div style={{ display: 'flex', justifyContent: 'center', width: '100%', gap: '15px' }}>
+                        <Button
+                            onClick={() => {
+                                Modal.destroyAll();
+                            }}
+                        >
+                            {t('buttons.cancel')}
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={async () => {
+                                localMicrophoneTrack?.close();
+                                localCameraTrack?.close();
+                                params.router.push('/home')
+                                message.success(t('success.disconnected'));
+                                Modal.destroyAll();
+                            }}
+                        >
+                            {t('buttons.disconnect')}
+                        </Button>
+                        <Button
+                            loading={endLessonLoading}
+                            type='primary'
+                            onClick={async () => {
+                                setEndLessonLoading(true);
+                                localMicrophoneTrack?.close();
+                                localCameraTrack?.close();
+                                const result = await closeLesson(params.lessonId);
+                                setEndLessonLoading(false);
+                                if (!result.id) {
+                                    message.error(t('errors.closeLessonFailed'));
+                                    return;
+                                }
+                                Modal.destroyAll();
+                                params.router.push('/home')
+                                message.success(t('success.lessonEnded'));
+                            }}
+                        >
+                            {t('buttons.endLesson')}
+                        </Button>
+                    </div>
+                }}
+            >
+                <div style={{margin:'20px 40px'}}>
+                    <p style={{fontSize:'17px'}}>{t('modals.teacherDisconnect.confirmMessage')}</p>
+                    <p style={{fontSize:'17px'}}>{t('modals.teacherDisconnect.optionsMessage')}</p>
+                </div>
+            </Modal>
+            
         </div>
     );
 }
@@ -280,9 +297,9 @@ export default function AgoraPage({ params }: AgoraPageProps) {
     }, [params.lessonId, t]);
     
     
-    return(
-            <AgoraRTCProvider client={client}>
-                {token&&params.channelName?<AgoraView params={{...params, token}} />:null}
-            </AgoraRTCProvider>
+    return (
+        <AgoraRTCProvider client={client}>
+            {token&&params.channelName?<AgoraView params={{...params, token}} />:null}
+        </AgoraRTCProvider>
     );
 }

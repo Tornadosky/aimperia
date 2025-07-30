@@ -160,7 +160,8 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                 message.error(t('errors.loadScreenshotsFailed'));
             }
         }
-        fetchBoardHighlights_();
+        if (user?.role === 'teacher')
+            fetchBoardHighlights_();
         
     }, [params.lessonId, user, t]);
 
