@@ -19,6 +19,7 @@ export default async function RootLayout({
     
     return (
         <html lang={locale}>
+            <meta name="viewport" content="width=1300" />
             <body
                 // className={`${geistSans.variable} ${geistMono.variable}`}
             >   

@@ -17,7 +17,7 @@ const multiplayerAssetStore: TLAssetStore = {
 
 export default function Whiteboard({ lessonId }: { lessonId: string }) {
     const [editor, setEditor] = useState<Editor | null>(null);
-    const store = useSync({ uri: `${process.env.NEXT_PUBLIC_WS_URL}/connect/${lessonId}`, assets: multiplayerAssetStore })
+    const store = useSync({ uri: `https://api.aimperia.org/connect/${lessonId}`, assets: multiplayerAssetStore })
     
     useEffect(() => {
         if (!store) return;

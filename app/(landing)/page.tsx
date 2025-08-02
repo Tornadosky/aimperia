@@ -294,7 +294,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Pricing Section */}
-                <section className={styles.section}>
+                {/* <section className={styles.section}>
                     <div className={styles.sectionPrice}>
                         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
                         <div className={styles.sectionTitle}>
@@ -343,7 +343,7 @@ export default function LandingPage() {
                             </Card>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 {/* For Who Section */}
                 <section className={styles.section}>
@@ -589,7 +589,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Teachers Section */}
-                <section className={styles.section} id="teachersSection">
+                {/* <section className={styles.section} id="teachersSection">
                     <div className={styles.sectionTitle}>
                         {t('teachers.title')}
                     </div>
@@ -656,10 +656,10 @@ export default function LandingPage() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 {/* Reviews Section */}
-                <section className={styles.sectionReviews}
+                {/* <section className={styles.sectionReviews}
                     style={{
                         backgroundImage: 'url(/landing/reviewsBackground.png)',
                         backgroundRepeat: 'repeat',
@@ -681,7 +681,7 @@ export default function LandingPage() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </section> */}
 
                 {/* FAQ */}
                 <section className={styles.section} id="faqSection">
@@ -706,7 +706,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* News Section */}
-                <section className={styles.section}>
+                {/* <section className={styles.section}>
                     <div className={styles.sectionTitle}>
                         {t('news.title')}
                     </div>
@@ -726,7 +726,7 @@ export default function LandingPage() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </section> */}
 
                 {/* Newsletter */}
                 <section className={styles.section}>
