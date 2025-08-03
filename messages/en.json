@@ -1,6 +1,7 @@
 {
     "Landing": {
         "heroTitle": "AImperia: The world's first platform that lets you learn much faster",
+        "heroWatchVideoTitle": "AImperia",
         "heroStartButton": "Start",
         "heroWatchVideoButton": "Watch Video",
         "heroOverlay": "Start using today!",
@@ -40,7 +41,11 @@
             "emailPlaceholder": "Email",
             "phonePlaceholder": "Phone",
             "askButton": "Ask a question",
-            "successMessage": "Thank you for your question! We will contact you soon."
+            "successMessage": "Thank you for your question! We will contact you soon.",
+            "emailRequired": "Please enter your email",
+            "emailInvalid": "Enter a valid email",
+            "nameRequired": "Please enter your name",
+            "phoneRequired": "Please enter your phone"
         },
         "about": {
             "title": "What is the AImperia platform?",
@@ -240,7 +245,10 @@
             "title": "Subscribe to our newsletter",
             "subtitle": "Stay up to date with the latest news and updates from AImperia",
             "emailPlaceholder": "Enter your email",
-            "subscribeButton": "Subscribe"
+            "subscribeButton": "Subscribe",
+            "emailRequired": "Please enter your email",
+            "emailInvalid": "Enter a valid email",
+            "successMessage": "Thank you for subscribing! We will send you news and updates from AImperia."
         }
     },
     
@@ -303,6 +311,7 @@
     
     "Auth": {
         "signIn": "Sign In",
+        "signIn2": "Sign In",
         "signUp": "Sign Up",
         "email": "Email",
         "emailLabel": "Email address",

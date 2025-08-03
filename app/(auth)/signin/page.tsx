@@ -100,6 +100,17 @@ export default function SignIn() {
                     {t('signInWithGoogle')}
                 </Button>
             </Form>
+            <Button
+                // type="primary"
+                block
+                className={styles.button}
+                style={{ marginTop: '10px' }}
+                onClick={() => {
+                    router.push('/signup');
+                }}
+            >
+                {t('signUp')}
+            </Button>
         </div>
     );
 }

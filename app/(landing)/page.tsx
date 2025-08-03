@@ -1,12 +1,13 @@
 "use client";
 
-import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form, Table, Collapse } from "antd";
+import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form, Table, Collapse, message, Modal } from "antd";
 import { useState } from "react";
 import { LineChartOutlined, DesktopOutlined, CheckCircleOutlined, CloseCircleOutlined, MailOutlined } from "@ant-design/icons";
 import { BsStars, BsSliders } from "react-icons/bs";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { useTranslations } from 'next-intl';
+import {subscribeToNewsletter, submitContactRequest} from "@/app/lib/landing";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -14,14 +15,17 @@ const { Content } = Layout;
 export default function LandingPage() {
     const t = useTranslations('Landing');
     const [collapseActiveKey, setCollapseActiveKey] = useState<string | string[]>(['1']);
-
+    
+    const [contactForm] = Form.useForm();
+    const [newsletterForm] = Form.useForm();
+    
     return (
         <Layout className={styles.layout}>
             <Content className={styles.content}>
                 {/* Hero Section */}
                 <section className={styles.hero}>
                     <div>
-                        <Title level={1} style={{ marginBottom: "50px !important" }}>
+                        <Title level={1} style={{ marginBottom: "50px !important", marginTop: "50px !important" }} className={styles.heroTitle}>
                             {
                                 // Split the heroTitle into words, show all except the last word
                                 (() => {
@@ -42,17 +46,30 @@ export default function LandingPage() {
                                 <Button
                                     type="primary"
                                     size="large"
-                                    style={{ marginRight: "10px", width: "200px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
-                                    className={styles.landingButton}
+                                    style={{ width: "200px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
+                                    className={styles.landingButton + " " + styles.heroStartButton}
                                 >
                                     {t('heroStartButton')}
                                 </Button>
                             </Link>
-                            <Link href="/signin">
-                                <Button size="large" style={{ width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
-                                    className={styles.landingButton}
-                                >{t('heroWatchVideoButton')}</Button>
-                            </Link>
+                            <Button size="large" style={{ width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
+                                className={styles.landingButton}
+                                onClick={() => {
+                                    Modal.info({
+                                        title: t('heroWatchVideoTitle'),
+                                        content: (
+                                            <video
+                                                src="https://aimperia-assets.s3.us-east-2.amazonaws.com/demo.mp4"
+                                                controls
+                                                style={{ width: '100%', height: 'auto' }}
+                                                className={styles.heroVideo}
+                                            />
+                                        ),
+                                        onOk() { },
+                                        width: window.innerWidth > 800 ? 800 : '100%',
+                                    });
+                                }}
+                            >{t('heroWatchVideoButton')}</Button>
                         </div>
                     </div>
                     <div className={styles.heroImageContainer}>
@@ -65,7 +82,7 @@ export default function LandingPage() {
 
                 {/* Features Section */}
                 <section className={styles.section}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'center', gap: '50px' }}>
+                    <div className={styles.sectionFeatures}>
                         <div className={styles.info1Item}>
                             <div className={styles.info1ItemTitle}>
                                 <DesktopOutlined className={styles.info1ItemIcon} /> {t('features.videoBoardTitle')}
@@ -97,7 +114,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* How It Works Section */}
-                <section className={styles.section}>
+                <section className={styles.section+' '+styles.sectionHowItWorks}>
                     <div className={styles.sectionTitle}>{t('easyStartTitle')}</div>
                     <div>
                         <Row gutter={24}>
@@ -232,16 +249,64 @@ export default function LandingPage() {
                         <div style={{ color: '#fff', textAlign: 'center', marginBottom: '50px', fontSize: '18px' }}>
                             {t('contact.subtitle')}
                         </div>
-                        <div className={styles.sectionFormContainer}>
-                            <Input placeholder={t('contact.namePlaceholder')} className={styles.sectionFormInput} />
-                            <Input type="email" placeholder={t('contact.emailPlaceholder')} className={styles.sectionFormInput} />
-                            <Input placeholder={t('contact.phonePlaceholder')} className={styles.sectionFormInput} />
-                            <Button color="purple" variant="solid" style={{ width: '100%' }}
+                        {/* <div className={styles.sectionFormContainer}> */}
+                        <Form
+                            name="contactForm"
+                            className={styles.sectionFormContainer}
+                            form={contactForm}
+                        >   
+                            <Form.Item
+                                name="name"
                                 className={styles.sectionFormInput}
-                                onClick={() => alert(t('contact.successMessage'))}>
-                                {t('contact.askButton')}
-                            </Button>
-                        </div>
+                                rules={[{ required: true, message: t('contact.nameRequired') }]}
+                            >
+                                <Input placeholder={t('contact.namePlaceholder')} className={styles.sectionFormInput} />
+                            </Form.Item>
+                            <Form.Item
+                                name="email"
+                                className={styles.sectionFormInput}
+                                rules={[
+                                    { required: true, message: t('contact.emailRequired') },
+                                    { type: 'email', message: t('contact.emailInvalid') }
+                                ]}
+                            >
+                                <Input type="email" placeholder={t('contact.emailPlaceholder')} className={styles.sectionFormInput} />
+                            </Form.Item>
+                            <Form.Item name="phone"
+                                className={styles.sectionFormInput}
+                                rules={[
+                                    { required: true, message: t('contact.phoneRequired') },
+                                ]}
+                            >
+                                <Input placeholder={t('contact.phonePlaceholder')} className={styles.sectionFormInput} />
+                            </Form.Item>
+                            <Form.Item
+                                className={styles.sectionFormInput}
+                            >
+                                <Button
+                                    variant="solid"
+                                    color="purple"
+                                    type="primary"
+                                    htmlType="submit"
+                                    className={styles.sectionFormInput}
+                                    onClick={async (e) => {
+                                        e.preventDefault();
+                                        try {
+                                            const values = await contactForm.validateFields();
+                                            await submitContactRequest(values);
+                                            contactForm.resetFields();
+                                            message.success(t('contact.successMessage'));
+                                        } catch (error) {
+                                            // Optionally handle validation or submission errors
+                                        }
+                                    }}
+                                    
+                                >
+                                    {t('contact.askButton')}
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                        {/* </div> */}
                     </div>
                 </section>
 
@@ -493,7 +558,7 @@ export default function LandingPage() {
                 </section>
 
                 {/* Features Comparison Section */}
-                <section className={styles.section}>
+                <section className={styles.section + " " + styles.sectionFeaturesComparison}>
                     <div className={styles.sectionTitle}>
                         {t('featuresComparison.title')}
                     </div>
@@ -506,7 +571,7 @@ export default function LandingPage() {
                                 title: '',
                                 dataIndex: 'feature',
                                 key: 'feature',
-                                render: (text) => <div style={{ marginLeft: '50px' }}>{text}</div>,
+                                render: (text) => <div className={styles.featureText}>{text}</div>,
                             },
                             {
                                 title: 'AImperia',
@@ -737,8 +802,11 @@ export default function LandingPage() {
                     <div className={styles.sectionNewsletterSubTitle}>
                         {t('newsletter.subtitle')}
                     </div>
-                    <Form layout="inline" className={styles.newsletterForm}>
-                        <Form.Item>
+                    <Form layout="inline" className={styles.newsletterForm} form={newsletterForm}>
+                        <Form.Item
+                            name="email"
+                            rules={[{ required: true, message: t('newsletter.emailRequired') }, { type: 'email', message: t('newsletter.emailInvalid') }]}
+                        >
                             <Input placeholder={t('newsletter.emailPlaceholder')}
                                 style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px', textAlign: 'center' }}
                                 className={styles.landingInput}
@@ -749,6 +817,17 @@ export default function LandingPage() {
                                 icon={<MailOutlined />}
                                 style={{ width: '300px', height: '60px', fontSize: '16px', borderRadius: '30px' }}
                                 className={styles.landingButton}
+                                onClick={async (e) => {
+                                    e.preventDefault();
+                                    try {
+                                        const values = await newsletterForm.validateFields();
+                                        await subscribeToNewsletter(values.email);
+                                        newsletterForm.resetFields();
+                                        message.success(t('newsletter.successMessage'));
+                                    } catch (error) {
+                                        // Optionally handle validation or submission errors
+                                    }
+                                }}
                             >
                                 {t('newsletter.subscribeButton')}
                             </Button>

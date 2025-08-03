@@ -4,7 +4,6 @@ import {NextIntlClientProvider} from 'next-intl';
 import {getLocale} from 'next-intl/server';
 import "./globals.css";
 
-
 export const metadata: Metadata = {
     title: "AImperia",
     description: "",
@@ -19,7 +18,6 @@ export default async function RootLayout({
     
     return (
         <html lang={locale}>
-            <meta name="viewport" content="width=1300" />
             <body
                 // className={`${geistSans.variable} ${geistMono.variable}`}
             >   

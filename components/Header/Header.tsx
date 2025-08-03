@@ -90,7 +90,7 @@ const AppHeader = () => {
                         <Link href="/signup">
                             <Button
                                 type="primary"
-                                className={styles.button}
+                                className={styles.button+' '+ styles.signupButton}
                             >
                                 {t('signup')}
                             </Button>

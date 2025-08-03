@@ -1,5 +1,5 @@
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const API_BASE_URL = "https://api.aimperia.org";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// const API_BASE_URL = "https://api.aimperia.org";
 
 const defaultHeaders = {
     "Content-Type": "application/json",

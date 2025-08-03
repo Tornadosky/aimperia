@@ -1,6 +1,7 @@
 {
     "Landing": {
         "heroTitle": "AImperia: Первая платформа в мире, которая позволяет тебе учиться в разы быстрее",
+        "heroWatchVideoTitle": "AImperia",
         "heroStartButton": "Начать",
         "heroWatchVideoButton": "Смотреть видео",
         "heroOverlay": "Начните пользоваться уже сегодня!",
@@ -40,7 +41,11 @@
             "emailPlaceholder": "Email",
             "phonePlaceholder": "Телефон",
             "askButton": "Задать вопрос",
-            "successMessage": "Спасибо за ваш вопрос! Мы свяжемся с вами в ближайшее время."
+            "successMessage": "Спасибо за ваш вопрос! Мы свяжемся с вами в ближайшее время.",
+            "emailRequired": "Пожалуйста, введите ваш email",
+            "emailInvalid": "Введите корректный email",
+            "nameRequired": "Пожалуйста, введите ваше имя",
+            "phoneRequired": "Пожалуйста, введите ваш телефон"
         },
         "about": {
             "title": "Что такое платформа AImperia?",
@@ -240,7 +245,10 @@
             "title": "Подпишитесь на нашу рассылку",
             "subtitle": "Будьте в курсе последних новостей и обновлений AImperia",
             "emailPlaceholder": "Введите ваш email",
-            "subscribeButton": "Подписаться"
+            "subscribeButton": "Подписаться",
+            "emailRequired": "Пожалуйста, введите ваш email",
+            "emailInvalid": "Введите корректный email",
+            "successMessage": "Спасибо за подписку! Мы будем присылать вам новости и обновления AImperia."
         }
     },
     "Header": {
@@ -302,6 +310,7 @@
     
     "Auth": {
         "signIn": "Вход",
+        "signIn2": "Войти",
         "signUp": "Регистрация",
         "email": "Email",
         "emailLabel": "Электронная почта",

@@ -1,6 +1,5 @@
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const API_BASE_URL = "https://api.aimperia.org";
-// console.log('API_BASE_URL=', process.env.NEXT_PUBLIC_API_BASE_URL);
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// const API_BASE_URL = "https://api.aimperia.org";
 
 export async function login(email, password) {
     const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
