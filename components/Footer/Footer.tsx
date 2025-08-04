@@ -11,7 +11,9 @@ const AppFooter = () => {
         <Footer className={styles.footer} id="app-footer">
             <div className={styles.socialLinks}>
                 <div style={{paddingTop:'4px'}}>{t('socialTitle')}</div>
-                <div className={styles.socialLink}>
+                <div className={styles.socialLink}
+                    onClick={() => window.open('https://t.me/+pcK3latBilczNmRi', '_blank')}
+                >
                     {t('telegram')}
                     <img
                         src="/footer/telegramicon.svg"
@@ -19,7 +21,9 @@ const AppFooter = () => {
                         className={styles.logo}
                     />
                 </div>
-                <div className={styles.socialLink}>
+                <div className={styles.socialLink}
+                    onClick={() => window.open('https://vk.com/aimperiaed', '_blank')}
+                >
                     {t('vk')}
                     <img src="/footer/vkicon.svg" alt="Logo" className={styles.logo} />
                 </div>

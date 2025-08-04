@@ -9,7 +9,7 @@ import {
   useRemoteUsers, // Retrieve the list of remote users
 } from "agora-rtc-react";
 import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useRef } from "react";
 
 import { generateAgoraToken, closeLesson } from "@/app/lib/lessons";
 
@@ -116,30 +116,62 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
         return () => clearInterval(interval);
     }, [remoteUsers]);
     
+    const container = useRef<HTMLDivElement>(null);
+    const containerToSetHeight = useRef<HTMLDivElement>(null);
+    
+    const containerRef = useRef<HTMLDivElement>(null);
+    const scrollingRef = useRef<HTMLDivElement>(null);
+    const controlsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const updateHeight = () => {
+            if (!containerRef.current || !scrollingRef.current || !controlsRef.current) return;
+            const containerHeight = containerRef.current.clientHeight;
+            const controlsHeight = controlsRef.current.clientHeight;
+            const availableHeight = containerHeight - controlsHeight;
+
+            scrollingRef.current.style.height = `${availableHeight}px`;
+        };
+
+        updateHeight();
+        window.addEventListener('resize', updateHeight);
+        return () => window.removeEventListener('resize', updateHeight);
+    }, []);
+    
+    
     return (
         <div className={styles.agoraContainer}>
-            <div className={styles.usersContainer}>
-                <LocalUser
-                    audioTrack={localMicrophoneTrack}
-                    playAudio={false}
-                    playVideo={cameraOn}
-                    cameraOn={cameraOn}
-                    micOn={micOn}
-                    videoTrack={localCameraTrack}
-                    className={classNames(styles.localUser, userSpeaking? styles.userSpeaking : '')}
-                    cover={'/user.png'}
-                />
-                {remoteUsers.map((user: any) => (
-                    <RemoteUser
-                        user={user}
-                        className={classNames(styles.remoteUser, remoteSpeakingUsers[user.uid] ? styles.userSpeaking : '')}
-                        key={user.uid}
+            <div className={styles.usersContainer} ref={containerRef}>
+                <div className={styles.usersContainerForScrolling} ref={scrollingRef}>
+                    <LocalUser
+                        audioTrack={localMicrophoneTrack}
+                        playAudio={false}
+                        playVideo={cameraOn}
+                        cameraOn={cameraOn}
+                        micOn={micOn}
+                        videoTrack={localCameraTrack}
+                        className={classNames(styles.localUser, userSpeaking? styles.userSpeaking : '')}
                         cover={'/user.png'}
                     >
-                    </RemoteUser>
-                ))}
+                        <div className={styles.userName}>
+                            {(params.user?.firstName+' '+params.user?.lastName)}
+                        </div>
+                    </LocalUser>
+                    {remoteUsers.map((user: any) => (
+                        <RemoteUser
+                            user={user}
+                            className={classNames(styles.remoteUser, remoteSpeakingUsers[user.uid] ? styles.userSpeaking : '')}
+                            key={user.uid}
+                            cover={'/user.png'}
+                        >
+                            {/* <div className={styles.userName}>
+                                {user?.firstName + ' ' + user?.lastName}
+                            </div> */}
+                        </RemoteUser>
+                    ))}
+                </div>
             </div>
-            <div className={styles.controls}>
+            <div className={styles.controls} ref={controlsRef}>
                 <div className={styles.callControls}>
                     <Button
                         icon={!cameraOn?<FiCameraOff />:<FiCamera />}

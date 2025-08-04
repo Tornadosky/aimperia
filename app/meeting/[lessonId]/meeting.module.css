@@ -27,6 +27,7 @@
     overflow-y: auto;
     height: calc(100vh);
     overflow-x: hidden;
+    height: 100vh;
 }
 
 .leftSider :global(.ant-layout-sider-children){
