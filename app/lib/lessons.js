@@ -19,6 +19,15 @@ export async function fetchLessonById(id) {
     return await res.json();
 }
 
+export async function fetchLessonByIdNoCache(lessonId) {
+    const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/status`, {
+        credentials: 'include',
+        cache: 'no-store',
+    });
+    if (!res.ok) throw new Error('Failed to fetch lesson status');
+    return res.json();
+}
+
 export async function createLesson(data) {
     const res = await fetch(`${API_BASE_URL}/api/lessons`, {
         method: "POST",

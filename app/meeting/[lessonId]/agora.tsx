@@ -11,7 +11,7 @@ import {
 import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
 import { use, useEffect, useState, useRef } from "react";
 
-import { generateAgoraToken, closeLesson } from "@/app/lib/lessons";
+import { generateAgoraToken, closeLesson, fetchLessonByIdNoCache } from "@/app/lib/lessons";
 
 import styles from './agora.module.css';
 
@@ -61,6 +61,9 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
     
     const [teacherDisconnectModal, setTeacherDisconnectModal] = useState<boolean>(false);
     const [ endLessonLoading, setEndLessonLoading ] = useState<boolean>(false);
+    
+    const rtcClient = useRTCClient();
+    const [autoLeaving, setAutoLeaving] = useState<boolean>(false);
     
     useEffect(()=> {
         console.log(appId, ' chn ',params.channelName, ' tk ', token, params.lessonId)
@@ -118,6 +121,29 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
     
         return () => { cancelled = true; };
     }, [remoteUsers, params.lessonId, nameByUid]);
+    
+    // Auto-leave when lesson is closed
+    useEffect(() => {
+        if (!params.lessonId) return;
+        let cancelled = false;
+        const interval = setInterval(async () => {
+            try {
+                const lesson = await fetchLessonByIdNoCache(params.lessonId);
+                if (!cancelled && lesson?.endedAt && !autoLeaving) {
+                    setAutoLeaving(true);
+                    try { localMicrophoneTrack?.close(); } catch {}
+                    try { localCameraTrack?.close(); } catch {}
+                    try { await rtcClient.leave(); } catch {}
+                    message.info(t('errors.meetingEnded'));
+                    params.router.push('/home');
+                }
+            } catch (e) {
+                console.error('Lesson status poll failed', e);
+            }
+        }, 3000);
+
+        return () => { cancelled = true; clearInterval(interval); };
+    }, [params.lessonId, rtcClient, localMicrophoneTrack, localCameraTrack, autoLeaving]);
     
     const [userSpeaking, setUserSpeaking] = useState<boolean>(false);
     
