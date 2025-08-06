@@ -63,7 +63,8 @@ const multiplayerAssets: TLAssetStore = {
 		const id = uniqueId()
         console.log('publicLessonId',publicLessonId.lessonId)
 		const objectName = `${id}-${file.name}`
-		const url = `https://api.aimperia.org/uploads/${encodeURIComponent(objectName)}`
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.aimperia.org";
+		const url = `${API_BASE_URL}/uploads/${encodeURIComponent(objectName)}`
 
 		const response = await fetch(url, {
 			method: 'PUT',
@@ -104,8 +105,8 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
     // const store = useSyncDemo({ roomId: 'unique-id-465845654654' })
     
     
-    
-    const store = useSync({ uri: `https://api.aimperia.org/connect/${params.lessonId}`, assets: multiplayerAssetStore })
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.aimperia.org";
+    const store = useSync({ uri: `${API_BASE_URL}/connect/${params.lessonId}`, assets: multiplayerAssetStore })
     
     // useEffect(() => {
     //     if (!store) return;

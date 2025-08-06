@@ -1,5 +1,4 @@
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const API_BASE_URL = "https://api.aimperia.org";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.aimperia.org";
 
 const defaultHeaders = {
     "Content-Type": "application/json",
@@ -148,4 +147,13 @@ export async function fetchBoardSnapshot(lessonId) {
     credentials: "include",
   });
   return await res.json();
+}
+
+export async function fetchParticipants(lessonId) {
+  const res = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}/participants`, {
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error('Failed to fetch participants');
+  return res.json(); // [{ userId, displayName, firstName, lastName }]
 }

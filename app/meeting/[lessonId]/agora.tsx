@@ -25,6 +25,10 @@ import classNames from 'classnames';
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useTranslations } from 'next-intl';
 import { InfoCircleFilled } from "@ant-design/icons";
+import { fetchParticipants } from "@/app/lib/lessons";
+
+
+
 
 interface AgoraPageParams {
     lessonId: string;
@@ -52,6 +56,8 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
     const [channel, setChannel] = useState<string>(params.channelName);
     const [token, setToken] = useState<string>(params.token || '');
     const [calling, setCalling] = useState<boolean>(false);
+    const [nameByUid, setNameByUid] = useState<Map<string, string>>(new Map());
+
     
     const [teacherDisconnectModal, setTeacherDisconnectModal] = useState<boolean>(false);
     const [ endLessonLoading, setEndLessonLoading ] = useState<boolean>(false);
@@ -60,6 +66,21 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
         console.log(appId, ' chn ',params.channelName, ' tk ', token, params.lessonId)
         setCalling(true);
     }, [params])
+
+    // initial load
+    useEffect(() => {
+        if (!params.lessonId) return;
+        (async () => {
+        try {
+            const list = await fetchParticipants(params.lessonId);
+            const map = new Map<string, string>();
+            list.forEach((p: any) => {
+            map.set(String(p.userId), p.displayName || `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim() || 'Participant');
+            });
+            setNameByUid(map);
+        } catch (e) { console.error(e); }
+        })();
+    }, [params.lessonId]);
     
     
     const [micOn, setMic] = useState<boolean>(true);
@@ -71,6 +92,32 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
     usePublish([localMicrophoneTrack, localCameraTrack]);
     
     const remoteUsers = useRemoteUsers();
+
+    // when new remote users appear, re-fetch and merge
+    useEffect(() => {
+        const unknown = remoteUsers
+        .map(u => String(u.uid))
+        .filter(uid => !nameByUid.has(uid));
+        if (unknown.length === 0) return;
+    
+        let cancelled = false;
+        (async () => {
+        try {
+            const list = await fetchParticipants(params.lessonId);
+            if (cancelled) return;
+            setNameByUid(prev => {
+                const next = new Map(prev);
+                list.forEach((p: any) => {
+                    const label = p.displayName || `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim() || 'Participant';
+                    next.set(String(p.userId), label);
+                });
+                return next;
+            });
+        } catch (e) { console.error(e); }
+        })();
+    
+        return () => { cancelled = true; };
+    }, [remoteUsers, params.lessonId, nameByUid]);
     
     const [userSpeaking, setUserSpeaking] = useState<boolean>(false);
     
@@ -157,18 +204,14 @@ const AgoraView = ({ params }: {params:AgoraViewParams}) => {
                             {(params.user?.firstName+' '+params.user?.lastName)}
                         </div>
                     </LocalUser>
-                    {remoteUsers.map((user: any) => (
-                        <RemoteUser
-                            user={user}
-                            className={classNames(styles.remoteUser, remoteSpeakingUsers[user.uid] ? styles.userSpeaking : '')}
-                            key={user.uid}
-                            cover={'/user.png'}
-                        >
-                            {/* <div className={styles.userName}>
-                                {user?.firstName + ' ' + user?.lastName}
-                            </div> */}
-                        </RemoteUser>
-                    ))}
+                    {remoteUsers.map((user: any) => {
+                        const label = nameByUid.get(String(user.uid)) ?? 'Participant';
+                        return (
+                            <RemoteUser user={user} key={user.uid} className={classNames(styles.remoteUser, remoteSpeakingUsers[user.uid] ? styles.userSpeaking : '')} cover={'/user.png'}>
+                            <div className={styles.userName}>{label}</div>
+                            </RemoteUser>
+                        );
+                    })}
                 </div>
             </div>
             <div className={styles.controls} ref={controlsRef}>
