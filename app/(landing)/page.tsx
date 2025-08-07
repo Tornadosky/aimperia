@@ -24,58 +24,60 @@ export default function LandingPage() {
             <Content className={styles.content}>
                 {/* Hero Section */}
                 <section className={styles.hero}>
-                    <div>
-                        <Title level={1} style={{ marginBottom: "50px !important", marginTop: "50px !important" }} className={styles.heroTitle}>
-                            {
-                                // Split the heroTitle into words, show all except the last word
-                                (() => {
-                                    const heroTitle = t('heroTitle');
-                                    const words = heroTitle.split(' ');
-                                    const allExceptLast = words.slice(0, -1).join(' ');
-                                    const lastWord = words[words.length - 1];
-                                    return (
-                                        <>
-                                            {allExceptLast} <span style={{ textWrap: 'nowrap' }}>{lastWord}<LineChartOutlined style={{ color: '#3d8eff', marginLeft:'10px' }} /></span>
-                                        </>
-                                    );
-                                })()
-                            }
-                        </Title>
-                        <div className={styles.heroButtons}>
-                            <Link href="/signup">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    style={{ width: "200px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
-                                    className={styles.landingButton + " " + styles.heroStartButton}
-                                >
-                                    {t('heroStartButton')}
-                                </Button>
-                            </Link>
-                            <Button size="large" style={{ width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
-                                className={styles.landingButton}
-                                onClick={() => {
-                                    Modal.info({
-                                        title: t('heroWatchVideoTitle'),
-                                        content: (
-                                            <video
-                                                src="https://aimperia-assets.s3.us-east-2.amazonaws.com/demo.mp4"
-                                                controls
-                                                style={{ width: '100%', height: 'auto' }}
-                                                className={styles.heroVideo}
-                                            />
-                                        ),
-                                        onOk() { },
-                                        width: window.innerWidth > 800 ? 800 : '100%',
-                                    });
-                                }}
-                            >{t('heroWatchVideoButton')}</Button>
+                    <div className={styles.heroContent}>
+                        <div>
+                            <Title level={1} style={{ marginBottom: "50px !important", marginTop: "50px !important" }} className={styles.heroTitle}>
+                                {
+                                    // Split the heroTitle into words, show all except the last word
+                                    (() => {
+                                        const heroTitle = t('heroTitle');
+                                        const words = heroTitle.split(' ');
+                                        const allExceptLast = words.slice(0, -1).join(' ');
+                                        const lastWord = words[words.length - 1];
+                                        return (
+                                            <>
+                                                {allExceptLast} <span style={{ textWrap: 'nowrap' }}>{lastWord}<LineChartOutlined style={{ color: '#3d8eff', marginLeft:'10px' }} /></span>
+                                            </>
+                                        );
+                                    })()
+                                }
+                            </Title>
+                            <div className={styles.heroButtons}>
+                                <Link href="/signup">
+                                    <Button
+                                        type="primary"
+                                        size="large"
+                                        style={{ width: "200px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
+                                        className={styles.landingButton + " " + styles.heroStartButton}
+                                    >
+                                        {t('heroStartButton')}
+                                    </Button>
+                                </Link>
+                                <Button size="large" style={{ width: "250px", height: "50px", fontSize: "20px", borderRadius: "50px" }}
+                                    className={styles.landingButton}
+                                    onClick={() => {
+                                        Modal.info({
+                                            title: t('heroWatchVideoTitle'),
+                                            content: (
+                                                <video
+                                                    src="https://aimperia-assets.s3.us-east-2.amazonaws.com/demo.mp4"
+                                                    controls
+                                                    style={{ width: '100%', height: 'auto' }}
+                                                    className={styles.heroVideo}
+                                                />
+                                            ),
+                                            onOk() { },
+                                            width: window.innerWidth > 800 ? 800 : '100%',
+                                        });
+                                    }}
+                                >{t('heroWatchVideoButton')}</Button>
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.heroImageContainer}>
-                        <img src='/landing/hero.png' alt="Hero" className={styles.heroImage} />
-                        <div className={styles.heroImageOverlay}>
-                            {t('heroOverlay')}
+                        <div className={styles.heroImageContainer}>
+                            <img src='/landing/hero.png' alt="Hero" className={styles.heroImage} />
+                            <div className={styles.heroImageOverlay}>
+                                {t('heroOverlay')}
+                            </div>
                         </div>
                     </div>
                 </section>

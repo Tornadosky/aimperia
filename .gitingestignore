@@ -1,0 +1,43 @@
+# ─── Build output & deps ─────────────────────────────────
+node_modules/
+.next/
+dist/
+out/
+coverage/
+
+# ─── Styles & CSS modules ────────────────────────────────
+**/*.css
+**/*.module.css
+app/globals.css
+
+# ─── Static assets & media ───────────────────────────────
+public/**
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.svg
+**/*.ico
+**/*.gif
+**/*.mp4
+**/*.mov
+**/*.webp
+**/*.map
+
+# ─── Documentation & markdown ────────────────────────────
+**/*.md
+
+# ─── Translation JSON (if you don’t need text strings) ────
+messages/*.json
+i18n/*.ts
+
+# ─── Local env & tool config ─────────────────────────────
+.env*
+.DS_Store
+.vscode/
+.idea/
+
+# ─── Misc. meta files ────────────────────────────────────
+.gitingestignore
+.gitignore
+*.lock
+*.log
