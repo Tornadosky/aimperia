@@ -14,6 +14,41 @@
             "easyInterfaceDesc": "The platform has a simple and intuitive interface, making it easy to start learning without unnecessary settings."
         },
         "easyStartTitle": "Easy to get started",
+        "whyAimperia": {
+            "title": "Why AImperia?",
+            "tutors": {
+                "builtFor": "Built for",
+                "tutors": "Tutors",
+                "subjectTools": {
+                    "title": "Subject-Specific Tools",
+                    "description": "AImperia is not just video conferencing software. We're a digital classroom with purpose-built tools for teaching subjects."
+                },
+                "studentControl": {
+                    "title": "Complete Control of Students",
+                    "description": "Remotely control what your students can see and change using leading tools and locking functionality."
+                },
+                "resources": {
+                    "title": "Resources At Your Fingertips",
+                    "description": "Grab visual resources straight from the resource library without having to leave the window. No fumbling with file uploads during a lesson."
+                }
+            },
+            "students": {
+                "easyFor": "Easy for",
+                "students": "Students",
+                "oneClick": {
+                    "title": "One-Click to Connect",
+                    "description": "Nothing to download, install or update. No sign-up required. Students just click the link to join the lesson."
+                },
+                "leading": {
+                    "title": "Leading & Locking",
+                    "description": "Lock changes, mute, and force students to see what you see as you teach. Then unlock when it's their turn to write or speak."
+                },
+                "configure": {
+                    "title": "Configure Your Students' Tools",
+                    "description": "You can set what tools and features are available to your students in each space via the admin panel so that they only have access to what's necessary."
+                }
+            }
+        },
         "easyStart": {
             "createLessonTitle": "Create a lesson",
             "createLessonDesc": "Create a new lesson using a simple interface.",

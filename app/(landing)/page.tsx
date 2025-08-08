@@ -4,6 +4,7 @@ import { Button, Layout, Row, Col, Typography, Divider, Card, Input, Form, Table
 import { useState } from "react";
 import { LineChartOutlined, DesktopOutlined, CheckCircleOutlined, CloseCircleOutlined, MailOutlined } from "@ant-design/icons";
 import { BsStars, BsSliders } from "react-icons/bs";
+import { HiOutlinePencil, HiOutlineUserGroup, HiOutlineBookOpen, HiOutlineCursorClick, HiOutlineLockClosed, HiOutlineAdjustments } from "react-icons/hi";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { useTranslations } from 'next-intl';
@@ -413,67 +414,139 @@ export default function LandingPage() {
                 </section> */}
 
                 {/* For Who Section */}
-                <section className={styles.section}>
-                    <div className={styles.sectionForWho}>
-                        <div className={styles.sectionTitle}>
-                            {t('forWho.title')}
+                <div className="relative pt-12 pb-24">
+                    {/* Removed gray backgrounds */}
+                    
+                    <div className="relative">
+                        <h2 className="text-3xl font-extrabold tracking-tight leading-8 text-center sm:text-5xl" style={{color: '#3d8eff'}}>
+                            {t('whyAimperia.title')}
+                        </h2>
+                    </div>
+                    
+                    <div className="grid gap-y-8 mx-auto mt-20 max-w-7xl lg:px-8 lg:grid-cols-2">
+                        {/* Tutors Section */}
+                        <div className="relative px-1.5 pb-2 bg-teal-500 rounded-l rounded-tr-3xl">
+                            <div className="relative pt-8 pb-12 h-full bg-white rounded-tl-xl rounded-tr-3xl border-r border-gray-200 transform translate-x-1.5 -translate-y-2">
+                                <div className="absolute bottom-0 w-full h-5 bg-gray-200 rounded-tr-2xl"></div>
+                                <div className="absolute top-0 left-0 w-2 h-full bg-gray-200 rounded-tl-xl"></div>
+                                
+                                <div className="mx-auto max-w-lg">
+                                    <div className="px-12 py-6">
+                                        <h3 className="pl-12 m-0 -ml-12 text-4xl font-black text-teal-500">
+                                            <span className="text-gray-800">{t('whyAimperia.tutors.builtFor')}</span> {t('whyAimperia.tutors.tutors')}
+                                        </h3>
+                                    </div>
+                                    
+                                    <div>
+                                        <div className="flex px-12 py-6">
+                                            <div>
+                                                <div className="p-2 mr-6 text-teal-600 bg-teal-100 rounded-lg">
+                                                    <HiOutlinePencil className="block w-7 h-7" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-bold text-gray-700">{t('whyAimperia.tutors.subjectTools.title')}</h4>
+                                                <p className="mt-2 mb-0 text-gray-500">
+                                                    {t('whyAimperia.tutors.subjectTools.description')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex px-12 py-6">
+                                            <div>
+                                                <div className="p-2 mr-6 text-teal-600 bg-teal-100 rounded-lg">
+                                                    <HiOutlineUserGroup className="block w-7 h-7" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-bold text-gray-700">{t('whyAimperia.tutors.studentControl.title')}</h4>
+                                                <p className="mt-2 mb-0 text-gray-500">
+                                                    {t('whyAimperia.tutors.studentControl.description')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex px-12 py-6">
+                                            <div>
+                                                <div className="p-2 mr-6 text-teal-600 bg-teal-100 rounded-lg">
+                                                    <HiOutlineBookOpen className="block w-7 h-7" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-bold text-gray-700">{t('whyAimperia.tutors.resources.title')}</h4>
+                                                <p className="mt-2 mb-0 text-gray-500">
+                                                    {t('whyAimperia.tutors.resources.description')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <Divider style={{ marginBottom: '40px' }} />
-                        <div className={styles.sectionForWhoItems}
-                            style={{
-                                backgroundImage: 'url(/landing/clouds.png)',
-                            }}>
-                            <div className={styles.sectionForWhoItem}>
-                                <div className={styles.sectionForWhoItemIcon}>
-                                    &#129299;
-                                </div>
-                                <div className={styles.sectionForWhoItemTitle}>
-                                    {t('forWho.students')}
-                                </div>
-                            </div>
-                            <div className={styles.sectionForWhoItem}>
-                                <div className={styles.sectionForWhoItemIcon}>
-                                    &#129488;
-                                </div>
-                                <div className={styles.sectionForWhoItemTitle}>
-                                    {t('forWho.teachers')}
-                                </div>
-                            </div>
-                            <div className={styles.sectionForWhoItem}>
-                                <div className={styles.sectionForWhoItemIcon}>
-                                    &#128640;
-                                </div>
-                                <div className={styles.sectionForWhoItemTitle}>
-                                    {t('forWho.fastLearners')}
-                                </div>
-                            </div>
-                            <div className={styles.sectionForWhoItem}>
-                                <div className={styles.sectionForWhoItemIcon}>
-                                    &#129302;
-                                </div>
-                                <div className={styles.sectionForWhoItemTitle}>
-                                    {t('forWho.aiLearners')}
-                                </div>
-                            </div>
-                            <div className={styles.sectionForWhoItem}>
-                                <div className={styles.sectionForWhoItemIcon}>
-                                    &#128187;
-                                </div>
-                                <div className={styles.sectionForWhoItemTitle}>
-                                    {t('forWho.innovativeTeachers')}
-                                </div>
-                            </div>
-                            <div className={styles.sectionForWhoItem}>
-                                <div className={styles.sectionForWhoItemIcon}>
-                                    &#128106;
-                                </div>
-                                <div className={styles.sectionForWhoItemTitle}>
-                                    {t('forWho.parents')}
+                        
+                        {/* Students Section */}
+                        <div className="relative px-1.5 pb-2 bg-yellow-500 rounded-r rounded-tl-3xl">
+                            <div className="relative pt-8 pb-12 h-full bg-white rounded-tl-3xl rounded-tr-xl border-l border-gray-200 transform -translate-x-1.5 -translate-y-2">
+                                <div className="absolute bottom-0 w-full h-5 bg-gray-200 rounded-tl-2xl rounded-tr-xl"></div>
+                                <div className="absolute top-0 right-0 w-2 h-full bg-gray-200 rounded-tr-xl"></div>
+                                
+                                <div className="mx-auto max-w-lg">
+                                    <div className="px-12 py-6">
+                                        <h3 className="pl-12 m-0 -ml-12 text-4xl font-black text-yellow-500">
+                                            <span className="text-gray-800">{t('whyAimperia.students.easyFor')}</span> {t('whyAimperia.students.students')}
+                                        </h3>
+                                    </div>
+                                    
+                                    <div>
+                                        <div className="flex px-12 py-6">
+                                            <div>
+                                                <div className="p-2 mr-6 text-yellow-600 bg-yellow-100 rounded-lg">
+                                                    <HiOutlineCursorClick className="block w-7 h-7" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-bold text-gray-700">{t('whyAimperia.students.oneClick.title')}</h4>
+                                                <p className="mt-2 mb-0 text-gray-500">
+                                                    {t('whyAimperia.students.oneClick.description')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex px-12 py-6">
+                                            <div>
+                                                <div className="p-2 mr-6 text-yellow-600 bg-yellow-100 rounded-lg">
+                                                    <HiOutlineLockClosed className="block w-7 h-7" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-bold text-gray-700">{t('whyAimperia.students.leading.title')}</h4>
+                                                <p className="mt-2 mb-0 text-gray-500">
+                                                    {t('whyAimperia.students.leading.description')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex px-12 py-6">
+                                            <div>
+                                                <div className="p-2 mr-6 text-yellow-600 bg-yellow-100 rounded-lg">
+                                                    <HiOutlineAdjustments className="block w-7 h-7" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-bold text-gray-700">{t('whyAimperia.students.configure.title')}</h4>
+                                                <p className="mt-2 mb-0 text-gray-500">
+                                                    {t('whyAimperia.students.configure.description')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+
+                
 
                 {/* How It Works Section */}
                 <section className={styles.section}>
