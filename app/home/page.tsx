@@ -255,6 +255,7 @@ export default function HomePage() {
                 <Sider
                     width={300}
                     className={styles.sider}
+                    theme="light"
                     breakpoint="lg"
                     collapsedWidth="0"
                 >

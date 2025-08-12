@@ -202,6 +202,7 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
             <Sider
                 width={180}
                 className={styles.leftSider}
+                theme="light"
                 breakpoint="lg"
                 collapsedWidth="0"
             >   
@@ -279,6 +280,7 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                 <Sider
                     width={300}
                     className={styles.sider}
+                    theme="light"
                     breakpoint="lg"
                     collapsedWidth="0"
                 >
