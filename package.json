@@ -31,6 +31,8 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
+    "stream-chat": "^9.15.0",
+    "stream-chat-react": "^13.3.0",
     "tldraw": "^3.14.2",
     "vercel": "^44.6.4"
   },

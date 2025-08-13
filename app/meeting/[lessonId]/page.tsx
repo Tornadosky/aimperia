@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Form, Input, Button, Spin, message, List, Layout, Image, ConfigProvider, Tooltip, Collapse, Popover } from "antd";
+import { Form, Input, Button, Spin, message, List, Layout, Image, ConfigProvider, Tooltip, Collapse, Popover, Drawer, FloatButton } from "antd";
 import { fetchLessons, createLesson, attendLesson, fetchLessonById, uploadBoardHighlight, fetchBoardHighlights, deleteBoardHighlight } from "@/app/lib/lessons";
 import { uploadBoardAsset } from "@/app/lib/tldrawAPI";
 import { logout } from "@/app/lib/auth";
@@ -22,12 +22,13 @@ import {
 import { useSyncDemo, useSync } from '@tldraw/sync'
 import 'tldraw/tldraw.css'
 import ruRU from 'antd/locale/ru_RU';
-import { DeleteOutlined, TeamOutlined, LogoutOutlined } from "@ant-design/icons";
+import { DeleteOutlined, TeamOutlined, LogoutOutlined, MessageOutlined } from "@ant-design/icons";
 const { Header, Sider, Content } = Layout;
 import HeaderLogo from '@/components/HeaderLogo/HeaderLogo';
 
 import AgoraPage from "./agora";
 import { useRouter } from 'next/navigation';
+import StreamChatPanel from './StreamChatPanel';
 
 const publicLessonId = {lessonId:''}
 
@@ -189,6 +190,7 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
     };
     
     const [editor, setEditor] = useState<Editor|null>(null);
+    const [isChatOpen, setIsChatOpen] = useState(false);
     
     function InsideOfContext() {
         const editor = useEditor()
@@ -276,6 +278,35 @@ export default function MeetingPage({ params }: { params: { lessonId: string } }
                 </div>
             </Content>
             
+            {(() => {
+                const v = (process.env.NEXT_PUBLIC_ENABLE_STREAM_CHAT || '').trim().toLowerCase();
+                const enabled = v === 'true' || v === '1' || v === 'yes' || v === 'on';
+                if (!enabled) return null;
+                return (
+                    <>
+                        <FloatButton
+                            icon={<MessageOutlined />}
+                            type="primary"
+                            onClick={() => setIsChatOpen(true)}
+                            style={{ right: 24, bottom: 24, zIndex: 1000 }}
+                        />
+                        <Drawer
+                            placement="right"
+                            width={420}
+                            title="Chat"
+                            open={isChatOpen}
+                            onClose={() => setIsChatOpen(false)}
+                            destroyOnClose
+                            maskClosable
+                        >
+                            <div style={{ height: 'calc(100vh - 120px)' }}>
+                                <StreamChatPanel lessonId={params.lessonId} showInput />
+                            </div>
+                        </Drawer>
+                    </>
+                );
+            })()}
+
             {user?.role==='teacher'?
                 <Sider
                     width={300}

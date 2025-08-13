@@ -1,4 +1,5 @@
 import MeetingHeader from "@/components/MeetingHeader/MeetingHeader";
+import "stream-chat-react/dist/css/v2/index.css";
 
 export default function HomeLayout({
     children,

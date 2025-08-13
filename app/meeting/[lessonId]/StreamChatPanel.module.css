@@ -1,0 +1,50 @@
+.wrapper{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	/* theme override: primary */
+	--str-chat__primary-color: #3d8eff;
+}
+
+.placeholder{
+	height: 100%;
+	background: #fafafa;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #f0f0f0;
+	border-radius: 8px;
+}
+
+.skeletonHeader{
+	height: 56px;
+	background: #ffffff;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	align-items: center;
+	padding: 0 12px;
+	font-weight: 600;
+	color: #4f4f4f;
+}
+
+.skeletonBody{
+	flex: 1;
+	padding: 12px;
+	overflow: auto;
+	background: #fff;
+}
+
+.bubble{
+	width: 70%;
+	height: 14px;
+	background: #f2f2f2;
+	border-radius: 7px;
+	margin: 8px 0;
+}
+
+.bubbleAlt{
+	width: 55%;
+	margin-left: 30%;
+}
+
+
+
