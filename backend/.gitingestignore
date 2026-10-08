@@ -1,0 +1,35 @@
+# Folders
+.git/
+node_modules/
+dist/
+coverage/
+.github/
+
+# Files / configs you don’t want in the digest
+.dockerignore
+.gitingestignore
+deploy-ec2.ps1
+.eslintrc.cjs
+.prettierrc
+vitest.config.ts
+setup-agora-s3.ps1
+deploy.ps1
+nginx.conf
+Dockerfile
+docker-compose.yml
+assets.local.ts
+rooms.local.ts
+.env
+.env.*
+
+# Binary / heavy
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.mp4
+*.mov
+*.map
+*.lock
+*.log
+.DS_Store
